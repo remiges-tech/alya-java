@@ -1,0 +1,87 @@
+             ALIYA
+
+ I have created a spring boot library that can be used in other spring boot project by 
+ adding jar file and dependency in pom.xml.   
+
+This library handle JSON Request, Success Response and Error Response in standard form as
+provide.
+
+Exception Package:-
+This Package contain two class that I created for making custom exception.
+
+1.UnauthorizedException::- Exception thrown when an unauthorized access attempt is made. 
+This exception indicates that the user is not authenticated to perform the requested action.
+
+Constructors:
+- `UnauthorizedException()`: Constructs a new UnauthorizedException with no detail message.
+- `UnauthorizedException(String message)`: Constructs a new UnauthorizedException with the specified detail message.
+- `UnauthorizedException(String message, Throwable cause)`: Constructs a new UnauthorizedException with the specified detail message and cause.
+- `UnauthorizedException(Throwable cause)`: Constructs a new UnauthorizedException with the specified cause and a detail message that is based on the cause.
+
+2.ValidationException::- Exception thrown when validation errors occur. 
+This exception is used to encapsulate a list of validation error messages.
+
+Fields:
+- `errorMessages`: List of error messages associated with this ValidationException.
+
+Constructors:
+- `ValidationException(List<ErrorMessage> errorMessages)`: Constructs a new ValidationException with the specified list of error messages.
+
+Methods:
+- `getErrorMessages()`: Get the list of error messages associated with this ValidationException.
+
+Util Package:-
+
+ErrorResponseUtil Class
+The ErrorResponseUtil class provides utility methods for generating instances of the ErrorResponse class,
+ which represents error responses in JSON format.
+
+Constructors
+private ErrorResponseUtil(): Private constructor to prevent instantiation of the class.
+
+Methods
+dataNotFound(String field)
+Description: Generates an error response indicating that the requested data was not found.
+
+Parameters:
+field (String): The field or resource identifier for which the data was not found.
+Returns: An ErrorResponse object indicating the data not found error.
+internalServerError()
+
+Description: Generates an error response indicating an internal server error.
+Returns: An ErrorResponse object indicating an internal server error.
+unauthorized(String field)
+
+Description: Generates an error response indicating unauthorized access.
+Parameters:
+field (String): The field or resource identifier for which access is unauthorized.
+Returns: An ErrorResponse object indicating unauthorized access error.
+badRequest(List<ErrorMessage> errorMessages)
+
+Description: Generates an error response for a bad request with custom error messages.
+Parameters:
+errorMessages (List<ErrorMessage>): A list of error messages describing the bad request.
+Returns: An ErrorResponse object with custom error messages for the bad request.
+
+JsonMapper Class:- 
+This class contains logic for Serilization and Deserilization of java object to json 
+and json to java object.
+
+RequestUtil:- 
+This class contain a method that create jsonrequest and take data as parameter.
+
+SuccessResponseUtil:-
+This class contain a method that contain formate of response to be displayed.
+
+util.model Package::-
+ErrorMessage:-
+This class have field to display error message that we have provided.
+
+ErrorResponse:-
+This class contain three field status, data and errorMessages to display in required formate.
+
+JsonRequest:-
+This class contain one field that takes object type data.
+
+SuccessResponse:-
+This class contain three field that will help to bind data in the give formate as required.
