@@ -11,7 +11,7 @@ public class BatchOutput {
 
     BatchStatus status;
     String result;
-    ErrorMessage[] messages;
+    String messages;
     Map<String, String> blobRows;
     ErrorCodes error;
 }

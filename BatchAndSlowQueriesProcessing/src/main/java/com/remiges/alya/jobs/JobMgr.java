@@ -13,7 +13,7 @@ public class JobMgr {
     private final Map<String, BatchInitBlock> initBlocks = new ConcurrentHashMap<>();
 
     private final Map<String, BatchProcessor> batchProcessors = new ConcurrentHashMap<>();
-    private final Map<String, SQProcessor> SQProcessor = new ConcurrentHashMap<>();
+    private final Map<String, SQProcessor> slowQueryProcessor = new ConcurrentHashMap<>();
 
     // Lock object for synchronization
     private final Object lock = new Object();
@@ -35,16 +35,64 @@ public class JobMgr {
         // jobprocessoThread.
     }
 
-    public void processRow(BatchJob rowtoprocess) {
+    public String processRow(BatchJob rowtoprocess) {
+
+        if (rowtoprocess.getline() == 0) {
+            return processSlowQuery(rowtoprocess);
+        } else {
+            return processBatch(rowtoprocess);
+        }
 
     }
 
-    private void processSlowQuery(BatchJob rowtoprocess) {
+    private String processSlowQuery(BatchJob rowtoprocess) {
+
+        String processorKey = rowtoprocess.getapp() + rowtoprocess.getop();
+
+        SQProcessor sqProcessor = slowQueryProcessor.get(processorKey);
+
+        if (sqProcessor == null) {
+            return "No SQ Processor found for app " + rowtoprocess.getapp()
+                    + " and for OP " + rowtoprocess.getop();
+
+        }
+
+        try {
+            BatchInitBlock batchInitBlock = getOrCreateInitBlock(rowtoprocess.getapp());
+
+            BatchOutput batchoutput = sqProcessor.DoSlowQuery(batchInitBlock, rowtoprocess.getcontext(),
+                    rowtoprocess.getinput());
+
+            if (batchoutput.error.equals(ErrorCodes.NOERROR)) {
+                updateSlowQueryJobResult(rowtoprocess, batchoutput);
+            } else {
+                return "failed to process sq for app " + rowtoprocess.getapp();
+            }
+
+            return "";
+
+        } catch (IllegalStateException exs) {
+            return "No Initializer found for app " + rowtoprocess.getapp();
+
+        }
+    }
+
+    private String updateSlowQueryJobResult(BatchJob rowtoproces, BatchOutput batchOutput) {
+        try {
+            batchJobService.updateBatchRowSlowQueryoutput(rowtoproces, batchOutput);
+            return "";
+        } catch (Exception ex) {
+            return "failed to update result for app" + rowtoproces.getapp();
+        }
+    }
+
+    private void updateBatchJobResult(BatchJob rowtoproces, BatchOutput batchOutput) {
 
     }
 
-    private void processBatch(BatchJob rowtoprocess) {
+    private String processBatch(BatchJob rowtoprocess) {
 
+        return "";
     }
 
     public class JobProcessor implements Runnable {
@@ -136,14 +184,14 @@ public class JobMgr {
 
         String key = app + op;
         // Check if an initializer for this app already exists
-        if (SQProcessor.containsKey(key)) {
+        if (slowQueryProcessor.containsKey(key)) {
             throw new IllegalStateException("SQProcessor already registered for app: " + key);
         }
         // Register the initializer for the app
         System.out.println("Register the SQProcessor for the app.......");
 
-        SQProcessor.put(key, processor);
-        System.out.println("Fetch the register SQProcessor for the app......." + SQProcessor.get(key));
+        slowQueryProcessor.put(key, processor);
+        System.out.println("Fetch the register SQProcessor for the app......." + slowQueryProcessor.get(key));
 
     }
 

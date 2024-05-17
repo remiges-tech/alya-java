@@ -19,6 +19,7 @@ import jakarta.transaction.Transactional;
 import com.remiges.alya.entity.BatchJob;
 import com.remiges.alya.entity.BatchRows;
 import com.remiges.alya.entity.Batches;
+import com.remiges.alya.jobs.BatchOutput;
 import com.remiges.alya.jobs.BatchStatus;
 
 @Service
@@ -68,6 +69,24 @@ public class BatchJobService {
                 e.printStackTrace();
             }
         });
+
+    }
+
+    public void updateBatchRowSlowQueryoutput(BatchJob rowtoproces, BatchOutput batchOutput) {
+
+        Optional<BatchRows> sqRow = batchrowrepo.findById(rowtoproces.getrowid());
+
+        if (sqRow.isPresent()) {
+            BatchRows batchRows = sqRow.get();
+            batchRows.setDoneat(Timestamp.from(Instant.now()));
+            batchRows.setBatchStatus(batchOutput.getStatus().toString());
+            batchRows.setRes(batchOutput.getResult());
+            batchRows.setMessages(batchOutput.getMessages());
+            batchrowrepo.save(batchRows);
+        }
+    }
+
+    public void updateBatchOutput() {
 
     }
 

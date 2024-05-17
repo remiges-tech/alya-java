@@ -1,5 +1,6 @@
 package com.remiges.alya.entity;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
@@ -38,10 +39,10 @@ public class BatchRows {
 	private String batchStatus;
 
 	@Column(nullable = false)
-	private LocalDateTime reqat;
+	private Timestamp reqat;
 
 	@Column
-	private LocalDateTime doneat;
+	private Timestamp doneat;
 
 	@Column
 	@Lob
