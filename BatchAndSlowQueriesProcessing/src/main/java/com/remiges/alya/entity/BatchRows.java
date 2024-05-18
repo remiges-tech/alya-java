@@ -3,6 +3,11 @@ package com.remiges.alya.entity;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+
+import com.remiges.alya.jobs.BatchStatus;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -36,7 +41,7 @@ public class BatchRows {
 	private String input;
 
 	@Column(nullable = false)
-	private String batchStatus;
+	private BatchStatus batchStatus;
 
 	@Column(nullable = false)
 	private Timestamp reqat;
@@ -44,12 +49,13 @@ public class BatchRows {
 	@Column
 	private Timestamp doneat;
 
-	@Column
-	@Lob
+	@JdbcTypeCode(SqlTypes.JSON)
+	@Column(columnDefinition = "jsonb")
+
 	private String res;
 
-	@Column
-	@Lob
+	@JdbcTypeCode(SqlTypes.JSON)
+	@Column(columnDefinition = "jsonb")
 	private String blobrows;
 
 	@Column
@@ -57,6 +63,6 @@ public class BatchRows {
 	private String messages;
 
 	@Column
-	private String doneby;
+	private Timestamp doneby;
 
 }

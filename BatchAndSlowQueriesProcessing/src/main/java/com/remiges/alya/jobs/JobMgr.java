@@ -4,10 +4,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.remiges.alya.service.BatchJobService;
 import com.remiges.alya.entity.BatchJob;
 
 public class JobMgr {
+
+    private static final Logger logger = LoggerFactory.getLogger(JobMgr.class);
 
     private final Map<String, BatchInitializer> initializers = new ConcurrentHashMap<>();
     private final Map<String, BatchInitBlock> initBlocks = new ConcurrentHashMap<>();
@@ -52,8 +57,10 @@ public class JobMgr {
         SQProcessor sqProcessor = slowQueryProcessor.get(processorKey);
 
         if (sqProcessor == null) {
-            return "No SQ Processor found for app " + rowtoprocess.getapp()
+            String erlog = "No SQ Processor found for app " + rowtoprocess.getapp()
                     + " and for OP " + rowtoprocess.getop();
+            logger.debug(erlog);
+            return erlog;
 
         }
 
@@ -66,33 +73,91 @@ public class JobMgr {
             if (batchoutput.error.equals(ErrorCodes.NOERROR)) {
                 updateSlowQueryJobResult(rowtoprocess, batchoutput);
             } else {
-                return "failed to process sq for app " + rowtoprocess.getapp();
+                String erlog = "failed to process sq for app " + rowtoprocess.getapp();
+                logger.debug(erlog);
+                return erlog;
             }
 
             return "";
 
         } catch (IllegalStateException exs) {
-            return "No Initializer found for app " + rowtoprocess.getapp();
+            String erlog = "No Initializer found for app " + rowtoprocess.getapp();
+            logger.debug(erlog);
+            return erlog;
 
         }
     }
 
+    /**
+     * Update slow query processor result to database.
+     * 
+     * @param rowtoproces - row for which this result belong
+     * @param batchOutput - result to update in DB
+     * @return error string if any
+     */
     private String updateSlowQueryJobResult(BatchJob rowtoproces, BatchOutput batchOutput) {
         try {
             batchJobService.updateBatchRowSlowQueryoutput(rowtoproces, batchOutput);
             return "";
         } catch (Exception ex) {
-            return "failed to update result for app" + rowtoproces.getapp();
+            String erlog = "failed to update result for app" + rowtoproces.getapp();
+            logger.debug(erlog);
+            return erlog;
         }
     }
 
+    /**
+     * update batch job result to DB.
+     * 
+     * @param rowtoproces
+     * @param batchOutput
+     */
     private void updateBatchJobResult(BatchJob rowtoproces, BatchOutput batchOutput) {
 
     }
 
+    /**
+     * 
+     * @param rowtoprocess
+     * @return
+     */
     private String processBatch(BatchJob rowtoprocess) {
 
-        return "";
+        String processorKey = rowtoprocess.getapp() + rowtoprocess.getop();
+
+        BatchProcessor batchProcessor = batchProcessors.get(processorKey);
+
+        if (batchProcessor == null) {
+            String erlog = "No batch Processor found for app " + rowtoprocess.getapp()
+                    + " and for OP " + rowtoprocess.getop();
+            logger.debug(erlog);
+            return erlog;
+
+        }
+
+        try {
+            BatchInitBlock batchInitBlock = getOrCreateInitBlock(rowtoprocess.getapp());
+
+            BatchOutput batchoutput = batchProcessor.DoBatchJob(batchInitBlock, rowtoprocess.getcontext(),
+                    rowtoprocess.getline(), rowtoprocess.getinput());
+
+            if (batchoutput.error.equals(ErrorCodes.NOERROR)) {
+                updateBatchJobResult(rowtoprocess, batchoutput);
+            } else {
+                String erlog = "failed to process batchrow for app " + rowtoprocess.getapp();
+                logger.debug(erlog);
+                return erlog;
+            }
+
+            return "";
+
+        } catch (IllegalStateException exs) {
+            String erlog = "No Initializer found for app " + rowtoprocess.getapp();
+            logger.debug(erlog);
+            return erlog;
+
+        }
+
     }
 
     public class JobProcessor implements Runnable {
@@ -107,6 +172,7 @@ public class JobMgr {
                 if (allQueuedBatchRow.isEmpty() == true) {
                     try {
                         Thread.sleep(30);
+                        continue;
                     } catch (InterruptedException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
@@ -115,16 +181,29 @@ public class JobMgr {
 
                 batchJobService.SwitchBatchToInprogress(allQueuedBatchRow, BatchStatus.BatchInProgress);
 
+                allQueuedBatchRow.forEach(row -> {
+                    String error = processRow(row);
+                    if (error.equals("") == false)
+                        logger.debug("process row failed for rowid " + row.getrowid());
+
+                });
+
             }
         }
 
     }
 
-    // getOrCreateInitBlock method to retrieve or create an InitBlock for the given
-    // app
+    //
+    /**
+     * getOrCreateInitBlock method to retrieve or create an InitBlock for the given
+     * app
+     * 
+     * @param app - app for which to return InitBlock
+     * @return
+     */
     public synchronized BatchInitBlock getOrCreateInitBlock(String app) {
-        System.out.println("getOrCreateInitBlock method to retrieve or create an InitBlock for the given app...");
-
+        String erlog = "getOrCreateInitBlock method to retrieve or create an InitBlock for the given app...";
+        logger.info(erlog);
         // Synchronize access to ensure thread safety
         synchronized (lock) {
 
@@ -136,7 +215,9 @@ public class JobMgr {
             // Check if an Initializer is registered for the app
             BatchInitializer initializer = initializers.get(app);
             if (initializer == null) {
-                throw new IllegalStateException("No initializer registered for app: " + app);
+                erlog = "No initializer registered for app: " + app;
+                logger.debug(erlog);
+                throw new IllegalStateException(erlog);
             }
 
             // Create a new InitBlock using the registered Initializer
@@ -144,55 +225,88 @@ public class JobMgr {
 
             // Cache the InitBlock for future use
             initBlocks.put(app, initBlock);
-            System.out.println("Create a new InitBlock using the registered Initializer...");
+            erlog = "Create a new InitBlock using the registered Initializer...";
+            logger.debug(erlog);
 
             return initBlock;
         }
     }
 
-    // RegisterInitializer method to register an initializer for a specific
-    // application
+    /**
+     * RegisterInitializer method to register an initializer for a specific
+     * application
+     * 
+     * @param app         - application for which to register initializer instance.
+     * @param initializer - BatchInitiazer instance to register.
+     */
+    //
     public synchronized void registerInitializer(String app, BatchInitializer initializer) {
         // Check if an initializer for this app already exists
+        String erlog = "";
         if (initializers.containsKey(app)) {
-            throw new IllegalStateException("Initializer already registered for app: " + app);
+            erlog = "Initializer already registered for app: " + app;
+            logger.debug(erlog);
+            throw new IllegalStateException(erlog);
         }
         // Register the initializer for the app
-        System.out.println("Register the initializer for the app.......");
+        erlog = "Register the initializer for the app.......";
+        logger.info(erlog);
 
         initializers.put(app, initializer);
-        System.out.println("Fetch the register initializer for the app......." + initializers.get(app));
-
+        erlog = "Fetch the register initializer for the app......." + initializers.get(app);
+        logger.info(erlog);
     }
 
+    /**
+     * Register Batch processor for the given app
+     * 
+     * @param app       - app name for which to register Batch processor
+     * @param op        - operation type for which to register processor
+     * @param processor - processor instance to register.
+     */
     public synchronized void RegisterProcessor(String app, String op, BatchProcessor processor) {
 
         String key = app + op;
         // Check if an initializer for this app already exists
+        String logst = "";
         if (batchProcessors.containsKey(key)) {
-            throw new IllegalStateException("BatchProcessor already registered for app: " + key);
+            logst = "BatchProcessor already registered for app: " + key;
+            logger.debug(logst);
+            throw new IllegalStateException(logst);
         }
         // Register the initializer for the app
-        System.out.println("Register the BatchProcessor for the app.......");
+        logst = "Register the BatchProcessor for the app.......";
+        logger.info(logst);
 
         batchProcessors.put(key, processor);
-        System.out.println("Fetch the register BatchProcessor for the app......." + batchProcessors.get(key));
+        logst = "Fetch the register BatchProcessor for the app......." + batchProcessors.get(key);
+        logger.info(logst);
 
     }
 
-    public synchronized void RegisterProcessor(String app, String op, SQProcessor processor) {
+    /**
+     * Register Slow Query processor for the given app
+     * 
+     * @param app       - app name for which to register slowQuery processor
+     * @param op        - operation type for which to register processor
+     * @param processor - processor instance to register.
+     */
+    public synchronized void RegisterSQProcessor(String app, String op, SQProcessor processor) {
 
         String key = app + op;
         // Check if an initializer for this app already exists
         if (slowQueryProcessor.containsKey(key)) {
-            throw new IllegalStateException("SQProcessor already registered for app: " + key);
+            String erlog = "SQProcessor already registered for app: " + key;
+            logger.debug(erlog);
+            throw new IllegalStateException(erlog);
         }
         // Register the initializer for the app
-        System.out.println("Register the SQProcessor for the app.......");
+        String erlog = "Register the SQProcessor for the app.......";
+        logger.info(erlog);
 
         slowQueryProcessor.put(key, processor);
-        System.out.println("Fetch the register SQProcessor for the app......." + slowQueryProcessor.get(key));
-
+        erlog = "Fetch the register SQProcessor for the app......." + slowQueryProcessor.get(key);
+        logger.info(erlog);
     }
 
 }

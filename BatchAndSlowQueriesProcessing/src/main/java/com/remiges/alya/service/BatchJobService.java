@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,8 @@ import com.remiges.alya.jobs.BatchStatus;
 @Service
 public class BatchJobService {
 
+    private static final Logger logger = LoggerFactory.getLogger(BatchJobService.class);
+
     ObjectMapper mapper;
 
     private BatchRowsRepo batchrowrepo;
@@ -42,7 +46,7 @@ public class BatchJobService {
         return batchrowrepo.findAllWithBatches(status);
     }
 
-    public void UpdateBatchRowStatus(Long rowid, String batchStatus) throws Exception {
+    public void UpdateBatchRowStatus(Long rowid, BatchStatus batchStatus) throws Exception {
 
         Optional<BatchRows> batchrow = batchrowrepo.findById(rowid);
         if (batchrow.isPresent()) {
@@ -50,7 +54,23 @@ public class BatchJobService {
             batchrowrepo.save(batchrow.get());
 
         } else {
-            throw new Exception("batch row not found" + rowid);
+            String erlog = "batch row not found" + rowid;
+            logger.debug(erlog);
+            throw new Exception(erlog);
+        }
+
+    }
+
+    public void UpdateBatchStatus(UUID batchId, BatchStatus Status) throws Exception {
+        Optional<Batches> batchrec = batchesRepo.findById(batchId);
+        if (batchrec.isPresent()) {
+            batchrec.get().setStatus(Status);
+            batchesRepo.save(batchrec.get());
+
+        } else {
+            String erlog = "batch not found for batchid" + batchId;
+            logger.debug(erlog);
+            throw new Exception(erlog);
         }
 
     }
@@ -60,13 +80,14 @@ public class BatchJobService {
 
         queuedbatchrows.stream().forEach(batchrow -> {
             try {
-                UpdateBatchRowStatus(batchrow.getrowid(), status.toString());
+                UpdateBatchRowStatus(batchrow.getrowid(), status);
 
                 UpdateBatchStatus(batchrow.getbatch(), status);
 
             } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                String erlog = "exception while updating batch status ex = " + e.getMessage();
+                logger.debug(erlog);
+
             }
         });
 
@@ -79,7 +100,7 @@ public class BatchJobService {
         if (sqRow.isPresent()) {
             BatchRows batchRows = sqRow.get();
             batchRows.setDoneat(Timestamp.from(Instant.now()));
-            batchRows.setBatchStatus(batchOutput.getStatus().toString());
+            batchRows.setBatchStatus(batchOutput.getStatus());
             batchRows.setRes(batchOutput.getResult());
             batchRows.setMessages(batchOutput.getMessages());
             batchrowrepo.save(batchRows);
@@ -90,32 +111,20 @@ public class BatchJobService {
 
     }
 
-    public void UpdateBatchStatus(UUID batchId, BatchStatus Status) throws Exception {
-        Optional<Batches> batchrec = batchesRepo.findById(batchId);
-        if (batchrec.isPresent()) {
-            batchrec.get().setStatus(Status);
-            batchesRepo.save(batchrec.get());
-
-        } else {
-            throw new Exception("batch not found" + batchId);
-        }
-
-    }
-
     /*
      * public void SaveSlowQueryBatchJobs(BatchRequestDto requestDto) {
      * 
-     * BatchJobs batchJobs = mapper.convertValue(requestDto, BatchJobs.class);
+     * Batches batchJobs = mapper.convertValue(requestDto, Batches.class);
      * batchJobs.setType('Q');
      * batchJobs.setReqat(Timestamp.from(Instant.now()));
-     * batchJobs.setStatus(BatchStatus.queued);
-     * BatchRow batchRow = new BatchRow();
+     * batchJobs.setStatus(BatchStatus.BatchQueued);
+     * BatchRows batchRow = new BatchRows();
      * batchRow.setBatch(batchJobs);
      * batchRow.setLine(0);
-     * batchRow.setStatus(BatchStatus.queued);
+     * batchRow.setBatchStatus(BatchStatus.BatchQueued);
      * batchRow.setReqat(Timestamp.from(Instant.now()));
      * 
-     * batchjobsrepo.save(batchJobs);
+     * batchesRepo.save(batchJobs);
      * 
      * }
      */

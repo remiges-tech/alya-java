@@ -1,7 +1,12 @@
 package com.remiges.alya.entity;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.UUID;
+
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.Type;
+import org.hibernate.type.SqlTypes;
 
 import com.remiges.alya.jobs.BatchStatus;
 
@@ -19,6 +24,7 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name = "batches")
+// @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 public class Batches {
 
 	@Enumerated(EnumType.STRING)
@@ -37,18 +43,18 @@ public class Batches {
 	@Column(nullable = false)
 	private char type;
 
-	@Column(nullable = false)
-	@Lob
+	@JdbcTypeCode(SqlTypes.JSON)
+	@Column(nullable = false, columnDefinition = "jsonb")
 	private String context;
 
 	@Column
 	private String inputfile;
 
 	@Column(nullable = false)
-	private LocalDateTime reqat;
+	private Timestamp reqat;
 
 	@Column
-	private LocalDateTime doneat;
+	private Timestamp doneat;
 
 	@Column
 	private String outputfiles;
