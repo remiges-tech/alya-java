@@ -1,7 +1,5 @@
 package com.remiges.alya.annotation;
 
-package com.remiges.alya.annotation;
-
 import java.util.List;
 import java.util.regex.Pattern;
 
