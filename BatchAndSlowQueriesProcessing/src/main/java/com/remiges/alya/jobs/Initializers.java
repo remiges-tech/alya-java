@@ -1,7 +1,9 @@
 package com.remiges.alya.jobs;
 
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -10,17 +12,19 @@ import org.springframework.stereotype.Component;
 /**
  * The Initializers class manages initialization for different applications.
  */
-interface BatchInitBlck {
-	boolean isAlive(); // Method to check if the BatchInitBlock object is still valid
+abstract class BatchInitBlocks {
+	abstract boolean isAlive(String appName); // Method to check if the BatchInitBlock object is still valid
 
-	void close(); // Method to close the BatchInitBlock object
+	abstract void close(String appName); // Method to close the BatchInitBlock object
 }
 
 @Component
 public class Initializers {
 
-	private final Map<String, InitBlock> initBlockCache = new HashMap<>();
+	public static final Map<String, InitBlock> initBlockCache = new ConcurrentHashMap<>();
 	private final Logger logger = Logger.getLogger(Initializers.class.getName());
+	// Lock object for synchronization
+	private final Object lock = new Object();
 
 	/**
 	 * Registers an initializer for the specified application.
@@ -30,24 +34,29 @@ public class Initializers {
 	 *                     objects as values.
 	 * @return A message indicating the registration status.
 	 */
-	public String registerInitializer(String appName, Map<String, Object> resourceList) {
-		try {
-			System.out.println("Registering initializer for app: " + appName);
-			// Check if an Initializer is registered for the app
-			if (initBlockCache.containsKey(appName)) {
-				return "Initializer already registered for app: " + appName;
+	public String RegisterInitializer(String appName, Map<String, Object> resourceList) {
+
+		// Synchronize access to ensure thread safety
+		synchronized (lock) {
+			try {
+				System.out.println("Registering initializer for app: " + appName);
+				// Check if an Initializer is registered for the app
+				if (initBlockCache.containsKey(appName)) {
+					return "Initializer already registered for app: " + appName + ":" + initBlockCache.get(appName);
+				}
+
+				// Create or retrieve the InitBlock for the app
+				InitBlock initBlock = init(appName, resourceList);
+				System.out.println("Init Block Object Created :- " + initBlock.toString());
+
+				// Register the initializer
+				initBlockCache.put(appName, initBlock);
+				return "Initializer registered successfully for app: " + appName;
+			} catch (Exception e) {
+				// Log and handle the exception
+				logger.log(Level.SEVERE, "Failed to register initializer for app: " + appName, e);
+				return "Failed to register initializer for app: " + appName + ". See logs for details.";
 			}
-
-			// Create or retrieve the InitBlock for the app
-			InitBlock initBlock = init(appName, resourceList);
-
-			// Register the initializer
-			initBlockCache.put(appName, initBlock);
-			return "Initializer registered successfully for app: " + appName;
-		} catch (Exception e) {
-			// Log and handle the exception
-			logger.log(Level.SEVERE, "Failed to register initializer for app: " + appName, e);
-			return "Failed to register initializer for app: " + appName + ". See logs for details.";
 		}
 	}
 
@@ -72,7 +81,7 @@ public class Initializers {
 	/**
 	 * The InitBlock class encapsulates initialization logic for each application.
 	 */
-	private static class InitBlock implements BatchInitBlck {
+	private static class InitBlock extends BatchInitBlocks {
 
 		// Add fields as required for your initialization logic
 
@@ -108,17 +117,16 @@ public class Initializers {
 		 * @return true if the BatchInitBlock is alive, false otherwise.
 		 */
 		@Override
-		public boolean isAlive() {
-			// Implement the logic to check if the BatchInitBlock object is still valid
-			// For example, check if database handles are still valid
-			return true; // Placeholder return value, replace with actual logic
+		public boolean isAlive(String appName) {
+			InitBlock initObject = initBlockCache.get(appName);
+			return initObject != null && new WeakReference<>(initObject).get() != null;
 		}
 
 		/**
 		 * Method to close the BatchInitBlock object.
 		 */
 		@Override
-		public void close() {
+		public void close(String appName) {
 			// Implement the logic to close the BatchInitBlock object
 			// For example, close database connections
 			System.out.println("Closing InitBlock");
