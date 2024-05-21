@@ -25,6 +25,7 @@ public final class ErrorResponseUtil {
         );
     }*/
     
+    /*This method is implemented for the field that user providing is incorrect, like- id */
 
     public static ErrorResponse dataNotFound(String field) {
         return new ErrorResponse(
@@ -34,6 +35,7 @@ public final class ErrorResponseUtil {
         );
     }
 
+    /*This method is implemented for giving error response as Internal server error */
     public static ErrorResponse internalServerError() {
         return new ErrorResponse(
                 "error",

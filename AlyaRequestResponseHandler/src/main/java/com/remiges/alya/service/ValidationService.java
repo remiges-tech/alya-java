@@ -11,7 +11,10 @@ import com.remiges.alya.constant.ValidationConstant;
 import com.remiges.alya.dto.RequestParameterDTO;
 import com.remiges.alya.exception.CustomException;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class ValidationService {
 
     public String validateUser(RequestParameterDTO userDTO) {
@@ -56,6 +59,7 @@ public class ValidationService {
     
 
     private static String validatePan(String pan) {
+        log.info("PAN Verified");
         return Pattern.compile(ValidationConstant.PAN_REGEX).matcher(pan).matches() ? "Entered PAN value is proper" : "Improper PAN Value Entered";
     }
 
