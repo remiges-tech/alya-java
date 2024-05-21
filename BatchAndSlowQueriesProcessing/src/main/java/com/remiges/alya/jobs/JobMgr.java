@@ -6,16 +6,20 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.remiges.alya.service.BatchJobService;
 import com.remiges.alya.entity.BatchJob;
+import com.remiges.alya.jobs.Initializer.InitBlock;
 
+@Component
 public class JobMgr {
 
     private static final Logger logger = LoggerFactory.getLogger(JobMgr.class);
 
-    private final Map<String, BatchInitializer> initializers = new ConcurrentHashMap<>();
-    private final Map<String, BatchInitBlock> initBlocks = new ConcurrentHashMap<>();
+    private final Map<String, Initializer> initializers = new ConcurrentHashMap<>();
+    private final Map<String, InitBlock> initBlocks = new ConcurrentHashMap<>();
 
     private final Map<String, BatchProcessor> batchProcessors = new ConcurrentHashMap<>();
     private final Map<String, SQProcessor> slowQueryProcessor = new ConcurrentHashMap<>();
@@ -23,18 +27,29 @@ public class JobMgr {
     // Lock object for synchronization
     private final Object lock = new Object();
 
+    @Autowired
     BatchJobService batchJobService;
 
     boolean bprocessJobs = true;
 
     Thread jobprocessoThread = null;
 
+    // @Autowired
     public JobMgr() {
+        // this.batchJobService = myService;
 
         jobprocessoThread = new Thread(new JobProcessor());
-        jobprocessoThread.start();
+
     }
 
+    public String DoJobs() {
+        if (jobprocessoThread == null) {
+            return "job process thread not exists";
+        }
+
+        jobprocessoThread.start();
+        return "";
+    }
     public void Shutdown() {
         bprocessJobs = false;
         // jobprocessoThread.
@@ -65,7 +80,7 @@ public class JobMgr {
         }
 
         try {
-            BatchInitBlock batchInitBlock = getOrCreateInitBlock(rowtoprocess.getapp());
+            InitBlock batchInitBlock = getOrCreateInitBlock(rowtoprocess.getapp());
 
             BatchOutput batchoutput = sqProcessor.DoSlowQuery(batchInitBlock, rowtoprocess.getcontext(),
                     rowtoprocess.getinput());
@@ -136,7 +151,7 @@ public class JobMgr {
         }
 
         try {
-            BatchInitBlock batchInitBlock = getOrCreateInitBlock(rowtoprocess.getapp());
+            InitBlock batchInitBlock = getOrCreateInitBlock(rowtoprocess.getapp());
 
             BatchOutput batchoutput = batchProcessor.DoBatchJob(batchInitBlock, rowtoprocess.getcontext(),
                     rowtoprocess.getline(), rowtoprocess.getinput());
@@ -193,7 +208,6 @@ public class JobMgr {
 
     }
 
-    //
     /**
      * getOrCreateInitBlock method to retrieve or create an InitBlock for the given
      * app
@@ -201,7 +215,7 @@ public class JobMgr {
      * @param app - app for which to return InitBlock
      * @return
      */
-    public synchronized BatchInitBlock getOrCreateInitBlock(String app) {
+    public synchronized InitBlock getOrCreateInitBlock(String app) {
         String erlog = "getOrCreateInitBlock method to retrieve or create an InitBlock for the given app...";
         logger.info(erlog);
         // Synchronize access to ensure thread safety
@@ -213,7 +227,7 @@ public class JobMgr {
             }
 
             // Check if an Initializer is registered for the app
-            BatchInitializer initializer = initializers.get(app);
+            Initializer initializer = initializers.get(app);
             if (initializer == null) {
                 erlog = "No initializer registered for app: " + app;
                 logger.debug(erlog);
@@ -221,7 +235,7 @@ public class JobMgr {
             }
 
             // Create a new InitBlock using the registered Initializer
-            BatchInitBlock initBlock = initializer.init(app);
+            InitBlock initBlock = initializer.init(app);
 
             // Cache the InitBlock for future use
             initBlocks.put(app, initBlock);
@@ -232,6 +246,7 @@ public class JobMgr {
         }
     }
 
+
     /**
      * RegisterInitializer method to register an initializer for a specific
      * application
@@ -240,7 +255,7 @@ public class JobMgr {
      * @param initializer - BatchInitiazer instance to register.
      */
     //
-    public synchronized void registerInitializer(String app, BatchInitializer initializer) {
+    public synchronized void registerInitializer(String app, Initializer initializer) {
         // Check if an initializer for this app already exists
         String erlog = "";
         if (initializers.containsKey(app)) {
