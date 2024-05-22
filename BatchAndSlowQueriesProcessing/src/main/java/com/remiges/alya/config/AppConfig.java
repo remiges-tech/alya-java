@@ -9,8 +9,10 @@ import com.remiges.alya.service.BatchJobService;
 @Configuration
 public class AppConfig {
 
-    @Bean
-    public JobMgr myComponent(BatchJobService myService) {
-        return new JobMgr();
-    }
+    /*
+     * @Bean
+     * public JobMgr myComponent(BatchJobService myService) {
+     * return new JobMgr();
+     * }
+     */
 }

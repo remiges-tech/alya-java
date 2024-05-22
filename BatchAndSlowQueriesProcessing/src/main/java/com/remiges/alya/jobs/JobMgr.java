@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.remiges.alya.service.BatchJobService;
+
+import lombok.NonNull;
+
 import com.remiges.alya.entity.BatchJob;
 import com.remiges.alya.jobs.Initializer.InitBlock;
 
@@ -27,16 +30,16 @@ public class JobMgr {
     // Lock object for synchronization
     private final Object lock = new Object();
 
-    @Autowired
+
     BatchJobService batchJobService;
 
     boolean bprocessJobs = true;
 
     Thread jobprocessoThread = null;
 
-    // @Autowired
-    public JobMgr() {
-        // this.batchJobService = myService;
+    @Autowired
+    public JobMgr(BatchJobService batchJobService) {
+        this.batchJobService = batchJobService;
 
         jobprocessoThread = new Thread(new JobProcessor());
 
@@ -112,7 +115,7 @@ public class JobMgr {
      */
     private String updateSlowQueryJobResult(BatchJob rowtoproces, BatchOutput batchOutput) {
         try {
-            batchJobService.updateBatchRowSlowQueryoutput(rowtoproces, batchOutput);
+            batchJobService.updateBatchRowForSlowQueryoutput(rowtoproces, batchOutput);
             return "";
         } catch (Exception ex) {
             String erlog = "failed to update result for app" + rowtoproces.getapp();
@@ -127,8 +130,15 @@ public class JobMgr {
      * @param rowtoproces
      * @param batchOutput
      */
-    private void updateBatchJobResult(BatchJob rowtoproces, BatchOutput batchOutput) {
-
+    private String updateBatchJobResult(BatchJob rowtoproces, BatchOutput batchOutput) {
+        try {
+            batchJobService.updateBatchRowForSlowQueryoutput(rowtoproces, batchOutput);
+            return "";
+        } catch (Exception ex) {
+            String erlog = "failed to update blobrow for app" + rowtoproces.getapp() + ex.getMessage();
+            logger.debug(erlog);
+            return erlog;
+        }
     }
 
     /**
@@ -182,7 +192,7 @@ public class JobMgr {
 
             while (bprocessJobs) {
 
-                List<BatchJob> allQueuedBatchRow = batchJobService.getAllQueuedBatchRow(BatchStatus.BatchQueued.name());
+                List<BatchJob> allQueuedBatchRow = batchJobService.getAllQueuedBatchRow(BatchStatus.BatchQueued);
 
                 if (allQueuedBatchRow.isEmpty() == true) {
                     try {

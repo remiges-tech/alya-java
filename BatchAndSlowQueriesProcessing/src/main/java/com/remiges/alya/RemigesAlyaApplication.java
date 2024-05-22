@@ -17,6 +17,7 @@ import com.remiges.alya.config.AppConfig;
 import com.remiges.alya.jobs.BatchProcessor;
 import com.remiges.alya.jobs.Initializer;
 import com.remiges.alya.jobs.JobMgr;
+import com.remiges.alya.jobs.JobMgrClient;
 import com.remiges.alya.service.BatchJobService;
 
 import redis.clients.jedis.Jedis;
@@ -34,29 +35,32 @@ public class RemigesAlyaApplication {
 		return Logger.getLogger("BatchProcessorLogs");
 	}
 
-	@Bean
-	public static JobMgr jobMgr() {
-
-		return new JobMgr();
-	}
 
 	public static void main(String[] args) {
-		SpringApplication.run(RemigesAlyaApplication.class, args);	
+		SpringApplication.run(RemigesAlyaApplication.class, args);
 
-		String KRA = "KRA";
-		String PANENQUIRY = "PANENQURY";
-
-		JobMgr jobMgr = jobMgr();
-
-		Initializer intr = new Initializer();
-		// JobMgr jobm = new JobMgr(batchJobService);
-		jobMgr.registerInitializer(KRA, intr);
-
-		jobMgr.RegisterProcessor(KRA, PANENQUIRY, new BatchProcessor());
-
-		jobMgr.DoJobs();
+		// JobMgrClient jobMgrcli = new JobMgrClient(); // jobMgr();
 
 	}
 
+	@Bean
+	public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
+		return args -> {
+			JobMgrClient jobMgrcli = ctx.getBean(JobMgrClient.class);
+			jobMgrcli.getJobmrg(); // This will call the method in MyComponent
+			JobMgr jobMgr = jobMgrcli.getJobmrg();
+			String KRA = "KRA";
+		String PANENQUIRY = "PANENQURY";
+
+			Initializer intr = new Initializer();
+			// JobMgr jobm = new JobMgr(batchJobService);
+			jobMgr.registerInitializer(KRA, intr);
+
+			jobMgr.RegisterProcessor(KRA, PANENQUIRY, new BatchProcessor());
+
+			jobMgr.DoJobs();
+
+		};
+	}
 
 }

@@ -60,7 +60,11 @@
 			<artifactId>hypersistence-utils-hibernate-62</artifactId>
 			<version>3.7.5</version>
 		</dependency>
-
+		<dependency>
+			<groupId>io.minio</groupId>
+			<artifactId>minio</artifactId>
+			<version>8.5.10</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

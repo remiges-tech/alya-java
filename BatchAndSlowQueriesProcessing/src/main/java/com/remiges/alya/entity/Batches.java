@@ -56,7 +56,8 @@ public class Batches {
 	@Column
 	private Timestamp doneat;
 
-	@Column
+	@JdbcTypeCode(SqlTypes.JSON)
+	@Column(columnDefinition = "jsonb")
 	private String outputfiles;
 
 	@Column

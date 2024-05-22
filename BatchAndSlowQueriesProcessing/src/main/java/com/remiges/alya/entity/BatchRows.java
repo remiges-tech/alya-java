@@ -2,6 +2,7 @@ package com.remiges.alya.entity;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Map;
 
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
@@ -51,18 +52,17 @@ public class BatchRows {
 
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(columnDefinition = "jsonb")
-
 	private String res;
 
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(columnDefinition = "jsonb")
-	private String blobrows;
+	private Map<String, String> blobrows;
 
 	@Column
 	@Lob
 	private String messages;
 
 	@Column
-	private Timestamp doneby;
+	private String doneby;
 
 }
