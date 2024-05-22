@@ -12,18 +12,6 @@ public final class ErrorResponseUtil {
         // private constructor to prevent instantiation
     }
 
-    /* 
-    public static ErrorResponse dataNotFound(String field, Long providedId) {
-        List<String> vals = new ArrayList<>();
-        vals.add("Required ID: " + field);
-        vals.add("Provided ID: " + providedId);
-        
-        return new ErrorResponse(
-                "error",
-                Collections.emptyMap(),
-                Collections.singletonList(new ErrorMessage("datanotfound", 404, field, vals))
-        );
-    }*/
     
     /*This method is implemented for the field that user providing is incorrect, like- id */
 

@@ -2,6 +2,8 @@ package com.remiges.alya.jsonutil.util.model;
 
 import java.util.List;
 
+import com.remiges.alya.validation.AlyaValidation;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,9 +17,8 @@ public class ErrorMessage {
     private String field;
     private List<String> vals;
 
-    // public String getMsg(){
-    //     return null;
-    // }
+    public String getValsErrorMessage() {
+        return AlyaValidation.combineErrorMessages(null);
+    }
 
-    // Constructors, getters, and setters
 }

@@ -17,6 +17,10 @@ public class RequestParameterDTO {
 
 private Long userId;
 
+private String name;
+
+private String email;
+
 @NotNull
 @ValidField(type = FieldType.PAN)
 private String pan;

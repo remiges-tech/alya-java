@@ -10,5 +10,6 @@ public class ValidationConstant {
     public static final String POSTAL_CODE_REGEX = "^[1-9][0-9]{5}$";
     public static final String POST_OFFICE_NAME = "^[A-Za-z\\s-]+$";
     public static final String PHONE_NUMBER = "\\d{10}";
+    public static final String EMAIL_REGEX = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
 }
 

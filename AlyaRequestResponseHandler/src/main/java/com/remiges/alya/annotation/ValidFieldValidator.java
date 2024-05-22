@@ -11,12 +11,12 @@ import com.remiges.alya.constant.ValidationConstant;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class ValidFieldValidator implements ConstraintValidator<ValidField1, String> {
+public class ValidFieldValidator implements ConstraintValidator<ValidField, String> {
 
     private List<FieldType> fieldTypes;
 
     @Override
-    public void initialize(ValidField1 constraintAnnotation) {
+    public void initialize(ValidField constraintAnnotation) {
         this.fieldTypes = List.of(constraintAnnotation.type());
     }
 

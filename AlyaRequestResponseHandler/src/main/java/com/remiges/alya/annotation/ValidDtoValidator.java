@@ -1,19 +1,18 @@
 package com.remiges.alya.annotation;
 
-
-import com.remiges.alya.dto.RequestDto;
+import com.remiges.alya.dto.RequestParameterDTO;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class ValidDtoValidator implements ConstraintValidator<ValidDto, RequestDto> {
+public class ValidDtoValidator implements ConstraintValidator<ValidDto, RequestParameterDTO> {
 
     @Override
     public void initialize(ValidDto constraintAnnotation) {
     }
 
     @Override
-    public boolean isValid(RequestDto value, ConstraintValidatorContext context) {
+    public boolean isValid(RequestParameterDTO value, ConstraintValidatorContext context) {
         if (value == null) {
             return false;
         }
