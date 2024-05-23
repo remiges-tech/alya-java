@@ -3,7 +3,7 @@ package com.remiges.alya.jsonutil.util;
 import java.util.Collections;
 import java.util.List;
 
-import com.remiges.alya.jsonutil.util.model.ErrorMessage;
+import com.remiges.alya.jsonutil.util.model.ErrorMessage1;
 import com.remiges.alya.jsonutil.util.model.ErrorResponse;
 
 public final class ErrorResponseUtil {
@@ -19,7 +19,7 @@ public final class ErrorResponseUtil {
         return new ErrorResponse(
                 "error",
                 Collections.emptyMap(),
-                Collections.singletonList(new ErrorMessage("datanotfound", 404, field, Collections.emptyList()))
+                Collections.singletonList(new ErrorMessage1("datanotfound", 404, field, Collections.emptyList()))
         );
     }
 
@@ -28,7 +28,7 @@ public final class ErrorResponseUtil {
         return new ErrorResponse(
                 "error",
                 Collections.emptyMap(),
-                Collections.singletonList(new ErrorMessage("internalservererror", 500, "", Collections.emptyList()))
+                Collections.singletonList(new ErrorMessage1("internalservererror", 500, "", Collections.emptyList()))
         );
     }
 
@@ -36,11 +36,11 @@ public final class ErrorResponseUtil {
         return new ErrorResponse(
                 "error",
                 Collections.emptyMap(),
-                Collections.singletonList(new ErrorMessage("unauthorized", 401, field, Collections.emptyList()))
+                Collections.singletonList(new ErrorMessage1("unauthorized", 401, field, Collections.emptyList()))
         );
     }
 
-    public static ErrorResponse badRequest(List<ErrorMessage> errorMessages) {
+    public static ErrorResponse badRequest(List<ErrorMessage1> errorMessages) {
         return new ErrorResponse(
                 "error",
                 Collections.emptyMap(),

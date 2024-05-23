@@ -8,11 +8,12 @@ import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 import com.remiges.alya.constant.ValidationConstant;
+import com.remiges.alya.dto.RequestDTO;
 import com.remiges.alya.dto.RequestParameterDTO;
 
 public class AlyaValidation {
 
-    public static Map<String, String> alyaValidator(RequestParameterDTO request) {
+    public static Map<String, String> alyaValidator(RequestDTO request) {
         Map<String, String> errors = new HashMap<>();
 
         // Validate name
@@ -147,15 +148,5 @@ public class AlyaValidation {
 
         return errorMessage.toString().trim();
     }
-
-    // public static Map<String, String> combineErrorMessagesWithFieldNames(Map<String, String> validationErrors) {
-    //     Map<String, String> combinedErrors = new HashMap<>();
-
-    //     for (Map.Entry<String, String> entry : validationErrors.entrySet()) {
-    //         combinedErrors.put(entry.getKey(), entry.getKey() + ": " + entry.getValue());
-    //     }
-
-    //     return combinedErrors;
-    // }
 }
 
