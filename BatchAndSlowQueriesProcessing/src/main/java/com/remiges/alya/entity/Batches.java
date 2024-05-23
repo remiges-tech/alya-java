@@ -2,6 +2,7 @@ package com.remiges.alya.entity;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.UUID;
 
 import org.hibernate.annotations.JdbcTypeCode;
@@ -58,7 +59,7 @@ public class Batches {
 
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(columnDefinition = "jsonb")
-	private String outputfiles;
+	private Map<String, String> outputfiles;
 
 	@Column
 	private Integer nsuccess;
