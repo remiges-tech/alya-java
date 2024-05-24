@@ -17,8 +17,8 @@ import com.remiges.alya.jobs.BatchStatus;
 public interface BatchRowsRepo extends JpaRepository<BatchRows, Long> {
 
     // Define custom query methods if needed...
-    @Query(" SELECT b.app, b.op, b.Id, br.rowid, "
-            + "  b.context, br.line, br.input FROM"
+    @Query(" SELECT new  com.remiges.alya.entity.BatchJob( b.app, b.op, b.Id, br.rowid, "
+                    + "  b.context, br.line, br.input ) FROM"
             + " BatchRows br INNER JOIN br.batch b "
             + " where br.batchStatus=:status")
     List<BatchJob> findAllWithBatches(@Param("status") BatchStatus status);

@@ -9,6 +9,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.Type;
 import org.hibernate.type.SqlTypes;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.remiges.alya.jobs.BatchStatus;
 
 import jakarta.persistence.Column;
@@ -46,7 +47,7 @@ public class Batches {
 
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(nullable = false, columnDefinition = "jsonb")
-	private String context;
+	private JsonNode context;
 
 	@Column
 	private String inputfile;

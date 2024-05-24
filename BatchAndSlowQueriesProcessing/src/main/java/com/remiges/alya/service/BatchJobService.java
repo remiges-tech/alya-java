@@ -16,15 +16,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.remiges.alya.repository.BatchRowsRepo;
 import com.remiges.alya.repository.BatchesRepo;
 
 import jakarta.transaction.Transactional;
 
+import com.remiges.alya.config.JobManagerConfig;
 import com.remiges.alya.entity.BatchJob;
 import com.remiges.alya.entity.BatchRows;
 import com.remiges.alya.entity.Batches;
+import com.remiges.alya.jobs.BatchInput;
 import com.remiges.alya.jobs.BatchOutput;
 import com.remiges.alya.jobs.BatchStatus;
 import com.remiges.alya.jobs.ProcessOutputToFle;
@@ -43,6 +46,38 @@ public class BatchJobService {
     private final BatchesRepo batchesRepo;
     private final MinioService minioSrv;
 
+    private JedisService jedissrv;
+
+    JobManagerConfig mgrConfig;
+
+    @Transactional
+    public UUID SaveBatch(String app, String op, JsonNode context, List<BatchInput> batchInput, BatchStatus status) {
+
+        Batches batchJob = new Batches();
+        batchJob.setApp(app);
+        batchJob.setOp(op);
+        batchJob.setContext(context);
+        batchJob.setStatus(status);
+        batchJob.setType('B');
+        batchJob.setReqat(new Timestamp(System.currentTimeMillis()));
+        Batches savedBatch = batchesRepo.save(batchJob);
+
+        for (BatchInput batch : batchInput) {
+
+            BatchRows btrow = new BatchRows();
+            btrow.setBatch(savedBatch);
+            btrow.setBatchStatus(status);
+            btrow.setInput(batch.getInput());
+            btrow.setLine(batch.getLine());
+            btrow.setReqat(new Timestamp(System.currentTimeMillis()));
+            batchrowrepo.save(btrow);
+
+        }
+
+        return savedBatch.getId();
+
+    }
+
     /**
      * Constructs a new BatchJobService.
      *
@@ -52,12 +87,15 @@ public class BatchJobService {
      * @param batchesRepo  the repository for batches
      */
     @Autowired
-    public BatchJobService(MinioService minioSrv, ObjectMapper mapper, BatchRowsRepo batchrowrepo,
+    public BatchJobService(JedisService jedissrv, JobManagerConfig mgrconfig, MinioService minioSrv,
+            ObjectMapper mapper, BatchRowsRepo batchrowrepo,
             BatchesRepo batchesRepo) {
         this.batchesRepo = batchesRepo;
         this.batchrowrepo = batchrowrepo;
         this.mapper = mapper;
         this.minioSrv = minioSrv;
+        this.jedissrv = jedissrv;
+        this.mgrConfig = mgrconfig;
     }
 
     /**
@@ -66,6 +104,7 @@ public class BatchJobService {
      * @param status the status to filter batch rows
      * @return a list of batch jobs
      */
+    @Transactional
     public List<BatchJob> getAllQueuedBatchRow(BatchStatus status) {
         return batchrowrepo.findAllWithBatches(status);
     }
@@ -152,7 +191,7 @@ public class BatchJobService {
             throws Exception {
         for (BatchJob batchrow : queuedbatchrows) {
             try {
-                UpdateBatchRowStatus(batchrow.getrowid(), status);
+                UpdateBatchRowStatus(batchrow.getRowId(), status);
             } catch (Exception e) {
                 String erlog = "exception while updating batchrow status ex = " + e.getMessage();
                 logger.debug(erlog);
@@ -178,7 +217,7 @@ public class BatchJobService {
      * @param batchOutput the batch output
      */
     public void updateBatchRowForSlowQueryoutput(BatchJob rowtoproces, BatchOutput batchOutput) {
-        Optional<BatchRows> sqRow = batchrowrepo.findById(rowtoproces.getrowid());
+        Optional<BatchRows> sqRow = batchrowrepo.findById(rowtoproces.getRowId());
         if (sqRow.isPresent()) {
             BatchRows batchRows = sqRow.get();
             batchRows.setDoneat(Timestamp.from(Instant.now()));
@@ -196,7 +235,7 @@ public class BatchJobService {
      * @param batchOutput the batch output
      */
     public void updateBatchRowForBatchOutput(BatchJob rowtoproces, BatchOutput batchOutput) {
-        Optional<BatchRows> sqRow = batchrowrepo.findById(rowtoproces.getrowid());
+        Optional<BatchRows> sqRow = batchrowrepo.findById(rowtoproces.getRowId());
         if (sqRow.isPresent()) {
             BatchRows batchRows = sqRow.get();
             batchRows.setDoneat(Timestamp.from(Instant.now()));
@@ -291,6 +330,10 @@ public class BatchJobService {
             logger.debug(erlog);
             return erlog;
         }
+
+        jedissrv.updateStatusInRedis(batchId, sumutils.getSummaryStatus(),
+                mgrConfig.getALYA_BATCHSTATUS_CACHEDUR_SEC() * 100);
+
         return "";
     }
 

@@ -15,10 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.remiges.alya.service.BatchJobService;
+import com.remiges.alya.service.JedisService;
+import com.remiges.alya.config.JobManagerConfig;
 import com.remiges.alya.entity.BatchJob;
 import com.remiges.alya.jobs.Initializer.InitBlock;
 
-import lombok.NonNull;
 
 @Component
 public class JobMgr {
@@ -34,14 +35,20 @@ public class JobMgr {
     private boolean bprocessJobs = true;
     private Thread jobprocessoThread = null;
 
+    private JedisService jedissrv;
+
+    JobManagerConfig mgrConfig;
+
     /**
      * Constructor for JobMgr.
      * 
      * @param batchJobService the service used for batch job operations
      */
     @Autowired
-    public JobMgr(BatchJobService batchJobService) {
+    public JobMgr(BatchJobService batchJobService, JedisService jedissrv, JobManagerConfig mgrconfig) {
         this.batchJobService = batchJobService;
+        this.jedissrv = jedissrv;
+        this.mgrConfig = mgrconfig;
         jobprocessoThread = new Thread(new JobProcessor());
     }
 
@@ -72,7 +79,7 @@ public class JobMgr {
      * @return a message indicating the result of the processing
      */
     public String processRow(BatchJob rowtoprocess) {
-        if (rowtoprocess.getline() == 0) {
+        if (rowtoprocess.getLine() == 0) {
             return processSlowQuery(rowtoprocess);
         } else {
             return processBatch(rowtoprocess);
@@ -86,33 +93,33 @@ public class JobMgr {
      * @return a message indicating the result of the processing
      */
     private String processSlowQuery(BatchJob rowtoprocess) {
-        String processorKey = rowtoprocess.getapp() + rowtoprocess.getop();
+        String processorKey = rowtoprocess.getApp() + rowtoprocess.getOp();
         SQProcessor sqProcessor = slowQueryProcessor.get(processorKey);
 
         if (sqProcessor == null) {
-            String erlog = "No SQ Processor found for app " + rowtoprocess.getapp()
-                    + " and for OP " + rowtoprocess.getop();
+            String erlog = "No SQ Processor found for app " + rowtoprocess.getApp()
+                    + " and for OP " + rowtoprocess.getOp();
             logger.debug(erlog);
             return erlog;
         }
 
         try {
-            InitBlock batchInitBlock = getOrCreateInitBlock(rowtoprocess.getapp());
+            InitBlock batchInitBlock = getOrCreateInitBlock(rowtoprocess.getApp());
 
-            BatchOutput batchoutput = sqProcessor.DoSlowQuery(batchInitBlock, rowtoprocess.getcontext(),
-                    rowtoprocess.getinput());
+            BatchOutput batchoutput = sqProcessor.DoSlowQuery(batchInitBlock, rowtoprocess.getContext(),
+                    rowtoprocess.getInput());
 
             if (batchoutput.error.equals(ErrorCodes.NOERROR)) {
                 updateSlowQueryJobResult(rowtoprocess, batchoutput);
             } else {
-                String erlog = "failed to process sq for app " + rowtoprocess.getapp();
+                String erlog = "failed to process sq for app " + rowtoprocess.getApp();
                 logger.debug(erlog);
                 return erlog;
             }
 
             return "";
         } catch (IllegalStateException exs) {
-            String erlog = "No Initializer found for app " + rowtoprocess.getapp();
+            String erlog = "No Initializer found for app " + rowtoprocess.getApp();
             logger.debug(erlog);
             return erlog;
         }
@@ -130,7 +137,7 @@ public class JobMgr {
             batchJobService.updateBatchRowForSlowQueryoutput(rowtoproces, batchOutput);
             return "";
         } catch (Exception ex) {
-            String erlog = "failed to update result for app " + rowtoproces.getapp();
+            String erlog = "failed to update result for app " + rowtoproces.getApp();
             logger.debug(erlog);
             return erlog;
         }
@@ -145,10 +152,10 @@ public class JobMgr {
      */
     private String updateBatchJobResult(BatchJob rowtoproces, BatchOutput batchOutput) {
         try {
-            batchJobService.updateBatchRowForSlowQueryoutput(rowtoproces, batchOutput);
+            batchJobService.updateBatchRowForBatchOutput(rowtoproces, batchOutput);
             return "";
         } catch (Exception ex) {
-            String erlog = "failed to update blobrow for app " + rowtoproces.getapp() + ex.getMessage();
+            String erlog = "failed to update blobrow for app " + rowtoproces.getApp() + ex.getMessage();
             logger.debug(erlog);
             return erlog;
         }
@@ -162,37 +169,38 @@ public class JobMgr {
      * @return a message indicating the result of the processing
      */
     private String processBatch(BatchJob rowtoprocess) {
-        String processorKey = rowtoprocess.getapp() + rowtoprocess.getop();
+        String processorKey = rowtoprocess.getApp() + rowtoprocess.getOp();
         BatchProcessor batchProcessor = batchProcessors.get(processorKey);
 
         if (batchProcessor == null) {
-            String erlog = "No batch Processor found for app " + rowtoprocess.getapp()
-                    + " and for OP " + rowtoprocess.getop();
+            String erlog = "No batch Processor found for app " + rowtoprocess.getApp()
+                    + " and for OP " + rowtoprocess.getOp();
             logger.debug(erlog);
             return erlog;
         }
 
         try {
-            InitBlock batchInitBlock = getOrCreateInitBlock(rowtoprocess.getapp());
+            InitBlock batchInitBlock = getOrCreateInitBlock(rowtoprocess.getApp());
 
-            BatchOutput batchoutput = batchProcessor.DoBatchJob(batchInitBlock, rowtoprocess.getcontext(),
-                    rowtoprocess.getline(), rowtoprocess.getinput());
+            BatchOutput batchoutput = batchProcessor.DoBatchJob(batchInitBlock, rowtoprocess.getContext(),
+                    rowtoprocess.getLine(), rowtoprocess.getInput());
 
             if (batchoutput.error.equals(ErrorCodes.NOERROR)) {
                 updateBatchJobResult(rowtoprocess, batchoutput);
             } else {
-                String erlog = "failed to process batchrow for app " + rowtoprocess.getapp();
+                String erlog = "failed to process batchrow for app " + rowtoprocess.getApp();
                 logger.debug(erlog);
                 return erlog;
             }
 
             return "";
         } catch (IllegalStateException exs) {
-            String erlog = "No Initializer found for app " + rowtoprocess.getapp();
+            String erlog = "No Initializer found for app " + rowtoprocess.getApp();
             logger.debug(erlog);
             return erlog;
         }
     }
+
 
     /**
      * JobProcessor is a Runnable class that processes jobs in a separate thread.
@@ -204,6 +212,11 @@ public class JobMgr {
             while (bprocessJobs) {
                 List<BatchJob> allQueuedBatchRow = batchJobService.getAllQueuedBatchRow(BatchStatus.BatchQueued);
 
+                allQueuedBatchRow.forEach(bat -> {
+                    // System.out.println(bat.getbatch().toString());
+                    System.out.println(bat.getInput().toString());
+                });
+
                 if (allQueuedBatchRow.isEmpty()) {
                     try {
                         Thread.sleep(getRandomSleepDuration());
@@ -214,7 +227,7 @@ public class JobMgr {
                 }
 
                 Set<UUID> uniqueBatchIds = allQueuedBatchRow.stream()
-                        .map(batch -> batch.getbatch())
+                        .map(batch -> batch.getId())
                         .collect(Collectors.toSet());
 
                 try {
@@ -226,12 +239,19 @@ public class JobMgr {
                     allQueuedBatchRow.forEach(row -> {
                         String error = processRow(row);
                         if (!error.isEmpty())
-                            logger.debug("process row failed for rowid " + row.getrowid());
+                            logger.debug("process row failed for rowid " + row.getRowId());
                         else
-                            BatchIdToSummarize.add(row.getbatch());
+                            BatchIdToSummarize.add(row.getId());
+
                     });
+
+                    for (UUID batchId : BatchIdToSummarize) {
+                        batchJobService.SummarizeBatch(batchId);
+                    }
+
                 } catch (Exception ex) {
                     // Log exception if needed
+                    logger.debug("Exception caught {}", ex.toString());
                 }
             }
         }

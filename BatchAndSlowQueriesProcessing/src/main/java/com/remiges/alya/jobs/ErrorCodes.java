@@ -1,9 +1,16 @@
 package com.remiges.alya.jobs;
 
-public class ErrorCodes {
+public enum ErrorCodes {
 
-    public final static String NOERROR = "";
-    public final String DBERROR = "DB Error";
-    public final String INVALIDINPUT = "Invalid Json";
+    NOERROR(0, ""),
+    ERROR(-1, "");
+
+    Integer error;
+    String description;
+
+    ErrorCodes(Integer error, String value) {
+        this.error = error;
+        this.description = value;
+    }
 
 }

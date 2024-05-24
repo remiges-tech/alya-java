@@ -50,8 +50,7 @@ public class BatchRows {
 	@Column
 	private Timestamp doneat;
 
-	@JdbcTypeCode(SqlTypes.JSON)
-	@Column(columnDefinition = "jsonb")
+	@Column
 	private String res;
 
 	@JdbcTypeCode(SqlTypes.JSON)

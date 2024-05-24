@@ -30,7 +30,7 @@ public class ProcessOutputToFle {
      * @throws IOException if an I/O error occurs
      */
     public void GenerateTempFile(List<BatchRows> processedBatchRows) throws IOException {
-        Map<String, File> outputFilemap = new HashMap<>();
+
 
         for (BatchRows row : processedBatchRows) {
             Map<String, String> blobrows = row.getBlobrows();
