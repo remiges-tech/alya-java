@@ -9,7 +9,6 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 import com.remiges.alya.constant.ValidationConstant;
 import com.remiges.alya.dto.RequestDTO;
-import com.remiges.alya.dto.RequestParameterDTO;
 
 public class AlyaValidation {
 

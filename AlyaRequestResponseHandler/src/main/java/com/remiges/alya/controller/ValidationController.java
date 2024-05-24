@@ -29,24 +29,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ValidationController {
 
-
-    // @PostMapping("/validate")
-    // public ResponseEntity<SuccessResponse<String>> validateRequest(@RequestBody RequestParameterDTO request) {
-    //     // Validate the request
-    //     Map<String, String> errors = AlyaValidation.alyaValidator(request);
-
-    //     // If there are validation errors, combine them into a single message
-    //     if (!errors.isEmpty()) {
-    //         List<String> errorMessages = List.copyOf(errors.values());
-    //         SuccessResponse<String> response = new SuccessResponse<>("error", null, errorMessages);
-    //         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-    //     }
-
-    //     // If no errors, return success message
-    //     SuccessResponse<String> response = new SuccessResponse<>("success", "Request is valid", null);
-    //     return ResponseEntity.ok(response);
-    // }
-
       /*
      * Validates the incoming request data.
      *
