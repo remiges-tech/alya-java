@@ -3,6 +3,7 @@ package com.remiges.alya.service;
 import java.io.File;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,8 +50,52 @@ public class BatchJobService {
 
 	JobManagerConfig mgrConfig;
 
+	public List<Batches> findByAppAndOpAndReqatAfter(String app, String op, LocalDateTime thresholdTime) {
+		return batchesRepo.findByAppAndOpAndReqatAfter(app, op, thresholdTime);
+	}
+
+	@Transactional
+	public void abortBatchAndRows(Batches batch) throws Exception {
+		// Check if the batch type is "Q"
+		if (batch.getType() == 'Q') {
+			// Update the status of the batch and its associated rows to "aborted"
+			batch.setStatus(BatchStatus.BatchAborted);
+			batch.setDoneat(new Timestamp(System.currentTimeMillis()));
+			batchesRepo.save(batch);
+
+			// Update the status of the batch rows to "aborted"
+			List<BatchRows> batchRows = batchrowrepo.findByBatch(batch, null);
+			for (BatchRows batchRow : batchRows) {
+				batchRow.setBatchStatus(BatchStatus.BatchAborted);
+				batchRow.setDoneat(new Timestamp(System.currentTimeMillis()));
+				batchrowrepo.save(batchRow);
+			}
+
+			// Set the REDIS batch status record for this batch to "aborted"
+			String redisKey = "ALYA_BATCHSTATUS_" + batch.getId().toString();
+			jedissrv.setRedisStatusSlowQuery(redisKey, BatchStatus.BatchAborted.name());
+		} else {
+			throw new Exception("Invalid batch type. Only 'Q' type batches can be aborted.");
+		}
+	}
+
+	public Batches getBatchByReqId(String reqID) throws Exception {
+
+		// Retrieve the batch by request ID using the repository method
+		Optional<Batches> batch = batchesRepo.findById(UUID.fromString(reqID));
+
+		// Check if the batch exists
+		if (batch.isPresent()) {
+			return batch.get();
+		} else {
+			throw new Exception("Batch not found for request ID: " + reqID);
+		}
+	}
+
 	public BatchStatus getBatchStatusFromBatches(String reqID) {
-		return batchesRepo.findByReqId(reqID).getStatus();
+		Optional<Batches> batch = batchesRepo.findById(UUID.fromString(reqID));
+
+		return batch.get().getStatus();
 	}
 
 	@Transactional
@@ -77,7 +122,7 @@ public class BatchJobService {
 	 */
 	public BatchRows getBatchRowByReqId(String reqId) {
 		// First, fetch the corresponding batch from the database based on the reqId
-		Optional<Batches> batch = Optional.ofNullable(batchesRepo.findByReqId(reqId));
+		Optional<Batches> batch = batchesRepo.findById(UUID.fromString(reqId));
 
 		// If the batch with the given reqId exists
 		if (batch.isPresent()) {
