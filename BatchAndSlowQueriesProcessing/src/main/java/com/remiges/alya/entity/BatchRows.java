@@ -64,4 +64,8 @@ public class BatchRows {
 	@Column
 	private String doneby;
 
+	public Long getRowId() {
+		return rowid;
+	}
+
 }

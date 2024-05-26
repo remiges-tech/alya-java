@@ -18,12 +18,6 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.remiges.alya.repository.BatchRowsRepo;
-import com.remiges.alya.repository.BatchesRepo;
-
-import jakarta.transaction.Transactional;
-
 import com.remiges.alya.config.JobManagerConfig;
 import com.remiges.alya.entity.BatchJob;
 import com.remiges.alya.entity.BatchRows;
@@ -33,6 +27,10 @@ import com.remiges.alya.jobs.BatchOutput;
 import com.remiges.alya.jobs.BatchStatus;
 import com.remiges.alya.jobs.ProcessOutputToFle;
 import com.remiges.alya.jobs.SummaryUtils;
+import com.remiges.alya.repository.BatchRowsRepo;
+import com.remiges.alya.repository.BatchesRepo;
+
+import jakarta.transaction.Transactional;
 
 /**
  * Service class for managing batch jobs and their statuses.
@@ -50,6 +48,52 @@ public class BatchJobService {
 	private JedisService jedissrv;
 
 	JobManagerConfig mgrConfig;
+
+	public BatchStatus getBatchStatusFromBatches(String reqID) {
+		return batchesRepo.findByReqId(reqID).getStatus();
+	}
+
+	@Transactional
+	public void updateBatchRowStatus(Long rowId, BatchStatus newStatus) throws Exception {
+		if (rowId != null) {
+			Optional<BatchRows> batchRowOptional = batchrowrepo.findById(rowId);
+			if (batchRowOptional.isPresent()) {
+				BatchRows batchRow = batchRowOptional.get();
+				batchRow.setBatchStatus(newStatus);
+				batchrowrepo.save(batchRow);
+			} else {
+				throw new Exception("Batch row with ID " + rowId + " not found.");
+			}
+		} else {
+			throw new Exception("Invalid UUID format for row ID: " + rowId);
+		}
+	}
+
+	/**
+	 * Retrieves the batch row for the specified request ID.
+	 *
+	 * @param reqId the request ID to retrieve the row for
+	 * @return the batch row, or null if not found
+	 */
+	public BatchRows getBatchRowByReqId(String reqId) {
+		// First, fetch the corresponding batch from the database based on the reqId
+		Optional<Batches> batch = Optional.ofNullable(batchesRepo.findByReqId(reqId));
+
+		// If the batch with the given reqId exists
+		if (batch.isPresent()) {
+			// Retrieve the list of batch rows associated with the batch
+			List<BatchRows> batchRowsList = batchrowrepo.findByBatch(batch.get(), null);
+
+			// If there are batch rows associated with the batch
+			if (!batchRowsList.isEmpty()) {
+				// Return the first batch row from the list
+				return batchRowsList.get(0);
+			}
+		}
+
+		// If no batch row is found for the given reqId, return null
+		return null;
+	}
 
 	@Transactional
 	public UUID SaveSlowQueries(String app, String op, JsonNode context, JsonNode input, BatchStatus status) {

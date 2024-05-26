@@ -46,5 +46,39 @@ public class JedisService {
             jedis.unwatch();
         }
     }
+    
+    // Implementation of lookupRedis method
+    public String getBatchStatusFromRedis(String key) {
+        try {
+            // Check if the key exists in Redis
+            if (jedis.exists(key)) {
+                // Retrieve the value corresponding to the key
+                return jedis.get(key);
+            } else {
+                // If the key doesn't exist, return null
+                return null;
+            }
+        } catch (Exception e) {
+            // Log any exceptions that occur during the Redis lookup
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public void setRedisStatusSlowQuery(String redisKey, BatchStatus status) {
+        // Set the status for the slow query in Redis
+        jedis.set(redisKey, status.toString());
+    }
+    
+    public BatchStatus getBatchStatus(String redisValue) {
+        return switch (redisValue) {
+            case "SUCCESS" -> BatchStatus.BatchSuccess;
+            case "FAILED" -> BatchStatus.BatchFailed;
+            case "ABORTED" -> BatchStatus.BatchAborted;
+            default -> BatchStatus.BatchTryLater;
+        };
+    }
+
+
 
 }
