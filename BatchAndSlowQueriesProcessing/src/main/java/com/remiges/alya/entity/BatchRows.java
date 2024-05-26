@@ -23,7 +23,6 @@ import jakarta.persistence.Table;
 import lombok.Data;
 
 @Entity
-@Data
 @Table(name = "batchrows")
 public class BatchRows {
 	@Id
@@ -63,6 +62,94 @@ public class BatchRows {
 
 	@Column
 	private String doneby;
+
+	public Long getRowid() {
+		return rowid;
+	}
+
+	public void setRowid(Long rowid) {
+		this.rowid = rowid;
+	}
+
+	public Batches getBatch() {
+		return batch;
+	}
+
+	public void setBatch(Batches batch) {
+		this.batch = batch;
+	}
+
+	public Integer getLine() {
+		return line;
+	}
+
+	public void setLine(Integer line) {
+		this.line = line;
+	}
+
+	public String getInput() {
+		return input;
+	}
+
+	public void setInput(String input) {
+		this.input = input;
+	}
+
+	public BatchStatus getBatchStatus() {
+		return batchStatus;
+	}
+
+	public void setBatchStatus(BatchStatus batchStatus) {
+		this.batchStatus = batchStatus;
+	}
+
+	public Timestamp getReqat() {
+		return reqat;
+	}
+
+	public void setReqat(Timestamp reqat) {
+		this.reqat = reqat;
+	}
+
+	public Timestamp getDoneat() {
+		return doneat;
+	}
+
+	public void setDoneat(Timestamp doneat) {
+		this.doneat = doneat;
+	}
+
+	public String getRes() {
+		return res;
+	}
+
+	public void setRes(String res) {
+		this.res = res;
+	}
+
+	public Map<String, String> getBlobrows() {
+		return blobrows;
+	}
+
+	public void setBlobrows(Map<String, String> blobrows) {
+		this.blobrows = blobrows;
+	}
+
+	public String getMessages() {
+		return messages;
+	}
+
+	public void setMessages(String messages) {
+		this.messages = messages;
+	}
+
+	public String getDoneby() {
+		return doneby;
+	}
+
+	public void setDoneby(String doneby) {
+		this.doneby = doneby;
+	}
 
 	public Long getRowId() {
 		return rowid;

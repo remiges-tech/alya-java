@@ -48,42 +48,35 @@ public class RemigesAlyaApplication {
 
 	}
 
-	@Bean
-	public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
-		return args -> {
-			String KRA = "KRA";
-			String PANENQUIRY = "PANENQURY";
-
-			JobMgrClient jobMgrcli = ctx.getBean(JobMgrClient.class);
-			jobMgrcli.getJobmrg(); // This will call the method in MyComponent
-
-			Batch batch = ctx.getBean(Batch.class);
-
-			List<BatchInput> list = new ArrayList<>();
-			BatchInput batchInput = BatchInput.builder().input("input1").line(1).build();
-			BatchInput batchInput2 = BatchInput.builder().input("input2").line(2).build();
-
-			list.add(batchInput);
-			list.add(batchInput2);
-
-			batch.batchSubmit("KRA", PANENQUIRY, JacksonUtil.toJsonNode("{" +
-					"   \"title\": \"High-Performance Java Persistence\"," +
-					"   \"author\": \"Vlad Mihalcea\"," +
-					"   \"publisher\": \"Amazon\"," +
-					"   \"price\": 44.99" +
-					"}"), list, false);
-
-			JobMgr jobMgr = jobMgrcli.getJobmrg();
-
-			Initializer intr = new Initializer();
-			// JobMgr jobm = new JobMgr(batchJobService);
-			jobMgr.registerInitializer(KRA, intr);
-
-			jobMgr.RegisterProcessor(KRA, PANENQUIRY, new BatchProcessor());
-
-			jobMgr.DoJobs();
-
-		};
-	}
-
+	/*
+	 * @Bean public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
+	 * return args -> { String KRA = "KRA"; String PANENQUIRY = "PANENQURY";
+	 * 
+	 * JobMgrClient jobMgrcli = ctx.getBean(JobMgrClient.class);
+	 * jobMgrcli.getJobmrg(); // This will call the method in MyComponent
+	 * 
+	 * Batch batch = ctx.getBean(Batch.class);
+	 * 
+	 * List<BatchInput> list = new ArrayList<>(); BatchInput batchInput =
+	 * BatchInput.builder().input("input1").line(1).build(); BatchInput batchInput2
+	 * = BatchInput.builder().input("input2").line(2).build();
+	 * 
+	 * list.add(batchInput); list.add(batchInput2);
+	 * 
+	 * batch.batchSubmit("KRA", PANENQUIRY, JacksonUtil.toJsonNode("{" +
+	 * "   \"title\": \"High-Performance Java Persistence\"," +
+	 * "   \"author\": \"Vlad Mihalcea\"," + "   \"publisher\": \"Amazon\"," +
+	 * "   \"price\": 44.99" + "}"), list, false);
+	 * 
+	 * JobMgr jobMgr = jobMgrcli.getJobmrg();
+	 * 
+	 * Initializer intr = new Initializer(); // JobMgr jobm = new
+	 * JobMgr(batchJobService); jobMgr.registerInitializer(KRA, intr);
+	 * 
+	 * jobMgr.RegisterProcessor(KRA, PANENQUIRY, new BatchProcessor());
+	 * 
+	 * jobMgr.DoJobs();
+	 * 
+	 * }; }
+	 */
 }

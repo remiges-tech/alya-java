@@ -1,12 +1,10 @@
 package com.remiges.alya.entity;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.UUID;
 
 import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.annotations.Type;
 import org.hibernate.type.SqlTypes;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -19,7 +17,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import lombok.Data;
 
