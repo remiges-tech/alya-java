@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.remiges.alya.repository.BatchRowsRepo;
 import com.remiges.alya.repository.BatchesRepo;
 
@@ -39,330 +40,351 @@ import com.remiges.alya.jobs.SummaryUtils;
 @Service
 public class BatchJobService {
 
-    private static final Logger logger = LoggerFactory.getLogger(BatchJobService.class);
+	private static final Logger logger = LoggerFactory.getLogger(BatchJobService.class);
 
-    private final ObjectMapper mapper;
-    private final BatchRowsRepo batchrowrepo;
-    private final BatchesRepo batchesRepo;
-    private final MinioService minioSrv;
+	private final ObjectMapper mapper;
+	private final BatchRowsRepo batchrowrepo;
+	private final BatchesRepo batchesRepo;
+	private final MinioService minioSrv;
 
-    private JedisService jedissrv;
+	private JedisService jedissrv;
 
-    JobManagerConfig mgrConfig;
+	JobManagerConfig mgrConfig;
 
-    @Transactional
-    public UUID SaveBatch(String app, String op, JsonNode context, List<BatchInput> batchInput, BatchStatus status) {
+	@Transactional
+	public UUID SaveSlowQueries(String app, String op, JsonNode context, JsonNode input, BatchStatus status) {
 
-        Batches batchJob = new Batches();
-        batchJob.setApp(app);
-        batchJob.setOp(op);
-        batchJob.setContext(context);
-        batchJob.setStatus(status);
-        batchJob.setType('B');
-        batchJob.setReqat(new Timestamp(System.currentTimeMillis()));
-        Batches savedBatch = batchesRepo.save(batchJob);
+		Batches batchJob = new Batches();
+		batchJob.setApp(app);
+		batchJob.setOp(op);
+		batchJob.setContext(context); // Convert context to JsonNode
+		batchJob.setStatus(status);
+		batchJob.setType('Q');
+		batchJob.setReqat(new Timestamp(System.currentTimeMillis()));
+		Batches savedBatch = batchesRepo.save(batchJob);
 
-        for (BatchInput batch : batchInput) {
+		BatchRows btrow = new BatchRows();
+		btrow.setBatch(savedBatch);
+		btrow.setBatchStatus(status);
+		btrow.setInput(input.toString());
+		btrow.setReqat(new Timestamp(System.currentTimeMillis()));
+		batchrowrepo.save(btrow);
 
-            BatchRows btrow = new BatchRows();
-            btrow.setBatch(savedBatch);
-            btrow.setBatchStatus(status);
-            btrow.setInput(batch.getInput());
-            btrow.setLine(batch.getLine());
-            btrow.setReqat(new Timestamp(System.currentTimeMillis()));
-            batchrowrepo.save(btrow);
+		return savedBatch.getId();
+	}
 
-        }
+	@Transactional
+	public UUID SaveBatch(String app, String op, JsonNode context, List<BatchInput> batchInput, BatchStatus status) {
 
-        return savedBatch.getId();
+		Batches batchJob = new Batches();
+		batchJob.setApp(app);
+		batchJob.setOp(op);
+		batchJob.setContext(context);
+		batchJob.setStatus(status);
+		batchJob.setType('B');
+		batchJob.setReqat(new Timestamp(System.currentTimeMillis()));
+		Batches savedBatch = batchesRepo.save(batchJob);
 
-    }
+		for (BatchInput batch : batchInput) {
 
-    /**
-     * Constructs a new BatchJobService.
-     *
-     * @param minioSrv     the Minio service for file storage
-     * @param mapper       the ObjectMapper for JSON processing
-     * @param batchrowrepo the repository for batch rows
-     * @param batchesRepo  the repository for batches
-     */
-    @Autowired
-    public BatchJobService(JedisService jedissrv, JobManagerConfig mgrconfig, MinioService minioSrv,
-            ObjectMapper mapper, BatchRowsRepo batchrowrepo,
-            BatchesRepo batchesRepo) {
-        this.batchesRepo = batchesRepo;
-        this.batchrowrepo = batchrowrepo;
-        this.mapper = mapper;
-        this.minioSrv = minioSrv;
-        this.jedissrv = jedissrv;
-        this.mgrConfig = mgrconfig;
-    }
+			BatchRows btrow = new BatchRows();
+			btrow.setBatch(savedBatch);
+			btrow.setBatchStatus(status);
+			btrow.setInput(batch.getInput());
+			btrow.setLine(batch.getLine());
+			btrow.setReqat(new Timestamp(System.currentTimeMillis()));
+			batchrowrepo.save(btrow);
 
-    /**
-     * Retrieves all queued batch rows with the specified status.
-     *
-     * @param status the status to filter batch rows
-     * @return a list of batch jobs
-     */
-    @Transactional
-    public List<BatchJob> getAllQueuedBatchRow(BatchStatus status) {
-        return batchrowrepo.findAllWithBatches(status);
-    }
+		}
 
-    /**
-     * Updates the status of a batch row.
-     *
-     * @param rowid       the ID of the row to update
-     * @param batchStatus the new status
-     * @throws Exception if the batch row is not found
-     */
-    public void UpdateBatchRowStatus(Long rowid, BatchStatus batchStatus) throws Exception {
-        Optional<BatchRows> batchrow = batchrowrepo.findById(rowid);
-        if (batchrow.isPresent()) {
-            batchrow.get().setBatchStatus(batchStatus);
-            batchrowrepo.save(batchrow.get());
-        } else {
-            String erlog = "batch row not found" + rowid;
-            logger.debug(erlog);
-            throw new Exception(erlog);
-        }
-    }
+		return savedBatch.getId();
 
-    /**
-     * Updates the status of a batch.
-     *
-     * @param batchId the ID of the batch to update
-     * @param Status  the new status
-     * @throws Exception if the batch is not found
-     */
-    public void UpdateBatchStatus(UUID batchId, BatchStatus Status) throws Exception {
-        Optional<Batches> batchrec = batchesRepo.findById(batchId);
-        if (batchrec.isPresent()) {
-            batchrec.get().setStatus(Status);
-            batchesRepo.save(batchrec.get());
-        } else {
-            String erlog = "batch not found for batchid" + batchId;
-            logger.debug(erlog);
-            throw new Exception(erlog);
-        }
-    }
+	}
 
-    /**
-     * Updates the summary of a batch.
-     *
-     * @param batchId     the ID of the batch to update
-     * @param Status      the new status
-     * @param nfailed     the number of failed rows
-     * @param nsuccess    the number of successful rows
-     * @param nabort      the number of aborted rows
-     * @param outputfiles the output files
-     * @throws Exception if the batch is not found
-     */
-    public void UpdateBatchSummary(UUID batchId, BatchStatus Status, Integer nfailed, Integer nsuccess, Integer nabort,
-            Map<String, String> outputfiles) throws Exception {
-        Optional<Batches> batchrec = batchesRepo.findById(batchId);
-        if (!batchrec.isPresent()) {
-            String erlog = "batch not found for batchid" + batchId;
-            logger.debug(erlog);
-            throw new Exception(erlog);
-        }
+	/**
+	 * Constructs a new BatchJobService.
+	 *
+	 * @param minioSrv     the Minio service for file storage
+	 * @param mapper       the ObjectMapper for JSON processing
+	 * @param batchrowrepo the repository for batch rows
+	 * @param batchesRepo  the repository for batches
+	 */
+	@Autowired
+	public BatchJobService(JedisService jedissrv, JobManagerConfig mgrconfig, MinioService minioSrv,
+			ObjectMapper mapper, BatchRowsRepo batchrowrepo, BatchesRepo batchesRepo) {
+		this.batchesRepo = batchesRepo;
+		this.batchrowrepo = batchrowrepo;
+		this.mapper = mapper;
+		this.minioSrv = minioSrv;
+		this.jedissrv = jedissrv;
+		this.mgrConfig = mgrconfig;
+	}
 
-        Batches batch = batchrec.get();
-        batch.setStatus(Status);
-        batch.setDoneat(Timestamp.from(Instant.now()));
-        batch.setNaborted(nabort);
-        batch.setNfailed(nfailed);
-        batch.setNsuccess(nsuccess);
-        batch.setOutputfiles(outputfiles);
+	/**
+	 * Retrieves all queued batch rows with the specified status.
+	 *
+	 * @param status the status to filter batch rows
+	 * @return a list of batch jobs
+	 */
+	@Transactional
+	public List<BatchJob> getAllQueuedBatchRow(BatchStatus status) {
+		return batchrowrepo.findAllWithBatches(status);
+	}
 
-        batchesRepo.save(batch);
-    }
+	/**
+	 * Updates the status of a batch row.
+	 *
+	 * @param rowid       the ID of the row to update
+	 * @param batchStatus the new status
+	 * @throws Exception if the batch row is not found
+	 */
+	public void UpdateBatchRowStatus(Long rowid, BatchStatus batchStatus) throws Exception {
+		Optional<BatchRows> batchrow = batchrowrepo.findById(rowid);
+		if (batchrow.isPresent()) {
+			batchrow.get().setBatchStatus(batchStatus);
+			batchrowrepo.save(batchrow.get());
+		} else {
+			String erlog = "batch row not found" + rowid;
+			logger.debug(erlog);
+			throw new Exception(erlog);
+		}
+	}
 
-    /**
-     * Switches the status of batch rows and batches to in-progress.
-     *
-     * @param queuedbatchrows the list of queued batch rows
-     * @param batchIds        the set of batch IDs
-     * @param status          the new status
-     * @throws Exception if updating the status fails
-     */
-    @Transactional
-    public void SwitchBatchToInprogress(List<BatchJob> queuedbatchrows, Set<UUID> batchIds, BatchStatus status)
-            throws Exception {
-        for (BatchJob batchrow : queuedbatchrows) {
-            try {
-                UpdateBatchRowStatus(batchrow.getRowId(), status);
-            } catch (Exception e) {
-                String erlog = "exception while updating batchrow status ex = " + e.getMessage();
-                logger.debug(erlog);
-                throw e;
-            }
-        }
+	/**
+	 * Updates the status of a batch.
+	 *
+	 * @param batchId the ID of the batch to update
+	 * @param Status  the new status
+	 * @throws Exception if the batch is not found
+	 */
+	public void UpdateBatchStatus(UUID batchId, BatchStatus Status) throws Exception {
+		Optional<Batches> batchrec = batchesRepo.findById(batchId);
+		if (batchrec.isPresent()) {
+			batchrec.get().setStatus(Status);
+			batchesRepo.save(batchrec.get());
+		} else {
+			String erlog = "batch not found for batchid" + batchId;
+			logger.debug(erlog);
+			throw new Exception(erlog);
+		}
+	}
 
-        for (UUID batchId : batchIds) {
-            try {
-                UpdateBatchStatus(batchId, status);
-            } catch (Exception e) {
-                String erlog = "exception while updating batch status ex = " + e.getMessage();
-                logger.debug(erlog);
-                throw e;
-            }
-        }
-    }
+	/**
+	 * Updates the summary of a batch.
+	 *
+	 * @param batchId     the ID of the batch to update
+	 * @param Status      the new status
+	 * @param nfailed     the number of failed rows
+	 * @param nsuccess    the number of successful rows
+	 * @param nabort      the number of aborted rows
+	 * @param outputfiles the output files
+	 * @throws Exception if the batch is not found
+	 */
+	public void UpdateBatchSummary(UUID batchId, BatchStatus Status, Integer nfailed, Integer nsuccess, Integer nabort,
+			Map<String, String> outputfiles) throws Exception {
+		Optional<Batches> batchrec = batchesRepo.findById(batchId);
+		if (!batchrec.isPresent()) {
+			String erlog = "batch not found for batchid" + batchId;
+			logger.debug(erlog);
+			throw new Exception(erlog);
+		}
 
-    /**
-     * Updates the batch row with the results of a slow query.
-     *
-     * @param rowtoproces the batch job to update
-     * @param batchOutput the batch output
-     */
-    public void updateBatchRowForSlowQueryoutput(BatchJob rowtoproces, BatchOutput batchOutput) {
-        Optional<BatchRows> sqRow = batchrowrepo.findById(rowtoproces.getRowId());
-        if (sqRow.isPresent()) {
-            BatchRows batchRows = sqRow.get();
-            batchRows.setDoneat(Timestamp.from(Instant.now()));
-            batchRows.setBatchStatus(batchOutput.getStatus());
-            batchRows.setRes(batchOutput.getResult());
-            batchRows.setMessages(batchOutput.getMessages());
-            batchrowrepo.save(batchRows);
-        }
-    }
+		Batches batch = batchrec.get();
+		batch.setStatus(Status);
+		batch.setDoneat(Timestamp.from(Instant.now()));
+		batch.setNaborted(nabort);
+		batch.setNfailed(nfailed);
+		batch.setNsuccess(nsuccess);
+		batch.setOutputfiles(outputfiles);
 
-    /**
-     * Updates the batch row with the results of a batch job.
-     *
-     * @param rowtoproces the batch job to update
-     * @param batchOutput the batch output
-     */
-    public void updateBatchRowForBatchOutput(BatchJob rowtoproces, BatchOutput batchOutput) {
-        Optional<BatchRows> sqRow = batchrowrepo.findById(rowtoproces.getRowId());
-        if (sqRow.isPresent()) {
-            BatchRows batchRows = sqRow.get();
-            batchRows.setDoneat(Timestamp.from(Instant.now()));
-            batchRows.setBatchStatus(batchOutput.getStatus());
-            batchRows.setRes(batchOutput.getResult());
-            batchRows.setMessages(batchOutput.getMessages());
-            batchRows.setBlobrows(batchOutput.getBlobRows());
-            batchrowrepo.save(batchRows);
-        }
-    }
+		batchesRepo.save(batch);
+	}
 
-    /**
-     * Retrieves the batch rows for the specified batch, sorted by line.
-     *
-     * @param batch the batch to retrieve rows for
-     * @return the list of batch rows
-     */
-    public List<BatchRows> GetBatchRowsByBatchIDSorted(Batches batch) {
-        return batchrowrepo.findByBatch(batch, Sort.by(Sort.Direction.ASC, "line"));
-    }
+	/**
+	 * Switches the status of batch rows and batches to in-progress.
+	 *
+	 * @param queuedbatchrows the list of queued batch rows
+	 * @param batchIds        the set of batch IDs
+	 * @param status          the new status
+	 * @throws Exception if updating the status fails
+	 */
+	@Transactional
+	public void SwitchBatchToInprogress(List<BatchJob> queuedbatchrows, Set<UUID> batchIds, BatchStatus status)
+			throws Exception {
+		for (BatchJob batchrow : queuedbatchrows) {
+			try {
+				UpdateBatchRowStatus(batchrow.getRowId(), status);
+			} catch (Exception e) {
+				String erlog = "exception while updating batchrow status ex = " + e.getMessage();
+				logger.debug(erlog);
+				throw e;
+			}
+		}
 
-    /**
-     * Summarizes the batch if it is completed. Determines the number of batch rows
-     * that succeeded, failed, or were aborted,
-     * and updates the batch status accordingly.
-     *
-     * @param batchId the batch ID to summarize
-     * @return a message indicating the result of the operation
-     */
-    @Transactional
-    public String SummarizeBatch(UUID batchId) {
-        Optional<Batches> opbatch = batchesRepo.findById(batchId);
-        if (!opbatch.isPresent()) {
-            return "Batch not found";
-        }
+		for (UUID batchId : batchIds) {
+			try {
+				UpdateBatchStatus(batchId, status);
+			} catch (Exception e) {
+				String erlog = "exception while updating batch status ex = " + e.getMessage();
+				logger.debug(erlog);
+				throw e;
+			}
+		}
+	}
 
-        Batches batch = opbatch.get();
+	/**
+	 * Updates the batch row with the results of a slow query.
+	 *
+	 * @param rowtoproces the batch job to update
+	 * @param batchOutput the batch output
+	 */
+	public void updateBatchRowForSlowQueryoutput(BatchJob rowtoproces, BatchOutput batchOutput) {
+		Optional<BatchRows> sqRow = batchrowrepo.findById(rowtoproces.getRowId());
+		if (sqRow.isPresent()) {
+			BatchRows batchRows = sqRow.get();
+			batchRows.setDoneat(Timestamp.from(Instant.now()));
+			batchRows.setBatchStatus(batchOutput.getStatus());
+			batchRows.setRes(batchOutput.getResult());
+			batchRows.setMessages(batchOutput.getMessages());
+			batchrowrepo.save(batchRows);
+		}
+	}
 
-        // some other thread is summarizing or has summarized this batch return
-        if (batch.getDoneat() != null) {
-            return "";
-        }
+	/**
+	 * Updates the batch row with the results of a batch job.
+	 *
+	 * @param rowtoproces the batch job to update
+	 * @param batchOutput the batch output
+	 */
+	public void updateBatchRowForBatchOutput(BatchJob rowtoproces, BatchOutput batchOutput) {
+		Optional<BatchRows> sqRow = batchrowrepo.findById(rowtoproces.getRowId());
+		if (sqRow.isPresent()) {
+			BatchRows batchRows = sqRow.get();
+			batchRows.setDoneat(Timestamp.from(Instant.now()));
+			batchRows.setBatchStatus(batchOutput.getStatus());
+			batchRows.setRes(batchOutput.getResult());
+			batchRows.setMessages(batchOutput.getMessages());
+			batchRows.setBlobrows(batchOutput.getBlobRows());
+			batchrowrepo.save(batchRows);
+		}
+	}
 
-        Integer count = batchrowrepo.countBatchRowsByBatchIDAndStatus(batch,
-                List.of(BatchStatus.BatchInProgress, BatchStatus.BatchQueued));
+	/**
+	 * Retrieves the batch rows for the specified batch, sorted by line.
+	 *
+	 * @param batch the batch to retrieve rows for
+	 * @return the list of batch rows
+	 */
+	public List<BatchRows> GetBatchRowsByBatchIDSorted(Batches batch) {
+		return batchrowrepo.findByBatch(batch, Sort.by(Sort.Direction.ASC, "line"));
+	}
 
-        if (count > 0) {
-            // the batch is not yet complete, some rows are pending
-            return "";
-        }
+	/**
+	 * Summarizes the batch if it is completed. Determines the number of batch rows
+	 * that succeeded, failed, or were aborted, and updates the batch status
+	 * accordingly.
+	 *
+	 * @param batchId the batch ID to summarize
+	 * @return a message indicating the result of the operation
+	 */
+	@Transactional
+	public String SummarizeBatch(UUID batchId) {
+		Optional<Batches> opbatch = batchesRepo.findById(batchId);
+		if (!opbatch.isPresent()) {
+			return "Batch not found";
+		}
 
-        // Fetch all batch rows records for the batch, sorted by "line"
-        List<BatchRows> batchrows = batchrowrepo.findByBatch(batch, Sort.by(Sort.Direction.ASC, "line"));
+		Batches batch = opbatch.get();
 
-        SummaryUtils sumutils = new SummaryUtils();
-        sumutils.calculateSummaryCounters(batchrows);
-        sumutils.determineBatchStatus();
+		// some other thread is summarizing or has summarized this batch return
+		if (batch.getDoneat() != null) {
+			return "";
+		}
 
-        List<BatchRows> processedBatchRows = batchrowrepo.GetProcessedBatchRowsByBatchIDSortedRow(batch,
-                List.of(BatchStatus.BatchSuccess, BatchStatus.BatchFailed));
+		Integer count = batchrowrepo.countBatchRowsByBatchIDAndStatus(batch,
+				List.of(BatchStatus.BatchInProgress, BatchStatus.BatchQueued));
 
-        ProcessOutputToFle outprocessor = new ProcessOutputToFle();
-        try {
-            // Create temporary files for each unique logical file in blob rows
-            outprocessor.GenerateTempFile(processedBatchRows);
+		if (count > 0) {
+			// the batch is not yet complete, some rows are pending
+			return "";
+		}
 
-            // Append blob rows strings to the appropriate temporary files
-            outprocessor.appendBlobRowsToFiles(processedBatchRows);
-        } catch (Exception ex) {
-            logger.debug("Failed to process blob row to files {}", ex);
-            return "Failed to process blob row to files " + ex.toString();
-        }
+		// Fetch all batch rows records for the batch, sorted by "line"
+		List<BatchRows> batchrows = batchrowrepo.findByBatch(batch, Sort.by(Sort.Direction.ASC, "line"));
 
-        Map<String, File> outputFilemap = outprocessor.getOutputFilemap();
+		SummaryUtils sumutils = new SummaryUtils();
+		sumutils.calculateSummaryCounters(batchrows);
+		sumutils.determineBatchStatus();
 
-        Map<String, String> outputfiles;
-        try {
-            // Move files to object store and update output files map
-            outputfiles = moveFilesToObjectStore(outputFilemap);
-        } catch (Exception ex) {
-            logger.debug("Failed to store files to object store", ex);
-            return "Failed to store files to object store " + ex.toString();
-        }
+		List<BatchRows> processedBatchRows = batchrowrepo.GetProcessedBatchRowsByBatchIDSortedRow(batch,
+				List.of(BatchStatus.BatchSuccess, BatchStatus.BatchFailed));
 
-        // Update the batches record with summarized information
-        try {
-            UpdateBatchSummary(batchId, sumutils.getSummaryStatus(), sumutils.getNfailed(), sumutils.getNSuccess(),
-                    sumutils.getNSuccess(), outputfiles);
-        } catch (Exception e) {
-            String erlog = "exception while updating batch summary for batch id : " + batchId + " ex = "
-                    + e.getMessage();
-            logger.debug(erlog);
-            return erlog;
-        }
+		ProcessOutputToFle outprocessor = new ProcessOutputToFle();
+		try {
+			// Create temporary files for each unique logical file in blob rows
+			outprocessor.GenerateTempFile(processedBatchRows);
 
-        jedissrv.updateStatusInRedis(batchId, sumutils.getSummaryStatus(),
-                mgrConfig.getALYA_BATCHSTATUS_CACHEDUR_SEC() * 100);
+			// Append blob rows strings to the appropriate temporary files
+			outprocessor.appendBlobRowsToFiles(processedBatchRows);
+		} catch (Exception ex) {
+			logger.debug("Failed to process blob row to files {}", ex);
+			return "Failed to process blob row to files " + ex.toString();
+		}
 
-        return "";
-    }
+		Map<String, File> outputFilemap = outprocessor.getOutputFilemap();
 
-    /**
-     * Moves the generated files to the object store and returns a map of filenames
-     * to their new storage locations.
-     *
-     * @param outputFilemap the map of filenames to files
-     * @return a map of filenames to their storage locations
-     * @throws Exception if an error occurs during file storage
-     */
-    public Map<String, String> moveFilesToObjectStore(Map<String, File> outputFilemap) throws Exception {
-        Map<String, String> outputfiles = new HashMap<>();
+		Map<String, String> outputfiles;
+		try {
+			// Move files to object store and update output files map
+			outputfiles = moveFilesToObjectStore(outputFilemap);
+		} catch (Exception ex) {
+			logger.debug("Failed to store files to object store", ex);
+			return "Failed to store files to object store " + ex.toString();
+		}
 
-        for (Map.Entry<String, File> entry : outputFilemap.entrySet()) {
-            String filename = entry.getKey();
-            File file = entry.getValue();
+		// Update the batches record with summarized information
+		try {
+			UpdateBatchSummary(batchId, sumutils.getSummaryStatus(), sumutils.getNfailed(), sumutils.getNSuccess(),
+					sumutils.getNSuccess(), outputfiles);
+		} catch (Exception e) {
+			String erlog = "exception while updating batch summary for batch id : " + batchId + " ex = "
+					+ e.getMessage();
+			logger.debug(erlog);
+			return erlog;
+		}
 
-            try {
-                UUID randomUUID = UUID.randomUUID();
-                // Move temporary files to the object store and update output files
-                minioSrv.uploadFile(randomUUID.toString(), file, "text/plain");
-                outputfiles.put(filename, randomUUID.toString());
-            } catch (Exception ex) {
-                String erlog = "exception while storing file for ex = " + ex.getMessage();
-                logger.debug(erlog);
-                throw ex;
-            }
-        }
-        return outputfiles;
-    }
+		jedissrv.updateStatusInRedis(batchId, sumutils.getSummaryStatus(),
+				mgrConfig.getALYA_BATCHSTATUS_CACHEDUR_SEC() * 100);
+
+		return "";
+	}
+
+	/**
+	 * Moves the generated files to the object store and returns a map of filenames
+	 * to their new storage locations.
+	 *
+	 * @param outputFilemap the map of filenames to files
+	 * @return a map of filenames to their storage locations
+	 * @throws Exception if an error occurs during file storage
+	 */
+	public Map<String, String> moveFilesToObjectStore(Map<String, File> outputFilemap) throws Exception {
+		Map<String, String> outputfiles = new HashMap<>();
+
+		for (Map.Entry<String, File> entry : outputFilemap.entrySet()) {
+			String filename = entry.getKey();
+			File file = entry.getValue();
+
+			try {
+				UUID randomUUID = UUID.randomUUID();
+				// Move temporary files to the object store and update output files
+				minioSrv.uploadFile(randomUUID.toString(), file, "text/plain");
+				outputfiles.put(filename, randomUUID.toString());
+			} catch (Exception ex) {
+				String erlog = "exception while storing file for ex = " + ex.getMessage();
+				logger.debug(erlog);
+				throw ex;
+			}
+		}
+		return outputfiles;
+	}
 }
