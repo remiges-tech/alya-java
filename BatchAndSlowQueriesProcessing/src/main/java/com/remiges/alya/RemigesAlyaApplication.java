@@ -1,30 +1,12 @@
 package com.remiges.alya;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
-import com.remiges.alya.config.AppConfig;
-import com.remiges.alya.jobs.Batch;
-import com.remiges.alya.jobs.BatchInput;
-import com.remiges.alya.jobs.BatchProcessor;
-import com.remiges.alya.jobs.Initializer;
-import com.remiges.alya.jobs.JobMgr;
-import com.remiges.alya.jobs.JobMgrClient;
-import com.remiges.alya.service.BatchJobService;
-
-import io.hypersistence.utils.hibernate.type.json.internal.JacksonUtil;
 import redis.clients.jedis.Jedis;
 
 @SpringBootApplication

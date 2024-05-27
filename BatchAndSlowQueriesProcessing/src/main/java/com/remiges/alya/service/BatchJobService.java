@@ -23,6 +23,7 @@ import com.remiges.alya.config.JobManagerConfig;
 import com.remiges.alya.entity.BatchJob;
 import com.remiges.alya.entity.BatchRows;
 import com.remiges.alya.entity.Batches;
+import com.remiges.alya.jobs.Batch;
 import com.remiges.alya.jobs.BatchInput;
 import com.remiges.alya.jobs.BatchOutput;
 import com.remiges.alya.jobs.BatchStatus;
@@ -49,6 +50,21 @@ public class BatchJobService {
 	private JedisService jedissrv;
 
 	JobManagerConfig mgrConfig;
+
+	@Transactional
+	public Batches saveIntoBatches(Batches batch) {
+		return batchesRepo.save(batch);
+
+	}
+
+	@Transactional
+	public void saveIntoBatchrows(Batches batch, int lineno, String input) {
+		BatchRows batchRow = new BatchRows();
+		batchRow.setBatch(batch);
+		batchRow.setLine(lineno);
+		batchRow.setInput(input.toString());
+		batchrowrepo.save(batchRow);
+	}
 
 	public List<Batches> findByAppAndOpAndReqatAfter(String app, String op, LocalDateTime thresholdTime) {
 		return batchesRepo.findByAppAndOpAndReqatAfter(app, op, thresholdTime);
@@ -142,24 +158,41 @@ public class BatchJobService {
 
 	@Transactional
 	public UUID SaveSlowQueries(String app, String op, JsonNode context, JsonNode input, BatchStatus status) {
+		try {
+			if (context == null || input == null) {
+				throw new IllegalArgumentException("Context or input is null");
+			}
 
-		Batches batchJob = new Batches();
-		batchJob.setApp(app);
-		batchJob.setOp(op);
-		batchJob.setContext(context); // Convert context to JsonNode
-		batchJob.setStatus(status);
-		batchJob.setType('Q');
-		batchJob.setReqat(new Timestamp(System.currentTimeMillis()));
-		Batches savedBatch = batchesRepo.save(batchJob);
+			Batches batchJob = new Batches();
+			batchJob.setApp(app);
+			batchJob.setOp(op);
+			batchJob.setContext(context);
+			batchJob.setStatus(status);
+			batchJob.setType('Q');
+			batchJob.setReqat(new Timestamp(System.currentTimeMillis()));
+			Batches savedBatch = batchesRepo.save(batchJob);
+			System.out.println("Batches Saved");
 
-		BatchRows btrow = new BatchRows();
-		btrow.setBatch(savedBatch);
-		btrow.setBatchStatus(status);
-		btrow.setInput(input.toString());
-		btrow.setReqat(new Timestamp(System.currentTimeMillis()));
-		batchrowrepo.save(btrow);
+			if (input.size() > 0) {
+				BatchRows btrow = new BatchRows();
+				btrow.setBatch(savedBatch);
+				btrow.setBatchStatus(status);
+				btrow.setInput(input.toString());
+				btrow.setReqat(new Timestamp(System.currentTimeMillis()));
+				batchrowrepo.save(btrow);
+				System.out.println("BatchRows Saved");
+			}
 
-		return savedBatch.getId();
+			return savedBatch.getId();
+		} catch (IllegalArgumentException e) {
+			// Log the exception
+			e.printStackTrace();
+			throw e;
+		} catch (Exception e) {
+			// Log the exception
+			e.printStackTrace();
+			throw new RuntimeException("An error occurred while saving the slow queries: " + e.getMessage());
+		}
 	}
 
 	@Transactional

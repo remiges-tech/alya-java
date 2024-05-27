@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.remiges.alya.config.JobManagerConfig;
@@ -17,6 +18,7 @@ import com.remiges.alya.jobs.SlowQueryResult.AlyaErrorMessage;
 import com.remiges.alya.service.BatchJobService;
 import com.remiges.alya.service.JedisService;;
 
+@Component
 public class SlowQuery {
 
 	private BatchJobService batchJobService;
@@ -31,20 +33,18 @@ public class SlowQuery {
 	}
 
 	public String Submit(String app, String op, JsonNode context, JsonNode input) {
-		// Generate a unique request ID
-		UUID reqID = null;
-
 		try {
-
-			reqID = batchJobService.SaveSlowQueries(app, op, context, input, BatchStatus.BatchQueued);
-
+			if (batchJobService != null) {
+				UUID reqID = batchJobService.SaveSlowQueries(app, op, context, input, BatchStatus.BatchQueued);
+				return reqID != null ? reqID.toString() : null;
+			} else {
+				return "batchJobService is null";
+			}
 		} catch (Exception e) {
-			// Handle any exceptions and return error
-			return e.getMessage();
+			// Log the exception
+			e.printStackTrace();
+			return "An error occurred while submitting the job: " + e.getMessage();
 		}
-
-		// Return the unique request ID
-		return reqID.toString();
 	}
 
 	public SlowQueryResult Done(String reqID) {

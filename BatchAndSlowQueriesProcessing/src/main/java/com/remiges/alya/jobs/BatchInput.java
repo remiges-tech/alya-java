@@ -1,5 +1,7 @@
 package com.remiges.alya.jobs;
 
+import com.remiges.alya.entity.Batches;
+
 import lombok.Builder;
 import lombok.Data;
 
