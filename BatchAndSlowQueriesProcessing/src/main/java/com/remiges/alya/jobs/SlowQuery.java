@@ -68,8 +68,6 @@ public class SlowQuery {
 	public SlowQueryResult done(String reqID) {
 		// Initialization
 		BatchStatus status = null;
-		List<AlyaErrorMessage> messages = new ArrayList<>();
-		Map<String, String> outputFiles = new HashMap<>();
 		Exception error = null;
 
 		try {
@@ -78,24 +76,26 @@ public class SlowQuery {
 			String redisValue = jedissrv.getBatchStatusFromRedis(redisKey);
 			if (redisValue != null) {
 				status = jedissrv.getBatchStatus(redisValue);
-				if (status != BatchStatus.BatchTryLater) {
-					return new SlowQueryResult(status, null, messages, outputFiles, error);
-				}
+			} else {
+				status = batchJobService.getSlowQueryStatusByReqId(reqID);
 			}
 
 			// Check database for status
-			BatchStatus dbStatus = batchJobService.getBatchStatusByReqId(reqID);
-			if (dbStatus == BatchStatus.BatchSuccess || dbStatus == BatchStatus.BatchFailed) {
+
+			if (status == BatchStatus.BatchSuccess || status == BatchStatus.BatchFailed) {
 				BatchRows batchRow = batchJobService.getBatchRowByReqId(reqID);
 				if (batchRow != null) {
 					status = batchRow.getBatchStatus();
 					batchJobService.updateBatchRowStatus(batchRow.getRowId(), status);
+					List<AlyaErrorMessage> errlist = new ArrayList<SlowQueryResult.AlyaErrorMessage>();
+					errlist.add(new AlyaErrorMessage(batchRow.getMessages()));
+					return new SlowQueryResult(status, batchRow.getRes(), errlist, batchRow.getBlobrows(), null);
 				}
-			} else if (dbStatus == BatchStatus.BatchAborted) {
+			} else if (status == BatchStatus.BatchAborted) {
 				return new SlowQueryResult(BatchStatus.BatchAborted, null, null, null, null);
 			} else {
 				// Insert new REDIS record
-				jedissrv.setRedisStatusSlowQuery(redisKey, BatchStatus.BatchTryLater);
+				jedissrv.setRedisStatusSlowQuery(redisKey, status);
 				status = BatchStatus.BatchTryLater;
 			}
 		} catch (Exception e) {
@@ -103,7 +103,7 @@ public class SlowQuery {
 			error = e;
 		}
 
-		return new SlowQueryResult(status, null, messages, outputFiles, error);
+		return new SlowQueryResult(status, null, null, null, error);
 	}
 
 	/**
