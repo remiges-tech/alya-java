@@ -1,12 +1,14 @@
-package com.remiges.alya.dto;
+package com.remiges.alya.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class RequestDTO{
 
     private String name;
@@ -21,4 +23,5 @@ public class RequestDTO{
     private String phoneNumber;
 
 }
+// This is an example to give DTO as request.
 

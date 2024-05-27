@@ -1,4 +1,4 @@
-package com.remiges.alya.jsonutil.util.model;
+package com.remiges.alya.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,4 +21,5 @@ public class DataObject  {
     private String phoneNumber;
 
 }
+// This is an example just of Object to show data.
 
