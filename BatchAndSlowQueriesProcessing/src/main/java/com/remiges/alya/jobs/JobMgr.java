@@ -78,7 +78,7 @@ public class JobMgr {
      * @param rowtoprocess the batch job row to process
      * @return a message indicating the result of the processing
      */
-    public String processRow(BatchJob rowtoprocess) {
+    public synchronized String processRow(BatchJob rowtoprocess) {
         if (rowtoprocess.getLine() == 0) {
             return processSlowQuery(rowtoprocess);
         } else {

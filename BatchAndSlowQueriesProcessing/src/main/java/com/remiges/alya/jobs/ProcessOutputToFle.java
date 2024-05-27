@@ -1,5 +1,6 @@
 package com.remiges.alya.jobs;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -72,8 +73,11 @@ public class ProcessOutputToFle {
 
                 File file = outputFilemap.get(filename); // Retrieve the file from the map
                 if (file != null) {
-                    try (FileWriter writer = new FileWriter(file, true)) { // Open the file in append mode
+                    try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true))) { // Open the file
+
                         writer.write(content); // Write the content to the file
+                        // Write the line to the file
+                        writer.newLine();
                     } catch (IOException ex) {
                         logger.debug("Failed to write content to file exception {} ", ex.toString()); // Log the
                                                                                                       // exception

@@ -14,6 +14,8 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -67,6 +69,7 @@ public class BatchJobService {
 		this.minioService = minioService;
 		this.jedisService = jedisService;
 		this.mgrConfig = mgrConfig;
+
 	}
 
 	/**
@@ -158,12 +161,22 @@ public class BatchJobService {
 	 * @param reqID the request ID
 	 * @return the batch status
 	 */
-	public BatchStatus getBatchStatusByReqId(String reqID) {
-		Optional<Batches> batch = batchesRepo.findById(UUID.fromString(reqID));
-		return batch.get().getStatus();
+	public BatchStatus getSlowQueryStatusByReqId(String reqID) {
+		List<Batches> lstbatch = batchesRepo.findByIdAndType(UUID.fromString(reqID), 'Q');
+
+		if (lstbatch.size() > 0) {
+
+			return lstbatch.get(0).getStatus();
+
+		} else {
+			return null;
+		}
 	}
 
 	/**
+	 * 
+	 * 
+	 * 
 	 * Updates the status of a batch row.
 	 *
 	 * @param rowId     the ID of the row
@@ -286,16 +299,14 @@ public class BatchJobService {
 	 */
 	@Transactional
 	public List<BatchJob> getAllQueuedBatchRows(BatchStatus status) {
-		return batchRowRepo.findAllWithBatches(status);
+
+		int limit = mgrConfig.getALYA_BATCHCHUNK_NROWS();
+		Pageable pageable = PageRequest.of(0, limit);
+
+		return batchRowRepo.findAllWithBatches(status, pageable);
+
 	}
 
-	/**
-	 * Updates the status of a batch row.
-	 *
-	 * @param rowId       the ID of the row to update
-	 * @param batchStatus the new status
-	 * @throws Exception if the batch row is not found
-	 */
 	@Transactional
 	public void updateBatchRowStatus(Long rowId, BatchStatus batchStatus) throws Exception {
 		Optional<BatchRows> batchRow = batchRowRepo.findById(rowId);
@@ -501,7 +512,7 @@ public class BatchJobService {
 		// Update the batches record with summarized information
 		try {
 			UpdateBatchSummary(batchId, sumutils.getSummaryStatus(), sumutils.getNfailed(), sumutils.getNSuccess(),
-					sumutils.getNSuccess(), outputfiles);
+					sumutils.getNaborted(), outputfiles);
 		} catch (Exception e) {
 			String erlog = "exception while updating batch summary for batch id : " + batchId + " ex = "
 					+ e.getMessage();

@@ -19,7 +19,7 @@ public interface BatchesRepo extends JpaRepository<Batches, UUID> {
 	
     List<Batches> findByAppAndOpAndReqatAfter(String app, String op, LocalDateTime thresholdTime);
     
-  Optional<Batches> findById(UUID batchId);
+    List<Batches> findByIdAndType(UUID id, char type);
 
 
 
