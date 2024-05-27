@@ -51,7 +51,7 @@ public class SlowQuery {
 	 */
 	public String submit(String app, String op, JsonNode context, JsonNode input) {
 		try {
-			UUID reqID = batchJobService.SaveSlowQueries(app, op, context, input, BatchStatus.BatchQueued);
+			UUID reqID = batchJobService.saveSlowQueries(app, op, context, input, BatchStatus.BatchQueued);
 			return reqID != null ? reqID.toString() : null;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -84,7 +84,7 @@ public class SlowQuery {
 			}
 
 			// Check database for status
-			BatchStatus dbStatus = batchJobService.getBatchStatusFromBatches(reqID);
+			BatchStatus dbStatus = batchJobService.getBatchStatusByReqId(reqID);
 			if (dbStatus == BatchStatus.BatchSuccess || dbStatus == BatchStatus.BatchFailed) {
 				BatchRows batchRow = batchJobService.getBatchRowByReqId(reqID);
 				if (batchRow != null) {
@@ -153,7 +153,7 @@ public class SlowQuery {
 		LocalDateTime thresholdTime = LocalDateTime.now().minusDays(age);
 
 		// Retrieve slow queries from repository
-		List<Batches> batchRowsList = batchJobService.findByAppAndOpAndReqatAfter(app, op, thresholdTime);
+		List<Batches> batchRowsList = batchJobService.findBatchesByAppAndOpAndReqAtAfter(app, op, thresholdTime);
 
 		// Map BatchRows to SlowQueryDetails_t
 		for (Batches batch : batchRowsList) {

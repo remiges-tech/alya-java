@@ -210,7 +210,7 @@ public class JobMgr {
         @Override
         public void run() {
             while (bprocessJobs) {
-                List<BatchJob> allQueuedBatchRow = batchJobService.getAllQueuedBatchRow(BatchStatus.BatchQueued);
+                List<BatchJob> allQueuedBatchRow = batchJobService.getAllQueuedBatchRows(BatchStatus.BatchQueued);
 
                 allQueuedBatchRow.forEach(bat -> {
                     // System.out.println(bat.getbatch().toString());
