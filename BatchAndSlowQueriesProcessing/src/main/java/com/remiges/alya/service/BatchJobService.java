@@ -243,6 +243,7 @@ public class BatchJobService {
 				batchRow.setBatch(savedBatch);
 				batchRow.setBatchStatus(status);
 				batchRow.setInput(input.toString());
+				batchRow.setLine(1);
 				batchRow.setReqat(new Timestamp(System.currentTimeMillis()));
 				batchRowRepo.save(batchRow);
 			}

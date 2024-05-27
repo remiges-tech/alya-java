@@ -38,7 +38,7 @@ public class SlowQueryTest {
     public void setUp() {
         batchJobServiceMock = mock(BatchJobService.class);
         jedisServiceMock = mock(JedisService.class);
-        slowQuery = new SlowQuery(batchJobServiceMock, jedisServiceMock, null);
+        slowQuery = new SlowQuery(batchJobServiceMock, jedisServiceMock, null, null);
     }
 
     @Test
@@ -77,7 +77,7 @@ public class SlowQueryTest {
         UUID requestId = UUID.randomUUID();
         // Stub the service methods
         when(jedisServiceMock.getBatchStatusFromRedis("ALYA_BATCHSTATUS_" + requestId)).thenReturn("BatchTryLater");
-        when(batchJobServiceMock.getBatchStatusByReqId(requestId.toString())).thenReturn(BatchStatus.BatchSuccess);
+        when(batchJobServiceMock.getSlowQueryStatusByReqId(requestId.toString())).thenReturn(BatchStatus.BatchSuccess);
         Batches batch = new Batches();
         batch.setId(requestId);
         batch.setStatus(BatchStatus.BatchSuccess);
