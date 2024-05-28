@@ -4,6 +4,7 @@ import java.io.File;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +26,7 @@ import com.remiges.alya.config.JobManagerConfig;
 import com.remiges.alya.entity.BatchJob;
 import com.remiges.alya.entity.BatchRows;
 import com.remiges.alya.entity.Batches;
+import com.remiges.alya.jobs.AlyaConstant;
 import com.remiges.alya.jobs.BatchInput;
 import com.remiges.alya.jobs.BatchOutput;
 import com.remiges.alya.jobs.BatchStatus;
@@ -120,7 +122,7 @@ public class BatchJobService {
 	 */
 	@Transactional
 	public void abortBatchAndRows(Batches batch) throws Exception {
-		if (batch.getType() == 'Q') {
+		if (batch.getType() == AlyaConstant.TYPE_Q) {
 			batch.setStatus(BatchStatus.BatchAborted);
 			batch.setDoneat(new Timestamp(System.currentTimeMillis()));
 			batchesRepo.save(batch);
@@ -162,7 +164,7 @@ public class BatchJobService {
 	 * @return the batch status
 	 */
 	public BatchStatus getSlowQueryStatusByReqId(String reqID) {
-		List<Batches> lstbatch = batchesRepo.findByIdAndType(UUID.fromString(reqID), 'Q');
+		List<Batches> lstbatch = batchesRepo.findByIdAndType(UUID.fromString(reqID), AlyaConstant.TYPE_Q);
 
 		if (lstbatch.size() > 0) {
 
@@ -234,21 +236,28 @@ public class BatchJobService {
 			batchJob.setOp(op);
 			batchJob.setContext(context);
 			batchJob.setStatus(status);
-			batchJob.setType('Q');
+			batchJob.setType(AlyaConstant.TYPE_Q);
 			batchJob.setReqat(new Timestamp(System.currentTimeMillis()));
-			Batches savedBatch = batchesRepo.save(batchJob);
+
+			List<BatchRows> batchRowsList = new ArrayList<>();
 
 			if (input.size() > 0) {
 				BatchRows batchRow = new BatchRows();
-				batchRow.setBatch(savedBatch);
+				batchRow.setBatch(batchJob);
 				batchRow.setBatchStatus(status);
-				batchRow.setInput(input.toString());
 				batchRow.setLine(1);
 				batchRow.setReqat(new Timestamp(System.currentTimeMillis()));
-				batchRowRepo.save(batchRow);
+				batchRow.setInput(input.toString());
+				batchRowsList.add(batchRow);
 			}
 
-			return savedBatch.getId();
+			// Save batch job and its rows in a single operation
+			batchesRepo.saveAll(List.of(batchJob));
+			if (!batchRowsList.isEmpty()) {
+				batchRowRepo.saveAll(batchRowsList);
+			}
+
+			return batchJob.getId();
 		} catch (IllegalArgumentException e) {
 			logger.error("Error saving slow queries: " + e.getMessage());
 			throw e;
@@ -275,7 +284,7 @@ public class BatchJobService {
 		batchJob.setOp(op);
 		batchJob.setContext(context);
 		batchJob.setStatus(status);
-		batchJob.setType('B');
+		batchJob.setType(AlyaConstant.TYPE_B);
 		batchJob.setReqat(new Timestamp(System.currentTimeMillis()));
 		Batches savedBatch = batchesRepo.save(batchJob);
 
