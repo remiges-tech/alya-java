@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.remiges.alya.service.BatchJobService;
@@ -22,6 +23,7 @@ import com.remiges.alya.jobs.Initializer.InitBlock;
 
 
 @Component
+@Scope("prototype")
 public class JobMgr {
 
     private static final Logger logger = LoggerFactory.getLogger(JobMgr.class);
@@ -109,8 +111,12 @@ public class JobMgr {
             BatchOutput batchoutput = sqProcessor.DoSlowQuery(batchInitBlock, rowtoprocess.getContext(),
                     rowtoprocess.getInput());
 
+            updateSlowQueryJobResult(rowtoprocess, batchoutput);
+
             if (batchoutput.error.equals(ErrorCodes.NOERROR)) {
-                updateSlowQueryJobResult(rowtoprocess, batchoutput);
+                String erlog = "Success to process row for app " + rowtoprocess.getApp();
+                logger.debug(erlog);
+
             } else {
                 String erlog = "failed to process sq for app " + rowtoprocess.getApp();
                 logger.debug(erlog);
@@ -184,9 +190,11 @@ public class JobMgr {
 
             BatchOutput batchoutput = batchProcessor.DoBatchJob(batchInitBlock, rowtoprocess.getContext(),
                     rowtoprocess.getLine(), rowtoprocess.getInput());
-
+            updateBatchJobResult(rowtoprocess, batchoutput);
             if (batchoutput.error.equals(ErrorCodes.NOERROR)) {
-                updateBatchJobResult(rowtoprocess, batchoutput);
+                String erlog = "Sucess to process batchrow for app " + rowtoprocess.getApp();
+                logger.debug(erlog);
+
             } else {
                 String erlog = "failed to process batchrow for app " + rowtoprocess.getApp();
                 logger.debug(erlog);
@@ -217,6 +225,7 @@ public class JobMgr {
                     System.out.println(bat.getInput().toString());
                 });
 
+                // batch is empty go to sleep
                 if (allQueuedBatchRow.isEmpty()) {
                     try {
                         Thread.sleep(getRandomSleepDuration());
@@ -234,6 +243,7 @@ public class JobMgr {
                     batchJobService.SwitchBatchToInprogress(allQueuedBatchRow, uniqueBatchIds,
                             BatchStatus.BatchInProgress);
 
+                    // collect batchId to summarize
                     Set<UUID> BatchIdToSummarize = new HashSet<>();
 
                     allQueuedBatchRow.forEach(row -> {

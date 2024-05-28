@@ -505,6 +505,9 @@ public class BatchJobService {
 		try {
 			// Move files to object store and update output files map
 			outputfiles = moveFilesToObjectStore(outputFilemap);
+
+			outprocessor.cleanupTemporaryFiles();
+
 		} catch (Exception ex) {
 			logger.debug("Failed to store files to object store", ex);
 			return "Failed to store files to object store " + ex.toString();

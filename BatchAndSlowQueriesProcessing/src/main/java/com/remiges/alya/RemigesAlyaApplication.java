@@ -54,11 +54,14 @@ public class RemigesAlyaApplication {
 			Batch batch = ctx.getBean(Batch.class);
 
 			List<BatchInput> list = new ArrayList<>();
-			BatchInput batchInput = BatchInput.builder().input("input1").line(1).build();
-			BatchInput batchInput2 = BatchInput.builder().input("input2").line(2).build();
+			int[] numbers = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
 
-			list.add(batchInput);
-			list.add(batchInput2);
+			// Using enhanced for loop to iterate over the array
+			for (int i : numbers) {
+				System.out.println(i);
+				BatchInput batchInput = BatchInput.builder().input("I" + i).line(i).build();
+				list.add(batchInput);
+			}
 
 			batch.submitBatch("KRA", PANENQUIRY, JacksonUtil.toJsonNode("{" +
 					"   \"title\": \"High-Performance Java Persistence\"," +
