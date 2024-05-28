@@ -75,6 +75,17 @@ public class BatchJobService {
 	}
 
 	/**
+	 * Counts the number of rows in batchrows associated with a batch.
+	 *
+	 * @param batch The batch for which to count the rows.
+	 * @return The total count of rows in batchrows associated with the batch.
+	 */
+	@Transactional
+	public int countBatchRowsByBatch(Batches batch) {
+		return batchRowRepo.countBatchRowsByBatch(batch);
+	}
+
+	/**
 	 * Saves a batch into the database.
 	 *
 	 * @param batch the batch to save

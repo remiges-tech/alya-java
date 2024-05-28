@@ -116,4 +116,46 @@ public class Batch {
 		}
 	}
 
+	/**
+	 * Sets the status of a batch from 'wait' to 'queued'.
+	 *
+	 * @param batchId The unique identifier of the batch.
+	 * @return Returns the batch ID and the total count of rows in batchrows against
+	 *         this batch if successful.
+	 * @throws RuntimeException If the batch record does not exist, has a status
+	 *                          other than 'wait' or 'queued', or an error occurs
+	 *                          during the process.
+	 */
+	public AlyaBatchResponse waitOff(String batchId) {
+		Batches batch = null;
+		try {
+			// Retrieve batch record from the database
+			batch = batchJobService.getBatchByReqId(batchId);
+
+			// Check if the batch record exists and its status is 'wait'
+			if (batch == null) {
+				throw new IllegalArgumentException("Batch record not found");
+			} else if (!batch.getStatus().equals(BatchStatus.BatchWait)) {
+				throw new IllegalArgumentException("Batch status must be 'wait'");
+			}
+
+			// Change the status of the batch record to 'queued'
+			batch.setStatus(BatchStatus.BatchQueued);
+			batchJobService.saveBatch(batch);
+
+			// Get the total number of rows in batchrows against this batch
+			int numberOfRows = batchJobService.countBatchRowsByBatch(batch);
+
+			// Return AlyaBatchResponse
+			return new AlyaBatchResponse(batchId, numberOfRows);
+		} catch (IllegalArgumentException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new RuntimeException(
+					"An error occurred while setting the status of the batch from 'wait' to 'queued': "
+							+ e.getMessage(),
+					e);
+		}
+	}
+
 }

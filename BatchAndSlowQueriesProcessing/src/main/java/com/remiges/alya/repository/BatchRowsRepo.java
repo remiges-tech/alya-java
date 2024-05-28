@@ -34,4 +34,12 @@ public interface BatchRowsRepo extends JpaRepository<BatchRows, Long> {
 	List<BatchRows> GetProcessedBatchRowsByBatchIDSortedRow(@Param("batch") Batches batch,
 			@Param("properties") List<BatchStatus> properties);
 
+	/**
+	 * Counts the number of rows in batchrows associated with a batch.
+	 *
+	 * @param batch The batch for which to count the rows.
+	 * @return The total count of rows in batchrows associated with the batch.
+	 */
+	int countBatchRowsByBatch(Batches batch);
+
 }
