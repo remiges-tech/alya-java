@@ -12,20 +12,30 @@ import com.remiges.alya.service.AlyaFormatService;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Controller class for validating requests.
+ */
 @RestController
 @RequestMapping("/api/request")
 @Slf4j
 public class ValidationController {
 
-    @Autowired
-    private AlyaFormatService alyaFormatService;
+    private final AlyaFormatService alyaFormatService;
 
-    @PostMapping("/validate")
-    public ResponseEntity<?> validateRequest(@RequestBody RequestDTO request) {
-        log.info("every class, method, logic and other data is working properly");
-        return alyaFormatService.processAndValidateRequest(request);
+    @Autowired
+    public ValidationController(AlyaFormatService alyaFormatService) {
+        this.alyaFormatService = alyaFormatService;
     }
 
+    /**
+     * Validates the request DTO.
+     *
+     * @param request the request DTO to validate
+     * @return a ResponseEntity containing either success or error response
+     */
+    @PostMapping("/validate")
+    public ResponseEntity<?> validateRequest(@RequestBody RequestDTO request) {
+        log.info("Processing and validating the request");
+        return alyaFormatService.processAndValidateRequest(request);
+    }
 }
-// This Class is an example to check wheather my library is working or not.
-
