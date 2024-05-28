@@ -1,0 +1,1110 @@
+2024-05-27 00:02:01 INFO  c.r.alya.RemigesAlyaApplication - Starting RemigesAlyaApplication using Java 17.0.6 with PID 14900 (C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing\target\classes started by Merceadm in C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing)
+2024-05-27 00:02:01 DEBUG c.r.alya.RemigesAlyaApplication - Running with Spring Boot v3.2.5, Spring v6.1.6
+2024-05-27 00:02:01 INFO  c.r.alya.RemigesAlyaApplication - No active profile set, falling back to 1 default profile: "default"
+2024-05-27 00:02:01 INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-05-27 00:02:01 INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-05-27 00:02:02 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-05-27 00:02:02 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 67 ms. Found 2 JPA repository interfaces.
+2024-05-27 00:02:03 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2024-05-27 00:02:03 INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-05-27 00:02:03 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-05-27 00:02:03 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-05-27 00:02:03 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-05-27 00:02:03 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2057 ms
+2024-05-27 00:02:03 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-05-27 00:02:03 INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-05-27 00:02:03 INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-05-27 00:02:04 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2024-05-27 00:02:04 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@24e91042
+2024-05-27 00:02:04 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2024-05-27 00:02:04 INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-05-27 00:02:05 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-05-27 00:02:05 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-05-27 00:02:06 INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-05-27 00:02:07 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-05-27 00:02:07 INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2024-05-27 00:02:07 INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-05-27 00:02:07 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2024-05-27 00:02:07 INFO  c.r.alya.RemigesAlyaApplication - Started RemigesAlyaApplication in 6.886 seconds (process running for 7.538)
+2024-05-27 00:27:15 INFO  c.r.alya.RemigesAlyaApplication - Starting RemigesAlyaApplication using Java 17.0.6 with PID 12852 (C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing\target\classes started by Merceadm in C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing)
+2024-05-27 00:27:15 DEBUG c.r.alya.RemigesAlyaApplication - Running with Spring Boot v3.2.5, Spring v6.1.6
+2024-05-27 00:27:15 INFO  c.r.alya.RemigesAlyaApplication - No active profile set, falling back to 1 default profile: "default"
+2024-05-27 00:27:15 INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-05-27 00:27:15 INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-05-27 00:27:16 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-05-27 00:27:16 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 66 ms. Found 2 JPA repository interfaces.
+2024-05-27 00:27:17 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2024-05-27 00:27:17 INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-05-27 00:27:17 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-05-27 00:27:17 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-05-27 00:27:17 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-05-27 00:27:17 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2159 ms
+2024-05-27 00:27:17 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-05-27 00:27:18 INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-05-27 00:27:18 INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-05-27 00:27:18 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2024-05-27 00:27:18 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@3b6683b5
+2024-05-27 00:27:18 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2024-05-27 00:27:18 INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-05-27 00:27:19 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-05-27 00:27:20 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-05-27 00:27:20 INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-05-27 00:27:21 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-05-27 00:27:21 INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2024-05-27 00:27:21 INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-05-27 00:27:22 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2024-05-27 00:27:22 INFO  c.r.alya.RemigesAlyaApplication - Started RemigesAlyaApplication in 7.131 seconds (process running for 7.776)
+2024-05-27 01:02:50 INFO  c.r.alya.RemigesAlyaApplication - Starting RemigesAlyaApplication using Java 17.0.6 with PID 17228 (C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing\target\classes started by Merceadm in C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing)
+2024-05-27 01:02:50 DEBUG c.r.alya.RemigesAlyaApplication - Running with Spring Boot v3.2.5, Spring v6.1.6
+2024-05-27 01:02:50 INFO  c.r.alya.RemigesAlyaApplication - No active profile set, falling back to 1 default profile: "default"
+2024-05-27 01:02:50 INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-05-27 01:02:50 INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-05-27 01:02:51 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-05-27 01:02:51 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 71 ms. Found 2 JPA repository interfaces.
+2024-05-27 01:02:52 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2024-05-27 01:02:52 INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-05-27 01:02:52 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-05-27 01:02:52 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-05-27 01:02:52 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-05-27 01:02:52 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2057 ms
+2024-05-27 01:02:53 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-05-27 01:02:53 INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-05-27 01:02:53 INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-05-27 01:02:53 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2024-05-27 01:02:53 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@3b6683b5
+2024-05-27 01:02:53 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2024-05-27 01:02:53 INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-05-27 01:02:55 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-05-27 01:02:55 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-05-27 01:02:56 INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-05-27 01:02:56 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-05-27 01:02:57 INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2024-05-27 01:02:57 INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-05-27 01:02:57 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2024-05-27 01:02:57 INFO  c.r.alya.RemigesAlyaApplication - Started RemigesAlyaApplication in 7.334 seconds (process running for 7.991)
+2024-05-27 09:56:34 INFO  c.r.alya.RemigesAlyaApplication - Starting RemigesAlyaApplication using Java 17.0.6 with PID 15060 (C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing\target\classes started by Merceadm in C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing)
+2024-05-27 09:56:34 DEBUG c.r.alya.RemigesAlyaApplication - Running with Spring Boot v3.2.5, Spring v6.1.6
+2024-05-27 09:56:34 INFO  c.r.alya.RemigesAlyaApplication - No active profile set, falling back to 1 default profile: "default"
+2024-05-27 09:56:34 INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-05-27 09:56:34 INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-05-27 09:56:35 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-05-27 09:56:35 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 74 ms. Found 2 JPA repository interfaces.
+2024-05-27 09:56:36 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2024-05-27 09:56:36 INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-05-27 09:56:36 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-05-27 09:56:36 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-05-27 09:56:36 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-05-27 09:56:36 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2245 ms
+2024-05-27 09:56:36 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-05-27 09:56:37 INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-05-27 09:56:37 INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-05-27 09:56:37 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2024-05-27 09:56:37 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@1c492021
+2024-05-27 09:56:37 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2024-05-27 09:56:37 INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-05-27 09:56:38 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-05-27 09:56:38 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-05-27 09:56:38 WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'remigesAlyaApplication': Unsatisfied dependency expressed through field 'sloquery': No qualifying bean of type 'com.remiges.alya.jobs.SlowQuery' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
+2024-05-27 09:56:38 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-05-27 09:56:38 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2024-05-27 09:56:38 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2024-05-27 09:56:38 INFO  o.a.catalina.core.StandardService - Stopping service [Tomcat]
+2024-05-27 09:56:39 INFO  o.s.b.a.l.ConditionEvaluationReportLogger - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2024-05-27 09:56:39 ERROR o.s.b.d.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Field sloquery in com.remiges.alya.RemigesAlyaApplication required a bean of type 'com.remiges.alya.jobs.SlowQuery' that could not be found.
+
+The injection point has the following annotations:
+	- @org.springframework.beans.factory.annotation.Autowired(required=true)
+
+
+Action:
+
+Consider defining a bean of type 'com.remiges.alya.jobs.SlowQuery' in your configuration.
+
+2024-05-27 09:59:25 INFO  c.r.alya.RemigesAlyaApplication - Starting RemigesAlyaApplication using Java 17.0.6 with PID 5152 (C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing\target\classes started by Merceadm in C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing)
+2024-05-27 09:59:25 DEBUG c.r.alya.RemigesAlyaApplication - Running with Spring Boot v3.2.5, Spring v6.1.6
+2024-05-27 09:59:25 INFO  c.r.alya.RemigesAlyaApplication - No active profile set, falling back to 1 default profile: "default"
+2024-05-27 09:59:25 INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-05-27 09:59:25 INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-05-27 09:59:26 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-05-27 09:59:26 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 70 ms. Found 2 JPA repository interfaces.
+2024-05-27 09:59:27 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2024-05-27 09:59:27 INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-05-27 09:59:27 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-05-27 09:59:27 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-05-27 09:59:27 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-05-27 09:59:27 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1990 ms
+2024-05-27 09:59:27 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-05-27 09:59:27 INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-05-27 09:59:27 INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-05-27 09:59:27 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2024-05-27 09:59:27 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@47e0fd3
+2024-05-27 09:59:27 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2024-05-27 09:59:28 INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-05-27 09:59:29 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-05-27 09:59:29 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-05-27 09:59:30 INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-05-27 09:59:30 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-05-27 09:59:31 INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2024-05-27 09:59:31 INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-05-27 09:59:31 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2024-05-27 09:59:31 INFO  c.r.alya.RemigesAlyaApplication - Started RemigesAlyaApplication in 6.844 seconds (process running for 7.459)
+2024-05-27 10:00:12 INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2024-05-27 10:00:12 INFO  o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["http-nio-8080"]
+2024-05-27 10:00:12 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-05-27 10:00:12 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2024-05-27 10:00:12 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2024-05-27 10:00:13 INFO  c.r.alya.RemigesAlyaApplication - Starting RemigesAlyaApplication using Java 17.0.6 with PID 5152 (C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing\target\classes started by Merceadm in C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing)
+2024-05-27 10:00:13 DEBUG c.r.alya.RemigesAlyaApplication - Running with Spring Boot v3.2.5, Spring v6.1.6
+2024-05-27 10:00:13 INFO  c.r.alya.RemigesAlyaApplication - No active profile set, falling back to 1 default profile: "default"
+2024-05-27 10:00:13 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-05-27 10:00:13 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 16 ms. Found 2 JPA repository interfaces.
+2024-05-27 10:00:13 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2024-05-27 10:00:13 INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-05-27 10:00:13 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-05-27 10:00:13 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-05-27 10:00:13 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-05-27 10:00:13 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 427 ms
+2024-05-27 10:00:13 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-05-27 10:00:13 INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-05-27 10:00:13 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Starting...
+2024-05-27 10:00:13 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-2 - Added connection org.postgresql.jdbc.PgConnection@5c9ba108
+2024-05-27 10:00:13 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Start completed.
+2024-05-27 10:00:13 INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-05-27 10:00:13 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-05-27 10:00:13 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-05-27 10:00:13 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-05-27 10:00:14 INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2024-05-27 10:00:14 INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-05-27 10:00:14 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2024-05-27 10:00:14 INFO  c.r.alya.RemigesAlyaApplication - Started RemigesAlyaApplication in 1.014 seconds (process running for 50.175)
+2024-05-27 10:00:14 INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2024-05-27 10:19:12 INFO  c.r.alya.RemigesAlyaApplication - Starting RemigesAlyaApplication using Java 17.0.6 with PID 2940 (C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing\target\classes started by Merceadm in C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing)
+2024-05-27 10:19:12 DEBUG c.r.alya.RemigesAlyaApplication - Running with Spring Boot v3.2.5, Spring v6.1.6
+2024-05-27 10:19:12 INFO  c.r.alya.RemigesAlyaApplication - No active profile set, falling back to 1 default profile: "default"
+2024-05-27 10:19:12 INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-05-27 10:19:12 INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-05-27 10:19:13 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-05-27 10:19:13 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 74 ms. Found 2 JPA repository interfaces.
+2024-05-27 10:19:14 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2024-05-27 10:19:14 INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-05-27 10:19:14 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-05-27 10:19:14 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-05-27 10:19:14 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-05-27 10:19:14 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2037 ms
+2024-05-27 10:19:14 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-05-27 10:19:14 INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-05-27 10:19:14 INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-05-27 10:19:14 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2024-05-27 10:19:15 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@69137744
+2024-05-27 10:19:15 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2024-05-27 10:19:15 INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-05-27 10:19:16 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-05-27 10:19:16 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-05-27 10:19:17 INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-05-27 10:19:18 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-05-27 10:19:18 INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2024-05-27 10:19:18 INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-05-27 10:19:18 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2024-05-27 10:19:18 INFO  c.r.alya.RemigesAlyaApplication - Started RemigesAlyaApplication in 6.906 seconds (process running for 7.581)
+2024-05-27 10:24:17 INFO  c.r.alya.RemigesAlyaApplication - Starting RemigesAlyaApplication using Java 17.0.6 with PID 7280 (C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing\target\classes started by Merceadm in C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing)
+2024-05-27 10:24:17 DEBUG c.r.alya.RemigesAlyaApplication - Running with Spring Boot v3.2.5, Spring v6.1.6
+2024-05-27 10:24:17 INFO  c.r.alya.RemigesAlyaApplication - No active profile set, falling back to 1 default profile: "default"
+2024-05-27 10:24:17 INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-05-27 10:24:17 INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-05-27 10:24:18 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-05-27 10:24:18 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 67 ms. Found 2 JPA repository interfaces.
+2024-05-27 10:24:19 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2024-05-27 10:24:19 INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-05-27 10:24:19 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-05-27 10:24:19 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-05-27 10:24:19 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-05-27 10:24:19 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2025 ms
+2024-05-27 10:24:19 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-05-27 10:24:19 INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-05-27 10:24:20 INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-05-27 10:24:20 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2024-05-27 10:24:20 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@7ee2c7b2
+2024-05-27 10:24:20 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2024-05-27 10:24:20 INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-05-27 10:24:21 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-05-27 10:24:21 WARN  o.h.e.jdbc.spi.SqlExceptionHelper - SQL Warning Code: 0, SQLState: 00000
+2024-05-27 10:24:21 WARN  o.h.e.jdbc.spi.SqlExceptionHelper - relation "batchrows" does not exist, skipping
+2024-05-27 10:24:21 WARN  o.h.e.jdbc.spi.SqlExceptionHelper - SQL Warning Code: 0, SQLState: 00000
+2024-05-27 10:24:21 WARN  o.h.e.jdbc.spi.SqlExceptionHelper - table "batches" does not exist, skipping
+2024-05-27 10:24:21 WARN  o.h.e.jdbc.spi.SqlExceptionHelper - SQL Warning Code: 0, SQLState: 00000
+2024-05-27 10:24:21 WARN  o.h.e.jdbc.spi.SqlExceptionHelper - table "batchrows" does not exist, skipping
+2024-05-27 10:24:21 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-05-27 10:24:22 INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-05-27 10:24:23 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-05-27 10:24:23 INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2024-05-27 10:24:23 INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-05-27 10:24:23 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2024-05-27 10:24:23 INFO  c.r.alya.RemigesAlyaApplication - Started RemigesAlyaApplication in 6.809 seconds (process running for 7.429)
+2024-05-27 10:26:34 INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2024-05-27 10:26:34 INFO  o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["http-nio-8080"]
+2024-05-27 10:26:34 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-05-27 10:26:34 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2024-05-27 10:26:34 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2024-05-27 10:26:34 INFO  c.r.alya.RemigesAlyaApplication - Starting RemigesAlyaApplication using Java 17.0.6 with PID 7280 (C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing\target\classes started by Merceadm in C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing)
+2024-05-27 10:26:34 DEBUG c.r.alya.RemigesAlyaApplication - Running with Spring Boot v3.2.5, Spring v6.1.6
+2024-05-27 10:26:34 INFO  c.r.alya.RemigesAlyaApplication - No active profile set, falling back to 1 default profile: "default"
+2024-05-27 10:26:34 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-05-27 10:26:34 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 47 ms. Found 2 JPA repository interfaces.
+2024-05-27 10:26:35 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2024-05-27 10:26:35 INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-05-27 10:26:35 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-05-27 10:26:35 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-05-27 10:26:35 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-05-27 10:26:35 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1023 ms
+2024-05-27 10:26:35 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-05-27 10:26:35 INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-05-27 10:26:35 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Starting...
+2024-05-27 10:26:35 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-2 - Added connection org.postgresql.jdbc.PgConnection@76ca34ff
+2024-05-27 10:26:35 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Start completed.
+2024-05-27 10:26:35 INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-05-27 10:26:35 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-05-27 10:26:36 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-05-27 10:26:36 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-05-27 10:26:36 INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2024-05-27 10:26:36 INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-05-27 10:26:36 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2024-05-27 10:26:36 INFO  c.r.alya.RemigesAlyaApplication - Started RemigesAlyaApplication in 2.381 seconds (process running for 140.305)
+2024-05-27 10:26:36 INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2024-05-27 10:26:52 INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2024-05-27 10:26:52 INFO  o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["http-nio-8080"]
+2024-05-27 10:26:52 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-05-27 10:26:52 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Shutdown initiated...
+2024-05-27 10:26:52 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Shutdown completed.
+2024-05-27 10:27:30 INFO  c.r.alya.RemigesAlyaApplication - Starting RemigesAlyaApplication using Java 17.0.6 with PID 7280 (C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing\target\classes started by Merceadm in C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing)
+2024-05-27 10:27:30 DEBUG c.r.alya.RemigesAlyaApplication - Running with Spring Boot v3.2.5, Spring v6.1.6
+2024-05-27 10:27:30 INFO  c.r.alya.RemigesAlyaApplication - No active profile set, falling back to 1 default profile: "default"
+2024-05-27 10:27:30 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-05-27 10:27:30 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 17 ms. Found 2 JPA repository interfaces.
+2024-05-27 10:27:30 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2024-05-27 10:27:30 INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-05-27 10:27:30 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-05-27 10:27:30 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-05-27 10:27:30 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-05-27 10:27:30 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 348 ms
+2024-05-27 10:27:30 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-05-27 10:27:30 INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-05-27 10:27:30 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-3 - Starting...
+2024-05-27 10:27:30 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-3 - Added connection org.postgresql.jdbc.PgConnection@3044aa6d
+2024-05-27 10:27:30 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-3 - Start completed.
+2024-05-27 10:27:30 INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-05-27 10:27:30 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-05-27 10:27:30 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-05-27 10:27:30 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-05-27 10:27:30 INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2024-05-27 10:27:31 INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-05-27 10:27:31 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2024-05-27 10:27:31 INFO  c.r.alya.RemigesAlyaApplication - Started RemigesAlyaApplication in 0.909 seconds (process running for 194.615)
+2024-05-27 10:27:31 INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2024-05-27 10:28:27 INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2024-05-27 10:28:27 INFO  o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["http-nio-8080"]
+2024-05-27 10:28:27 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-05-27 10:28:27 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-3 - Shutdown initiated...
+2024-05-27 10:28:27 INFO  c.r.alya.RemigesAlyaApplication - Starting RemigesAlyaApplication using Java 17.0.6 with PID 7280 (C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing\target\classes started by Merceadm in C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing)
+2024-05-27 10:28:27 DEBUG c.r.alya.RemigesAlyaApplication - Running with Spring Boot v3.2.5, Spring v6.1.6
+2024-05-27 10:28:27 INFO  c.r.alya.RemigesAlyaApplication - No active profile set, falling back to 1 default profile: "default"
+2024-05-27 10:28:27 INFO  c.r.alya.RemigesAlyaApplication - Starting RemigesAlyaApplication using Java 17.0.6 with PID 7280 (C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing\target\classes started by Merceadm in C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing)
+2024-05-27 10:28:27 DEBUG c.r.alya.RemigesAlyaApplication - Running with Spring Boot v3.2.5, Spring v6.1.6
+2024-05-27 10:28:27 INFO  c.r.alya.RemigesAlyaApplication - No active profile set, falling back to 1 default profile: "default"
+2024-05-27 10:28:27 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-05-27 10:28:27 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-05-27 10:28:27 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 14 ms. Found 2 JPA repository interfaces.
+2024-05-27 10:28:27 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 14 ms. Found 2 JPA repository interfaces.
+2024-05-27 10:28:27 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2024-05-27 10:28:27 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2024-05-27 10:28:27 INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-05-27 10:28:27 INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-05-27 10:28:27 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-05-27 10:28:27 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-05-27 10:28:27 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-05-27 10:28:27 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-05-27 10:28:27 INFO  o.a.c.c.C.[Tomcat-1].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-05-27 10:28:27 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 318 ms
+2024-05-27 10:28:27 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-05-27 10:28:27 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 320 ms
+2024-05-27 10:28:27 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-05-27 10:28:27 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-05-27 10:28:27 INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-05-27 10:28:27 INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-05-27 10:28:27 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-4 - Starting...
+2024-05-27 10:28:27 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-5 - Starting...
+2024-05-27 10:28:27 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-4 - Added connection org.postgresql.jdbc.PgConnection@562905c
+2024-05-27 10:28:27 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-4 - Start completed.
+2024-05-27 10:28:27 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-5 - Added connection org.postgresql.jdbc.PgConnection@2db65235
+2024-05-27 10:28:27 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-5 - Start completed.
+2024-05-27 10:28:27 INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-05-27 10:28:27 INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-05-27 10:28:27 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-05-27 10:28:27 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-05-27 10:28:27 WARN  o.h.e.jdbc.spi.SqlExceptionHelper - SQL Warning Code: 0, SQLState: 00000
+2024-05-27 10:28:27 WARN  o.h.e.jdbc.spi.SqlExceptionHelper - constraint "fkeudv45hpj5u9q2idi9e41y13b" of relation "batchrows" does not exist, skipping
+2024-05-27 10:28:27 WARN  o.h.e.jdbc.spi.SqlExceptionHelper - SQL Warning Code: 0, SQLState: 00000
+2024-05-27 10:28:27 WARN  o.h.e.jdbc.spi.SqlExceptionHelper - table "batches" does not exist, skipping
+2024-05-27 10:28:27 WARN  o.h.e.jdbc.spi.SqlExceptionHelper - SQL Warning Code: 0, SQLState: 00000
+2024-05-27 10:28:27 WARN  o.h.e.jdbc.spi.SqlExceptionHelper - table "batchrows" does not exist, skipping
+2024-05-27 10:28:27 WARN  o.h.t.s.i.ExceptionHandlerLoggedImpl - GenerationTarget encountered exception accepting command : Error executing DDL "create table batches (naborted integer, nfailed integer, nsuccess integer, type char(1) not null, doneat timestamp(6), reqat timestamp(6) not null, id uuid not null, app varchar(255) not null, inputfile varchar(255), op varchar(255) not null, status varchar(255) check (status in ('BatchTryLater','BatchWait','BatchQueued','BatchInProgress','BatchSuccess','BatchFailed','BatchAborted')), context jsonb not null, outputfiles jsonb, primary key (id))" via JDBC [ERROR: duplicate key value violates unique constraint "pg_type_typname_nsp_index"
+  Detail: Key (typname, typnamespace)=(batches, 2200) already exists.]
+org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "create table batches (naborted integer, nfailed integer, nsuccess integer, type char(1) not null, doneat timestamp(6), reqat timestamp(6) not null, id uuid not null, app varchar(255) not null, inputfile varchar(255), op varchar(255) not null, status varchar(255) check (status in ('BatchTryLater','BatchWait','BatchQueued','BatchInProgress','BatchSuccess','BatchFailed','BatchAborted')), context jsonb not null, outputfiles jsonb, primary key (id))" via JDBC [ERROR: duplicate key value violates unique constraint "pg_type_typname_nsp_index"
+  Detail: Key (typname, typnamespace)=(batches, 2200) already exists.]
+	at org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase.accept(GenerationTargetToDatabase.java:94)
+	at org.hibernate.tool.schema.internal.Helper.applySqlString(Helper.java:233)
+	at org.hibernate.tool.schema.internal.Helper.applySqlStrings(Helper.java:217)
+	at org.hibernate.tool.schema.internal.SchemaCreatorImpl.createTables(SchemaCreatorImpl.java:420)
+	at org.hibernate.tool.schema.internal.SchemaCreatorImpl.createSequencesTablesConstraints(SchemaCreatorImpl.java:340)
+	at org.hibernate.tool.schema.internal.SchemaCreatorImpl.createFromMetadata(SchemaCreatorImpl.java:239)
+	at org.hibernate.tool.schema.internal.SchemaCreatorImpl.performCreation(SchemaCreatorImpl.java:172)
+	at org.hibernate.tool.schema.internal.SchemaCreatorImpl.doCreation(SchemaCreatorImpl.java:142)
+	at org.hibernate.tool.schema.internal.SchemaCreatorImpl.doCreation(SchemaCreatorImpl.java:118)
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.performDatabaseAction(SchemaManagementToolCoordinator.java:256)
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.lambda$process$5(SchemaManagementToolCoordinator.java:145)
+	at java.base/java.util.HashMap.forEach(HashMap.java:1421)
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.process(SchemaManagementToolCoordinator.java:142)
+	at org.hibernate.boot.internal.SessionFactoryObserverForSchemaExport.sessionFactoryCreated(SessionFactoryObserverForSchemaExport.java:37)
+	at org.hibernate.internal.SessionFactoryObserverChain.sessionFactoryCreated(SessionFactoryObserverChain.java:35)
+	at org.hibernate.internal.SessionFactoryImpl.<init>(SessionFactoryImpl.java:315)
+	at org.hibernate.boot.internal.SessionFactoryBuilderImpl.build(SessionFactoryBuilderImpl.java:450)
+	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.build(EntityManagerFactoryBuilderImpl.java:1507)
+	at org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider.createContainerEntityManagerFactory(SpringHibernateJpaPersistenceProvider.java:75)
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.createNativeEntityManagerFactory(LocalContainerEntityManagerFactoryBean.java:390)
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:409)
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.afterPropertiesSet(AbstractEntityManagerFactoryBean.java:396)
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.afterPropertiesSet(LocalContainerEntityManagerFactoryBean.java:366)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1833)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1782)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:600)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:522)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:326)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:324)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:200)
+	at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:1234)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:952)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:624)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:754)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:456)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:334)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1354)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1343)
+	at com.remiges.alya.RemigesAlyaApplication.main(RemigesAlyaApplication.java:33)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:50)
+Caused by: org.postgresql.util.PSQLException: ERROR: duplicate key value violates unique constraint "pg_type_typname_nsp_index"
+  Detail: Key (typname, typnamespace)=(batches, 2200) already exists.
+	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2713)
+	at org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2401)
+	at org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:368)
+	at org.postgresql.jdbc.PgStatement.executeInternal(PgStatement.java:498)
+	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:415)
+	at org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:335)
+	at org.postgresql.jdbc.PgStatement.executeCachedSql(PgStatement.java:321)
+	at org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:297)
+	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:292)
+	at com.zaxxer.hikari.pool.ProxyStatement.execute(ProxyStatement.java:94)
+	at com.zaxxer.hikari.pool.HikariProxyStatement.execute(HikariProxyStatement.java)
+	at org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase.accept(GenerationTargetToDatabase.java:80)
+	... 45 common frames omitted
+2024-05-27 10:28:27 WARN  o.h.t.s.i.ExceptionHandlerLoggedImpl - GenerationTarget encountered exception accepting command : Error executing DDL "create table batchrows (batch_status smallint not null check (batch_status between 0 and 6), line integer not null, doneat timestamp(6), reqat timestamp(6) not null, rowid bigserial not null, batch_id uuid not null, doneby varchar(255), res varchar(255), blobrows jsonb, input oid not null, messages oid, primary key (rowid))" via JDBC [ERROR: relation "batchrows" already exists]
+org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "create table batchrows (batch_status smallint not null check (batch_status between 0 and 6), line integer not null, doneat timestamp(6), reqat timestamp(6) not null, rowid bigserial not null, batch_id uuid not null, doneby varchar(255), res varchar(255), blobrows jsonb, input oid not null, messages oid, primary key (rowid))" via JDBC [ERROR: relation "batchrows" already exists]
+	at org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase.accept(GenerationTargetToDatabase.java:94)
+	at org.hibernate.tool.schema.internal.Helper.applySqlString(Helper.java:233)
+	at org.hibernate.tool.schema.internal.Helper.applySqlStrings(Helper.java:217)
+	at org.hibernate.tool.schema.internal.SchemaCreatorImpl.createTables(SchemaCreatorImpl.java:420)
+	at org.hibernate.tool.schema.internal.SchemaCreatorImpl.createSequencesTablesConstraints(SchemaCreatorImpl.java:340)
+	at org.hibernate.tool.schema.internal.SchemaCreatorImpl.createFromMetadata(SchemaCreatorImpl.java:239)
+	at org.hibernate.tool.schema.internal.SchemaCreatorImpl.performCreation(SchemaCreatorImpl.java:172)
+	at org.hibernate.tool.schema.internal.SchemaCreatorImpl.doCreation(SchemaCreatorImpl.java:142)
+	at org.hibernate.tool.schema.internal.SchemaCreatorImpl.doCreation(SchemaCreatorImpl.java:118)
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.performDatabaseAction(SchemaManagementToolCoordinator.java:256)
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.lambda$process$5(SchemaManagementToolCoordinator.java:145)
+	at java.base/java.util.HashMap.forEach(HashMap.java:1421)
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.process(SchemaManagementToolCoordinator.java:142)
+	at org.hibernate.boot.internal.SessionFactoryObserverForSchemaExport.sessionFactoryCreated(SessionFactoryObserverForSchemaExport.java:37)
+	at org.hibernate.internal.SessionFactoryObserverChain.sessionFactoryCreated(SessionFactoryObserverChain.java:35)
+	at org.hibernate.internal.SessionFactoryImpl.<init>(SessionFactoryImpl.java:315)
+	at org.hibernate.boot.internal.SessionFactoryBuilderImpl.build(SessionFactoryBuilderImpl.java:450)
+	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.build(EntityManagerFactoryBuilderImpl.java:1507)
+	at org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider.createContainerEntityManagerFactory(SpringHibernateJpaPersistenceProvider.java:75)
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.createNativeEntityManagerFactory(LocalContainerEntityManagerFactoryBean.java:390)
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:409)
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.afterPropertiesSet(AbstractEntityManagerFactoryBean.java:396)
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.afterPropertiesSet(LocalContainerEntityManagerFactoryBean.java:366)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1833)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1782)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:600)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:522)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:326)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:324)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:200)
+	at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:1234)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:952)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:624)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:754)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:456)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:334)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1354)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1343)
+	at com.remiges.alya.RemigesAlyaApplication.main(RemigesAlyaApplication.java:33)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:50)
+Caused by: org.postgresql.util.PSQLException: ERROR: relation "batchrows" already exists
+	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2713)
+	at org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2401)
+	at org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:368)
+	at org.postgresql.jdbc.PgStatement.executeInternal(PgStatement.java:498)
+	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:415)
+	at org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:335)
+	at org.postgresql.jdbc.PgStatement.executeCachedSql(PgStatement.java:321)
+	at org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:297)
+	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:292)
+	at com.zaxxer.hikari.pool.ProxyStatement.execute(ProxyStatement.java:94)
+	at com.zaxxer.hikari.pool.HikariProxyStatement.execute(HikariProxyStatement.java)
+	at org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase.accept(GenerationTargetToDatabase.java:80)
+	... 45 common frames omitted
+2024-05-27 10:28:27 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-05-27 10:28:27 WARN  o.h.t.s.i.ExceptionHandlerLoggedImpl - GenerationTarget encountered exception accepting command : Error executing DDL "alter table if exists batchrows add constraint FKeudv45hpj5u9q2idi9e41y13b foreign key (batch_id) references batches" via JDBC [ERROR: constraint "fkeudv45hpj5u9q2idi9e41y13b" for relation "batchrows" already exists]
+org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "alter table if exists batchrows add constraint FKeudv45hpj5u9q2idi9e41y13b foreign key (batch_id) references batches" via JDBC [ERROR: constraint "fkeudv45hpj5u9q2idi9e41y13b" for relation "batchrows" already exists]
+	at org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase.accept(GenerationTargetToDatabase.java:94)
+	at org.hibernate.tool.schema.internal.Helper.applySqlString(Helper.java:233)
+	at org.hibernate.tool.schema.internal.Helper.applySqlStrings(Helper.java:217)
+	at org.hibernate.tool.schema.internal.SchemaCreatorImpl.createForeignKeys(SchemaCreatorImpl.java:303)
+	at org.hibernate.tool.schema.internal.SchemaCreatorImpl.createFromMetadata(SchemaCreatorImpl.java:250)
+	at org.hibernate.tool.schema.internal.SchemaCreatorImpl.performCreation(SchemaCreatorImpl.java:172)
+	at org.hibernate.tool.schema.internal.SchemaCreatorImpl.doCreation(SchemaCreatorImpl.java:142)
+	at org.hibernate.tool.schema.internal.SchemaCreatorImpl.doCreation(SchemaCreatorImpl.java:118)
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.performDatabaseAction(SchemaManagementToolCoordinator.java:256)
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.lambda$process$5(SchemaManagementToolCoordinator.java:145)
+	at java.base/java.util.HashMap.forEach(HashMap.java:1421)
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.process(SchemaManagementToolCoordinator.java:142)
+	at org.hibernate.boot.internal.SessionFactoryObserverForSchemaExport.sessionFactoryCreated(SessionFactoryObserverForSchemaExport.java:37)
+	at org.hibernate.internal.SessionFactoryObserverChain.sessionFactoryCreated(SessionFactoryObserverChain.java:35)
+	at org.hibernate.internal.SessionFactoryImpl.<init>(SessionFactoryImpl.java:315)
+	at org.hibernate.boot.internal.SessionFactoryBuilderImpl.build(SessionFactoryBuilderImpl.java:450)
+	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.build(EntityManagerFactoryBuilderImpl.java:1507)
+	at org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider.createContainerEntityManagerFactory(SpringHibernateJpaPersistenceProvider.java:75)
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.createNativeEntityManagerFactory(LocalContainerEntityManagerFactoryBean.java:390)
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:409)
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.afterPropertiesSet(AbstractEntityManagerFactoryBean.java:396)
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.afterPropertiesSet(LocalContainerEntityManagerFactoryBean.java:366)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1833)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1782)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:600)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:522)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:326)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:324)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:200)
+	at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:1234)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:952)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:624)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:754)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:456)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:334)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1354)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1343)
+	at com.remiges.alya.RemigesAlyaApplication.main(RemigesAlyaApplication.java:33)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:50)
+Caused by: org.postgresql.util.PSQLException: ERROR: constraint "fkeudv45hpj5u9q2idi9e41y13b" for relation "batchrows" already exists
+	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2713)
+	at org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2401)
+	at org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:368)
+	at org.postgresql.jdbc.PgStatement.executeInternal(PgStatement.java:498)
+	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:415)
+	at org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:335)
+	at org.postgresql.jdbc.PgStatement.executeCachedSql(PgStatement.java:321)
+	at org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:297)
+	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:292)
+	at com.zaxxer.hikari.pool.ProxyStatement.execute(ProxyStatement.java:94)
+	at com.zaxxer.hikari.pool.HikariProxyStatement.execute(HikariProxyStatement.java)
+	at org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase.accept(GenerationTargetToDatabase.java:80)
+	... 44 common frames omitted
+2024-05-27 10:28:27 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-05-27 10:28:28 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-05-27 10:28:28 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-05-27 10:28:28 INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2024-05-27 10:28:28 INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-05-27 10:28:28 INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2024-05-27 10:28:28 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2024-05-27 10:28:28 INFO  c.r.alya.RemigesAlyaApplication - Started RemigesAlyaApplication in 1.028 seconds (process running for 251.748)
+2024-05-27 10:28:28 INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2024-05-27 10:28:28 INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-05-27 10:28:28 WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2024-05-27 10:28:28 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-05-27 10:28:28 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-5 - Shutdown initiated...
+2024-05-27 10:28:28 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-5 - Shutdown completed.
+2024-05-27 10:28:28 INFO  o.s.b.a.l.ConditionEvaluationReportLogger - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2024-05-27 10:28:28 ERROR o.s.b.d.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8080 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8080 or configure this application to listen on another port.
+
+2024-05-27 10:28:36 INFO  c.r.alya.RemigesAlyaApplication - Starting RemigesAlyaApplication using Java 17.0.6 with PID 10508 (C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing\target\classes started by Merceadm in C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing)
+2024-05-27 10:28:36 DEBUG c.r.alya.RemigesAlyaApplication - Running with Spring Boot v3.2.5, Spring v6.1.6
+2024-05-27 10:28:36 INFO  c.r.alya.RemigesAlyaApplication - No active profile set, falling back to 1 default profile: "default"
+2024-05-27 10:28:36 INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-05-27 10:28:36 INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-05-27 10:28:37 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-05-27 10:28:37 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 74 ms. Found 2 JPA repository interfaces.
+2024-05-27 10:28:38 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2024-05-27 10:28:38 INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-05-27 10:28:38 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-05-27 10:28:38 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-05-27 10:28:38 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-05-27 10:28:38 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2030 ms
+2024-05-27 10:28:38 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-05-27 10:28:38 INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-05-27 10:28:39 INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-05-27 10:28:39 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2024-05-27 10:28:39 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@1f87c951
+2024-05-27 10:28:39 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2024-05-27 10:28:39 INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-05-27 10:28:40 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-05-27 10:28:40 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-05-27 10:28:41 INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-05-27 10:28:42 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-05-27 10:28:42 INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2024-05-27 10:28:42 INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-05-27 10:28:42 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2024-05-27 10:28:42 INFO  c.r.alya.RemigesAlyaApplication - Started RemigesAlyaApplication in 6.818 seconds (process running for 7.455)
+2024-05-27 10:30:25 INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2024-05-27 10:30:25 INFO  o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["http-nio-8080"]
+2024-05-27 10:30:25 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-05-27 10:30:25 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2024-05-27 10:30:25 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2024-05-27 10:30:25 INFO  c.r.alya.RemigesAlyaApplication - Starting RemigesAlyaApplication using Java 17.0.6 with PID 10508 (C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing\target\classes started by Merceadm in C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing)
+2024-05-27 10:30:25 DEBUG c.r.alya.RemigesAlyaApplication - Running with Spring Boot v3.2.5, Spring v6.1.6
+2024-05-27 10:30:25 INFO  c.r.alya.RemigesAlyaApplication - No active profile set, falling back to 1 default profile: "default"
+2024-05-27 10:30:25 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-05-27 10:30:25 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 18 ms. Found 2 JPA repository interfaces.
+2024-05-27 10:30:25 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2024-05-27 10:30:25 INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-05-27 10:30:25 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-05-27 10:30:25 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-05-27 10:30:25 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-05-27 10:30:25 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 409 ms
+2024-05-27 10:30:25 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-05-27 10:30:25 INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-05-27 10:30:25 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Starting...
+2024-05-27 10:30:25 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-2 - Added connection org.postgresql.jdbc.PgConnection@458c974e
+2024-05-27 10:30:25 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Start completed.
+2024-05-27 10:30:25 INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-05-27 10:30:26 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-05-27 10:30:26 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-05-27 10:30:26 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-05-27 10:30:26 INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2024-05-27 10:30:26 INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-05-27 10:30:26 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2024-05-27 10:30:26 INFO  c.r.alya.RemigesAlyaApplication - Started RemigesAlyaApplication in 1.196 seconds (process running for 111.192)
+2024-05-27 10:30:26 INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2024-05-27 10:30:28 INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2024-05-27 10:30:28 INFO  o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["http-nio-8080"]
+2024-05-27 10:30:29 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-05-27 10:30:29 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Shutdown initiated...
+2024-05-27 10:30:29 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Shutdown completed.
+2024-05-27 10:30:29 INFO  c.r.alya.RemigesAlyaApplication - Starting RemigesAlyaApplication using Java 17.0.6 with PID 10508 (C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing\target\classes started by Merceadm in C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing)
+2024-05-27 10:30:29 DEBUG c.r.alya.RemigesAlyaApplication - Running with Spring Boot v3.2.5, Spring v6.1.6
+2024-05-27 10:30:29 INFO  c.r.alya.RemigesAlyaApplication - No active profile set, falling back to 1 default profile: "default"
+2024-05-27 10:30:29 ERROR o.s.boot.SpringApplication - Application run failed
+java.lang.IllegalStateException: java.util.NoSuchElementException
+	at org.springframework.boot.context.logging.LoggingApplicationListener.initializeSystem(LoggingApplicationListener.java:347)
+	at org.springframework.boot.context.logging.LoggingApplicationListener.initialize(LoggingApplicationListener.java:298)
+	at org.springframework.boot.context.logging.LoggingApplicationListener.onApplicationEnvironmentPreparedEvent(LoggingApplicationListener.java:246)
+	at org.springframework.boot.context.logging.LoggingApplicationListener.onApplicationEvent(LoggingApplicationListener.java:223)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.doInvokeListener(SimpleApplicationEventMulticaster.java:185)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.invokeListener(SimpleApplicationEventMulticaster.java:178)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:156)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:138)
+	at org.springframework.boot.context.event.EventPublishingRunListener.multicastInitialEvent(EventPublishingRunListener.java:136)
+	at org.springframework.boot.context.event.EventPublishingRunListener.environmentPrepared(EventPublishingRunListener.java:81)
+	at org.springframework.boot.SpringApplicationRunListeners.lambda$environmentPrepared$2(SpringApplicationRunListeners.java:64)
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75)
+	at org.springframework.boot.SpringApplicationRunListeners.doWithListeners(SpringApplicationRunListeners.java:118)
+	at org.springframework.boot.SpringApplicationRunListeners.doWithListeners(SpringApplicationRunListeners.java:112)
+	at org.springframework.boot.SpringApplicationRunListeners.environmentPrepared(SpringApplicationRunListeners.java:63)
+	at org.springframework.boot.SpringApplication.prepareEnvironment(SpringApplication.java:369)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:329)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1354)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1343)
+	at com.remiges.alya.RemigesAlyaApplication.main(RemigesAlyaApplication.java:33)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:50)
+Caused by: java.util.NoSuchElementException: null
+	at java.base/java.util.ArrayList$Itr.next(ArrayList.java:970)
+	at ch.qos.logback.classic.LoggerContext.resetListenersExceptResetResistant(LoggerContext.java:294)
+	at ch.qos.logback.classic.LoggerContext.reset(LoggerContext.java:367)
+	at ch.qos.logback.classic.LoggerContext.stop(LoggerContext.java:343)
+	at org.springframework.boot.logging.logback.LogbackLoggingSystem.stopAndReset(LogbackLoggingSystem.java:295)
+	at org.springframework.boot.logging.logback.LogbackLoggingSystem.loadConfiguration(LogbackLoggingSystem.java:243)
+	at org.springframework.boot.logging.AbstractLoggingSystem.initializeWithConventions(AbstractLoggingSystem.java:81)
+	at org.springframework.boot.logging.AbstractLoggingSystem.initialize(AbstractLoggingSystem.java:61)
+	at org.springframework.boot.logging.logback.LogbackLoggingSystem.initialize(LogbackLoggingSystem.java:189)
+	at org.springframework.boot.context.logging.LoggingApplicationListener.initializeSystem(LoggingApplicationListener.java:332)
+	... 24 common frames omitted
+2024-05-27 10:30:29 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-05-27 10:30:29 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 16 ms. Found 2 JPA repository interfaces.
+2024-05-27 10:30:29 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2024-05-27 10:30:29 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 320 ms
+2024-05-27 10:30:29 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-05-27 10:30:29 INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-05-27 10:30:29 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-3 - Starting...
+2024-05-27 10:30:29 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-3 - Added connection org.postgresql.jdbc.PgConnection@7983d751
+2024-05-27 10:30:29 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-3 - Start completed.
+2024-05-27 10:30:29 INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-05-27 10:30:41 INFO  c.r.alya.RemigesAlyaApplication - Starting RemigesAlyaApplication using Java 17.0.6 with PID 16596 (C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing\target\classes started by Merceadm in C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing)
+2024-05-27 10:30:41 DEBUG c.r.alya.RemigesAlyaApplication - Running with Spring Boot v3.2.5, Spring v6.1.6
+2024-05-27 10:30:41 INFO  c.r.alya.RemigesAlyaApplication - No active profile set, falling back to 1 default profile: "default"
+2024-05-27 10:30:41 INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-05-27 10:30:41 INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-05-27 10:30:42 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-05-27 10:30:42 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 69 ms. Found 2 JPA repository interfaces.
+2024-05-27 10:30:43 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2024-05-27 10:30:43 INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-05-27 10:30:43 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-05-27 10:30:43 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-05-27 10:30:43 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-05-27 10:30:43 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2006 ms
+2024-05-27 10:30:44 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-05-27 10:30:44 INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-05-27 10:30:44 INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-05-27 10:30:44 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2024-05-27 10:30:44 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@5ff0ce67
+2024-05-27 10:30:44 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2024-05-27 10:30:45 INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-05-27 10:30:46 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-05-27 10:30:46 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-05-27 10:30:46 INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-05-27 10:30:47 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-05-27 10:30:47 INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2024-05-27 10:30:47 INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-05-27 10:30:47 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2024-05-27 10:30:48 INFO  c.r.alya.RemigesAlyaApplication - Started RemigesAlyaApplication in 6.696 seconds (process running for 7.305)
+2024-05-27 10:31:27 INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2024-05-27 10:31:27 INFO  o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["http-nio-8080"]
+2024-05-27 10:31:27 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-05-27 10:31:27 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2024-05-27 10:31:27 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2024-05-27 10:32:25 INFO  c.r.alya.RemigesAlyaApplication - Starting RemigesAlyaApplication using Java 17.0.6 with PID 7696 (C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing\target\classes started by Merceadm in C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing)
+2024-05-27 10:32:25 DEBUG c.r.alya.RemigesAlyaApplication - Running with Spring Boot v3.2.5, Spring v6.1.6
+2024-05-27 10:32:25 INFO  c.r.alya.RemigesAlyaApplication - No active profile set, falling back to 1 default profile: "default"
+2024-05-27 10:32:25 INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-05-27 10:32:25 INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-05-27 10:32:26 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-05-27 10:32:26 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 70 ms. Found 2 JPA repository interfaces.
+2024-05-27 10:32:27 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2024-05-27 10:32:27 INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-05-27 10:32:27 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-05-27 10:32:27 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-05-27 10:32:27 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-05-27 10:32:27 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1916 ms
+2024-05-27 10:32:27 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-05-27 10:32:28 INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-05-27 10:32:28 INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-05-27 10:32:28 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2024-05-27 10:32:28 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@7acd9882
+2024-05-27 10:32:28 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2024-05-27 10:32:28 INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-05-27 10:32:29 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-05-27 10:32:29 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-05-27 10:32:30 INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-05-27 10:32:31 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-05-27 10:32:31 INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2024-05-27 10:32:31 INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-05-27 10:32:31 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2024-05-27 10:32:31 INFO  c.r.alya.RemigesAlyaApplication - Started RemigesAlyaApplication in 6.577 seconds (process running for 7.178)
+2024-05-27 10:33:10 INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2024-05-27 10:33:10 INFO  o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["http-nio-8080"]
+2024-05-27 10:33:10 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-05-27 10:33:10 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2024-05-27 10:33:10 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2024-05-27 10:33:12 INFO  c.r.alya.RemigesAlyaApplication - Starting RemigesAlyaApplication using Java 17.0.6 with PID 7696 (C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing\target\classes started by Merceadm in C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing)
+2024-05-27 10:33:12 DEBUG c.r.alya.RemigesAlyaApplication - Running with Spring Boot v3.2.5, Spring v6.1.6
+2024-05-27 10:33:12 INFO  c.r.alya.RemigesAlyaApplication - No active profile set, falling back to 1 default profile: "default"
+2024-05-27 10:33:13 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-05-27 10:33:13 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 17 ms. Found 2 JPA repository interfaces.
+2024-05-27 10:33:13 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2024-05-27 10:33:13 INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-05-27 10:33:13 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-05-27 10:33:13 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-05-27 10:33:13 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-05-27 10:33:13 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 385 ms
+2024-05-27 10:33:13 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-05-27 10:33:13 INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-05-27 10:33:13 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Starting...
+2024-05-27 10:33:13 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-2 - Added connection org.postgresql.jdbc.PgConnection@77165992
+2024-05-27 10:33:13 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Start completed.
+2024-05-27 10:33:13 INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-05-27 10:33:13 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-05-27 10:33:13 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-05-27 10:33:13 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-05-27 10:33:13 INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2024-05-27 10:33:13 INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-05-27 10:33:13 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2024-05-27 10:33:13 INFO  c.r.alya.RemigesAlyaApplication - Started RemigesAlyaApplication in 1.015 seconds (process running for 49.321)
+2024-05-27 10:33:13 INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2024-05-27 10:33:24 INFO  c.r.alya.RemigesAlyaApplication - Starting RemigesAlyaApplication using Java 17.0.6 with PID 3700 (C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing\target\classes started by Merceadm in C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing)
+2024-05-27 10:33:24 DEBUG c.r.alya.RemigesAlyaApplication - Running with Spring Boot v3.2.5, Spring v6.1.6
+2024-05-27 10:33:24 INFO  c.r.alya.RemigesAlyaApplication - No active profile set, falling back to 1 default profile: "default"
+2024-05-27 10:33:24 INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-05-27 10:33:24 INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-05-27 10:33:25 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-05-27 10:33:25 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 71 ms. Found 2 JPA repository interfaces.
+2024-05-27 10:33:26 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2024-05-27 10:33:26 INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-05-27 10:33:26 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-05-27 10:33:26 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-05-27 10:33:26 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-05-27 10:33:26 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2039 ms
+2024-05-27 10:33:26 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-05-27 10:33:26 INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-05-27 10:33:26 INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-05-27 10:33:26 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2024-05-27 10:33:27 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@4bf72261
+2024-05-27 10:33:27 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2024-05-27 10:33:27 INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-05-27 10:33:28 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-05-27 10:33:28 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-05-27 10:33:29 INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-05-27 10:33:30 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-05-27 10:33:30 INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2024-05-27 10:33:30 INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-05-27 10:33:30 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2024-05-27 10:33:30 INFO  c.r.alya.RemigesAlyaApplication - Started RemigesAlyaApplication in 6.868 seconds (process running for 7.499)
+2024-05-27 10:34:10 INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2024-05-27 10:34:10 INFO  o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["http-nio-8080"]
+2024-05-27 10:34:10 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-05-27 10:34:10 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2024-05-27 10:34:10 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2024-05-27 10:34:10 INFO  c.r.alya.RemigesAlyaApplication - Starting RemigesAlyaApplication using Java 17.0.6 with PID 3700 (C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing\target\classes started by Merceadm in C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing)
+2024-05-27 10:34:10 DEBUG c.r.alya.RemigesAlyaApplication - Running with Spring Boot v3.2.5, Spring v6.1.6
+2024-05-27 10:34:10 INFO  c.r.alya.RemigesAlyaApplication - No active profile set, falling back to 1 default profile: "default"
+2024-05-27 10:34:10 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-05-27 10:34:10 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 15 ms. Found 2 JPA repository interfaces.
+2024-05-27 10:34:10 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2024-05-27 10:34:10 INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-05-27 10:34:10 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-05-27 10:34:10 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-05-27 10:34:10 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-05-27 10:34:10 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 390 ms
+2024-05-27 10:34:10 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-05-27 10:34:10 INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-05-27 10:34:10 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Starting...
+2024-05-27 10:34:10 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-2 - Added connection org.postgresql.jdbc.PgConnection@d9a5a44
+2024-05-27 10:34:10 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Start completed.
+2024-05-27 10:34:10 INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-05-27 10:34:10 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-05-27 10:34:10 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-05-27 10:34:11 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-05-27 10:34:11 INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2024-05-27 10:34:11 INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-05-27 10:34:11 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2024-05-27 10:34:11 INFO  c.r.alya.RemigesAlyaApplication - Started RemigesAlyaApplication in 0.972 seconds (process running for 48.148)
+2024-05-27 10:34:11 INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2024-05-27 10:34:27 INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2024-05-27 10:34:27 INFO  o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["http-nio-8080"]
+2024-05-27 10:34:27 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-05-27 10:34:27 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Shutdown initiated...
+2024-05-27 10:34:27 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Shutdown completed.
+2024-05-27 10:34:27 INFO  c.r.alya.RemigesAlyaApplication - Starting RemigesAlyaApplication using Java 17.0.6 with PID 3700 (C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing\target\classes started by Merceadm in C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing)
+2024-05-27 10:34:27 DEBUG c.r.alya.RemigesAlyaApplication - Running with Spring Boot v3.2.5, Spring v6.1.6
+2024-05-27 10:34:27 INFO  c.r.alya.RemigesAlyaApplication - No active profile set, falling back to 1 default profile: "default"
+2024-05-27 10:34:27 ERROR o.s.boot.SpringApplication - Application run failed
+java.lang.IllegalStateException: java.lang.IllegalStateException: Logback configuration error detected: 
+ERROR in ch.qos.logback.core.rolling.RollingFileAppender[FILE] - 'FileNamePattern' option has the same value "./logs/app-%d{yyyy-MM-dd}.log" as that given for appender [FILE] defined earlier.
+ERROR in ch.qos.logback.core.rolling.RollingFileAppender[FILE] - Collisions detected with FileAppender/RollingAppender instances defined earlier. Aborting.
+ERROR in ch.qos.logback.core.rolling.RollingFileAppender[FILE] - For more information, please visit http://logback.qos.ch/codes.html#earlier_fa_collision
+	at org.springframework.boot.context.logging.LoggingApplicationListener.initializeSystem(LoggingApplicationListener.java:347)
+	at org.springframework.boot.context.logging.LoggingApplicationListener.initialize(LoggingApplicationListener.java:298)
+	at org.springframework.boot.context.logging.LoggingApplicationListener.onApplicationEnvironmentPreparedEvent(LoggingApplicationListener.java:246)
+	at org.springframework.boot.context.logging.LoggingApplicationListener.onApplicationEvent(LoggingApplicationListener.java:223)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.doInvokeListener(SimpleApplicationEventMulticaster.java:185)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.invokeListener(SimpleApplicationEventMulticaster.java:178)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:156)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:138)
+	at org.springframework.boot.context.event.EventPublishingRunListener.multicastInitialEvent(EventPublishingRunListener.java:136)
+	at org.springframework.boot.context.event.EventPublishingRunListener.environmentPrepared(EventPublishingRunListener.java:81)
+	at org.springframework.boot.SpringApplicationRunListeners.lambda$environmentPrepared$2(SpringApplicationRunListeners.java:64)
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75)
+	at org.springframework.boot.SpringApplicationRunListeners.doWithListeners(SpringApplicationRunListeners.java:118)
+	at org.springframework.boot.SpringApplicationRunListeners.doWithListeners(SpringApplicationRunListeners.java:112)
+	at org.springframework.boot.SpringApplicationRunListeners.environmentPrepared(SpringApplicationRunListeners.java:63)
+	at org.springframework.boot.SpringApplication.prepareEnvironment(SpringApplication.java:369)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:329)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1354)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1343)
+	at com.remiges.alya.RemigesAlyaApplication.main(RemigesAlyaApplication.java:30)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:50)
+Caused by: java.lang.IllegalStateException: Logback configuration error detected: 
+ERROR in ch.qos.logback.core.rolling.RollingFileAppender[FILE] - 'FileNamePattern' option has the same value "./logs/app-%d{yyyy-MM-dd}.log" as that given for appender [FILE] defined earlier.
+ERROR in ch.qos.logback.core.rolling.RollingFileAppender[FILE] - Collisions detected with FileAppender/RollingAppender instances defined earlier. Aborting.
+ERROR in ch.qos.logback.core.rolling.RollingFileAppender[FILE] - For more information, please visit http://logback.qos.ch/codes.html#earlier_fa_collision
+	at org.springframework.boot.logging.logback.LogbackLoggingSystem.reportConfigurationErrorsIfNecessary(LogbackLoggingSystem.java:277)
+	at org.springframework.boot.logging.logback.LogbackLoggingSystem.loadConfiguration(LogbackLoggingSystem.java:255)
+	at org.springframework.boot.logging.AbstractLoggingSystem.initializeWithConventions(AbstractLoggingSystem.java:81)
+	at org.springframework.boot.logging.AbstractLoggingSystem.initialize(AbstractLoggingSystem.java:61)
+	at org.springframework.boot.logging.logback.LogbackLoggingSystem.initialize(LogbackLoggingSystem.java:189)
+	at org.springframework.boot.context.logging.LoggingApplicationListener.initializeSystem(LoggingApplicationListener.java:332)
+	... 24 common frames omitted
+2024-05-27 10:34:27 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-05-27 10:34:27 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 15 ms. Found 2 JPA repository interfaces.
+2024-05-27 10:34:27 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2024-05-27 10:34:27 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 336 ms
+2024-05-27 10:34:27 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-05-27 10:34:27 INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-05-27 10:34:27 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-3 - Starting...
+2024-05-27 10:34:27 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-3 - Added connection org.postgresql.jdbc.PgConnection@244de69f
+2024-05-27 10:34:27 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-3 - Start completed.
+2024-05-27 10:34:27 INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-05-27 10:34:27 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-05-27 10:34:27 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-05-27 10:34:27 WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'remigesAlyaApplication': Unsatisfied dependency expressed through field 'slowQuery': Error creating bean with name 'slowQuery' defined in file [C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing\target\classes\com\remiges\alya\jobs\SlowQuery.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'batchJobService' defined in file [C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing\target\classes\com\remiges\alya\service\BatchJobService.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'jedisService' defined in file [C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing\target\classes\com\remiges\alya\service\JedisService.class]: Unsatisfied dependency expressed through constructor parameter 0: No qualifying bean of type 'redis.clients.jedis.Jedis' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {}
+2024-05-27 10:34:27 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-05-27 10:34:27 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-3 - Shutdown initiated...
+2024-05-27 10:34:27 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-3 - Shutdown completed.
+2024-05-27 10:34:27 INFO  o.s.b.a.l.ConditionEvaluationReportLogger - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2024-05-27 10:34:27 ERROR o.s.b.d.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Parameter 0 of constructor in com.remiges.alya.service.JedisService required a bean of type 'redis.clients.jedis.Jedis' that could not be found.
+
+The injection point has the following annotations:
+	- @org.springframework.beans.factory.annotation.Autowired(required=true)
+
+
+Action:
+
+Consider defining a bean of type 'redis.clients.jedis.Jedis' in your configuration.
+
+2024-05-27 10:34:38 INFO  c.r.alya.RemigesAlyaApplication - Starting RemigesAlyaApplication using Java 17.0.6 with PID 3700 (C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing\target\classes started by Merceadm in C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing)
+2024-05-27 10:34:38 DEBUG c.r.alya.RemigesAlyaApplication - Running with Spring Boot v3.2.5, Spring v6.1.6
+2024-05-27 10:34:38 INFO  c.r.alya.RemigesAlyaApplication - No active profile set, falling back to 1 default profile: "default"
+2024-05-27 10:34:38 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-05-27 10:34:38 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 16 ms. Found 2 JPA repository interfaces.
+2024-05-27 10:34:38 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2024-05-27 10:34:38 INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-05-27 10:34:38 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-05-27 10:34:38 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-05-27 10:34:38 INFO  o.a.c.c.C.[Tomcat-1].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-05-27 10:34:38 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 304 ms
+2024-05-27 10:34:38 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-05-27 10:34:38 INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-05-27 10:34:38 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-4 - Starting...
+2024-05-27 10:34:38 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-4 - Added connection org.postgresql.jdbc.PgConnection@24510c2b
+2024-05-27 10:34:38 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-4 - Start completed.
+2024-05-27 10:34:38 INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-05-27 10:34:38 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-05-27 10:34:38 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-05-27 10:34:38 INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-05-27 10:34:38 INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-05-27 10:34:38 INFO  c.r.alya.RemigesAlyaApplication - Starting RemigesAlyaApplication using Java 17.0.6 with PID 3700 (C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing\target\classes started by Merceadm in C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing)
+2024-05-27 10:34:38 DEBUG c.r.alya.RemigesAlyaApplication - Running with Spring Boot v3.2.5, Spring v6.1.6
+2024-05-27 10:34:38 INFO  c.r.alya.RemigesAlyaApplication - No active profile set, falling back to 1 default profile: "default"
+2024-05-27 10:34:38 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-05-27 10:34:38 INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2024-05-27 10:34:38 INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-05-27 10:34:38 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2024-05-27 10:34:38 INFO  c.r.alya.RemigesAlyaApplication - Started RemigesAlyaApplication in 0.781 seconds (process running for 75.723)
+2024-05-27 10:34:38 INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2024-05-27 10:34:38 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-05-27 10:34:38 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 10 ms. Found 2 JPA repository interfaces.
+2024-05-27 10:34:38 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2024-05-27 10:34:38 INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-05-27 10:34:38 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-05-27 10:34:38 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-05-27 10:34:38 INFO  o.a.c.c.C.[Tomcat-2].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-05-27 10:34:38 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 311 ms
+2024-05-27 10:34:38 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-05-27 10:34:38 INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-05-27 10:34:38 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-5 - Starting...
+2024-05-27 10:34:38 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-5 - Added connection org.postgresql.jdbc.PgConnection@3e337013
+2024-05-27 10:34:38 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-5 - Start completed.
+2024-05-27 10:34:38 INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-05-27 10:34:39 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-05-27 10:34:39 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-05-27 10:34:39 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-05-27 10:34:39 INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2024-05-27 10:34:39 INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-05-27 10:34:39 WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2024-05-27 10:34:39 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-05-27 10:34:39 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-5 - Shutdown initiated...
+2024-05-27 10:34:39 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-5 - Shutdown completed.
+2024-05-27 10:34:39 INFO  o.s.b.a.l.ConditionEvaluationReportLogger - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2024-05-27 10:34:39 ERROR o.s.b.d.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8080 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8080 or configure this application to listen on another port.
+
+2024-05-27 10:41:48 INFO  c.r.alya.RemigesAlyaApplication - Starting RemigesAlyaApplication using Java 17.0.6 with PID 7492 (C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing\target\classes started by Merceadm in C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing)
+2024-05-27 10:41:48 DEBUG c.r.alya.RemigesAlyaApplication - Running with Spring Boot v3.2.5, Spring v6.1.6
+2024-05-27 10:41:48 INFO  c.r.alya.RemigesAlyaApplication - No active profile set, falling back to 1 default profile: "default"
+2024-05-27 10:41:48 INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-05-27 10:41:48 INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-05-27 10:41:49 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-05-27 10:41:49 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 68 ms. Found 2 JPA repository interfaces.
+2024-05-27 10:41:50 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2024-05-27 10:41:50 INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-05-27 10:41:50 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-05-27 10:41:50 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-05-27 10:41:50 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-05-27 10:41:50 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2028 ms
+2024-05-27 10:41:50 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-05-27 10:41:51 INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-05-27 10:41:51 INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-05-27 10:41:51 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2024-05-27 10:41:51 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@4e83c5e4
+2024-05-27 10:41:51 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2024-05-27 10:41:51 INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-05-27 10:41:52 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-05-27 10:41:52 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-05-27 10:41:53 INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-05-27 10:41:54 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-05-27 10:41:54 INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2024-05-27 10:41:54 INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-05-27 10:41:54 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2024-05-27 10:41:54 INFO  c.r.alya.RemigesAlyaApplication - Started RemigesAlyaApplication in 6.709 seconds (process running for 7.339)
+2024-05-27 11:10:42 INFO  c.r.alya.RemigesAlyaApplication - Starting RemigesAlyaApplication using Java 17.0.6 with PID 8936 (C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing\target\classes started by Merceadm in C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing)
+2024-05-27 11:10:42 DEBUG c.r.alya.RemigesAlyaApplication - Running with Spring Boot v3.2.5, Spring v6.1.6
+2024-05-27 11:10:42 INFO  c.r.alya.RemigesAlyaApplication - No active profile set, falling back to 1 default profile: "default"
+2024-05-27 11:10:42 INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-05-27 11:10:42 INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-05-27 11:10:43 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-05-27 11:10:43 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 77 ms. Found 2 JPA repository interfaces.
+2024-05-27 11:10:44 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2024-05-27 11:10:44 INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-05-27 11:10:44 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-05-27 11:10:44 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-05-27 11:10:45 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-05-27 11:10:45 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2017 ms
+2024-05-27 11:10:45 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-05-27 11:10:45 INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-05-27 11:10:45 INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-05-27 11:10:45 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2024-05-27 11:10:45 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@6bd5a055
+2024-05-27 11:10:45 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2024-05-27 11:10:46 INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-05-27 11:10:47 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-05-27 11:10:47 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-05-27 11:10:48 INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-05-27 11:10:48 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-05-27 11:10:49 INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2024-05-27 11:10:49 INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-05-27 11:10:49 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2024-05-27 11:10:49 INFO  c.r.alya.RemigesAlyaApplication - Started RemigesAlyaApplication in 6.863 seconds (process running for 7.495)
+2024-05-27 11:29:24 INFO  c.r.alya.RemigesAlyaApplication - Starting RemigesAlyaApplication using Java 17.0.6 with PID 18108 (C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing\target\classes started by Merceadm in C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing)
+2024-05-27 11:29:24 DEBUG c.r.alya.RemigesAlyaApplication - Running with Spring Boot v3.2.5, Spring v6.1.6
+2024-05-27 11:29:24 INFO  c.r.alya.RemigesAlyaApplication - No active profile set, falling back to 1 default profile: "default"
+2024-05-27 11:29:24 INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-05-27 11:29:24 INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-05-27 11:29:25 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-05-27 11:29:25 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 74 ms. Found 2 JPA repository interfaces.
+2024-05-27 11:29:26 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2024-05-27 11:29:26 INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-05-27 11:29:26 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-05-27 11:29:26 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-05-27 11:29:26 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-05-27 11:29:26 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2037 ms
+2024-05-27 11:29:26 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-05-27 11:29:26 INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-05-27 11:29:26 INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-05-27 11:29:26 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2024-05-27 11:29:27 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@24e91042
+2024-05-27 11:29:27 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2024-05-27 11:29:27 INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-05-27 11:29:28 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-05-27 11:29:28 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-05-27 11:29:29 INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-05-27 11:29:30 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-05-27 11:29:30 INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2024-05-27 11:29:30 INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-05-27 11:29:30 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2024-05-27 11:29:30 INFO  c.r.alya.RemigesAlyaApplication - Started RemigesAlyaApplication in 6.882 seconds (process running for 7.506)
+2024-05-27 11:45:06 INFO  c.r.alya.RemigesAlyaApplication - Starting RemigesAlyaApplication using Java 17.0.6 with PID 17444 (C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing\target\classes started by Merceadm in C:\Users\Merceadm\Desktop\Remiges Workspace\Alya\alya-java\BatchAndSlowQueriesProcessing)
+2024-05-27 11:45:06 DEBUG c.r.alya.RemigesAlyaApplication - Running with Spring Boot v3.2.5, Spring v6.1.6
+2024-05-27 11:45:06 INFO  c.r.alya.RemigesAlyaApplication - No active profile set, falling back to 1 default profile: "default"
+2024-05-27 11:45:06 INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-05-27 11:45:06 INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-05-27 11:45:07 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-05-27 11:45:07 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 81 ms. Found 2 JPA repository interfaces.
+2024-05-27 11:45:08 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2024-05-27 11:45:08 INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-05-27 11:45:08 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-05-27 11:45:08 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-05-27 11:45:08 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-05-27 11:45:08 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2046 ms
+2024-05-27 11:45:08 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-05-27 11:45:08 INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-05-27 11:45:08 INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-05-27 11:45:08 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2024-05-27 11:45:09 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@24e91042
+2024-05-27 11:45:09 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2024-05-27 11:45:09 INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-05-27 11:45:10 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-05-27 11:45:10 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-05-27 11:45:11 INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-05-27 11:45:12 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-05-27 11:45:12 INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2024-05-27 11:45:12 INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-05-27 11:45:12 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2024-05-27 11:45:12 INFO  c.r.alya.RemigesAlyaApplication - Started RemigesAlyaApplication in 6.765 seconds (process running for 7.373)
