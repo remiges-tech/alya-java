@@ -4,6 +4,7 @@ import java.io.File;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -235,21 +236,28 @@ public class BatchJobService {
 			batchJob.setOp(op);
 			batchJob.setContext(context);
 			batchJob.setStatus(status);
-			batchJob.setType(AlyaConstant.TYPE_Q); 
+			batchJob.setType(AlyaConstant.TYPE_Q);
 			batchJob.setReqat(new Timestamp(System.currentTimeMillis()));
-			Batches savedBatch = batchesRepo.save(batchJob);
+
+			List<BatchRows> batchRowsList = new ArrayList<>();
 
 			if (input.size() > 0) {
 				BatchRows batchRow = new BatchRows();
-				batchRow.setBatch(savedBatch);
+				batchRow.setBatch(batchJob);
 				batchRow.setBatchStatus(status);
-				batchRow.setInput(input.toString());
 				batchRow.setLine(1);
 				batchRow.setReqat(new Timestamp(System.currentTimeMillis()));
-				batchRowRepo.save(batchRow);
+				batchRow.setInput(input.toString());
+				batchRowsList.add(batchRow);
 			}
 
-			return savedBatch.getId();
+			// Save batch job and its rows in a single operation
+			batchesRepo.saveAll(List.of(batchJob));
+			if (!batchRowsList.isEmpty()) {
+				batchRowRepo.saveAll(batchRowsList);
+			}
+
+			return batchJob.getId();
 		} catch (IllegalArgumentException e) {
 			logger.error("Error saving slow queries: " + e.getMessage());
 			throw e;
