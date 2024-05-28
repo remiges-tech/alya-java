@@ -1,5 +1,7 @@
 package com.remiges.alya.jobs;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -155,6 +157,47 @@ public class Batch {
 					"An error occurred while setting the status of the batch from 'wait' to 'queued': "
 							+ e.getMessage(),
 					e);
+		}
+	}
+
+	/**
+	 * List all the batches currently being processed or processed in the past
+	 * against a specific app.
+	 *
+	 * @param app The specific app for which batches will be listed.
+	 * @param op  Optional operation name to filter batches.
+	 * @param age The age of the records to return, in days.
+	 * @return Returns an array of BatchDetails_t objects representing the batches.
+	 */
+	public List<BatchResultDTO> list(String app, String op, int age) {
+		try {
+			// Calculate the threshold time based on the age parameter
+			LocalDateTime thresholdTime = LocalDateTime.now().minusDays(age);
+
+			// Query the database for matching batches
+			List<Batches> matchingBatches = batchJobService.findBatchesByAppAndOpAndReqAtAfter(app, op, thresholdTime);
+
+			// Construct BatchDetails_t objects for each matching batch
+			List<BatchResultDTO> batchDetailsList = new ArrayList<>();
+			matchingBatches.forEach(batch -> {
+				BatchResultDTO batchDetails = new BatchResultDTO();
+				batchDetails.setId(batch.getId().toString());
+				batchDetails.setApp(batch.getApp());
+				batchDetails.setOp(batch.getOp());
+				batchDetails.setInputfile(""); // You may set this based on your business logic
+				batchDetails.setStatus(batch.getStatus());
+				batchDetails.setReqat(batch.getReqat().toLocalDateTime());
+				batchDetails.setDoneat(batch.getDoneat() != null ? batch.getDoneat().toLocalDateTime() : null);
+				batchDetails.setOutputfiles(batch.getOutputfiles());
+				batchDetails.setNsuccess(batch.getNsuccess());
+				batchDetails.setNfailed(batch.getNfailed());
+				batchDetails.setNaborted(batch.getNaborted());
+				batchDetailsList.add(batchDetails);
+			});
+
+			return batchDetailsList;
+		} catch (Exception e) {
+			throw new RuntimeException("An error occurred while listing batches: " + e.getMessage(), e);
 		}
 	}
 
