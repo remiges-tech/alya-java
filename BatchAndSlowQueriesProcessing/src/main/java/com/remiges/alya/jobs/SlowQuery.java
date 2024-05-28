@@ -123,7 +123,7 @@ public class SlowQuery {
 
 		try {
 			// Check REDIS for the status entry
-			String redisKey = "ALYA_BATCHSTATUS_" + reqID;
+			String redisKey = "ALYA_BATCHSTATUS_" + reqID; // constant
 			String redisValue = jedissrv.getBatchStatusFromRedis(redisKey);
 			if (redisValue != null) {
 				status = jedissrv.getBatchStatus(redisValue);
@@ -137,11 +137,18 @@ public class SlowQuery {
 				BatchRows batchRow = batchJobService.getBatchRowByReqId(reqID);
 				if (batchRow != null) {
 					status = batchRow.getBatchStatus();
-					batchJobService.updateBatchRowStatus(batchRow.getRowId(), status);
+					// batchJobService.updateBatchRowStatus(batchRow.getRowId(), status);
+					jedissrv.setRedisStatusSlowQuery(redisKey, status);
+
 					List<AlyaErrorMessage> errlist = new ArrayList<SlowQueryResult.AlyaErrorMessage>();
 					errlist.add(new AlyaErrorMessage(batchRow.getMessages()));
 					return new SlowQueryResult(status, batchRow.getRes(), errlist, batchRow.getBlobrows(), null);
+				} else if (batchRow == null) {
+					throw new Exception(
+							"Invalid request ID : As entry is not available in batch rows for this request ID :"
+									+ reqID);
 				}
+
 			} else if (status == BatchStatus.BatchAborted) {
 				return new SlowQueryResult(BatchStatus.BatchAborted, null, null, null, null);
 			} else {
@@ -190,8 +197,8 @@ public class SlowQuery {
 
 			char type = batch.getType();
 			BatchStatus status = batch.getStatus();
-			if (type != 'Q') {
-				throw new Exception("Batch type is not 'Q'");
+			if (type != AlyaConstant.TYPE_Q) {
+				throw new Exception("Batch type is not 'Q'"); // need to impl in done also
 			}
 			if (status == BatchStatus.BatchAborted || status == BatchStatus.BatchSuccess
 					|| status == BatchStatus.BatchFailed) {
@@ -244,10 +251,9 @@ public class SlowQuery {
 
 		// Retrieve slow queries from repository
 		List<Batches> batchRowsList = batchJobService.findBatchesByAppAndOpAndReqAtAfter(app, op, thresholdTime);
-		logger.info("Retrieved " + batchRowsList.size() + " batches from the repository."+thresholdTime);
+		logger.info("Retrieved " + batchRowsList.size() + " batches from the repository." + thresholdTime);
 
-		// Map BatchRows to SlowQueryDetails_t
-		for (Batches batch : batchRowsList) {
+		batchRowsList.forEach(batch -> {
 			SlowQueriesResultList slowQuery = new SlowQueriesResultList();
 			slowQuery.setId(batch.getId().toString());
 			slowQuery.setApp(batch.getApp());
@@ -257,9 +263,8 @@ public class SlowQuery {
 			slowQuery.setReqat(batch.getReqat());
 			slowQuery.setDoneat(batch.getDoneat());
 			slowQuery.setOutputfiles(null); // Output files mapping not available in BatchRows entity
-
 			slowQueries.add(slowQuery);
-		}
+		});
 
 		logger.info("Finished processing slow queries.");
 		return slowQueries;
