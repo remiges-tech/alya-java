@@ -175,7 +175,8 @@ public class Batch {
 			LocalDateTime thresholdTime = LocalDateTime.now().minusDays(age);
 
 			// Query the database for matching batches
-			List<Batches> matchingBatches = batchJobService.findBatchesByAppAndOpAndReqAtAfter(app, op, thresholdTime);
+			List<Batches> matchingBatches = batchJobService.findBatchesByType(AlyaConstant.TYPE_B, app, op,
+					thresholdTime);
 
 			// Construct BatchDetails_t objects for each matching batch
 			List<BatchResultDTO> batchDetailsList = new ArrayList<>();
@@ -192,6 +193,12 @@ public class Batch {
 				batchDetails.setNsuccess(batch.getNsuccess());
 				batchDetails.setNfailed(batch.getNfailed());
 				batchDetails.setNaborted(batch.getNaborted());
+
+				// Fetch nrows from batchrows table and set it in the DTO
+				int nrows = batchJobService.getNrowsByBatchId(batch.getId()); // Assuming you have a method to fetch
+																				// nrows by batch ID
+				batchDetails.setNrows(nrows);
+
 				batchDetailsList.add(batchDetails);
 			});
 

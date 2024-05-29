@@ -1,7 +1,7 @@
 package com.remiges.alya.repository;
 
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -42,4 +42,5 @@ public interface BatchRowsRepo extends JpaRepository<BatchRows, Long> {
 	 */
 	int countBatchRowsByBatch(Batches batch);
 
+	List<BatchRows> findByBatchId(UUID batchId);
 }

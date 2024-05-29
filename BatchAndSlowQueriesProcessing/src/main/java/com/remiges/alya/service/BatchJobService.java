@@ -74,6 +74,12 @@ public class BatchJobService {
 
 	}
 
+	public int getNrowsByBatchId(UUID batchId) {
+		// Assuming BatchRowRepository has a method to find nrows by batchId
+		List<BatchRows> batchRows = batchRowRepo.findByBatchId(batchId);
+		return batchRows.size(); // Assuming you want to count the number of rows
+	}
+
 	/**
 	 * Counts the number of rows in batchrows associated with a batch.
 	 *
@@ -110,6 +116,20 @@ public class BatchJobService {
 		batchRow.setLine(lineNo);
 		batchRow.setInput(input.toString());
 		batchRowRepo.save(batchRow);
+	}
+
+	/**
+	 * Finds batches by type, application, operation, and request time after a
+	 * specified threshold time.
+	 *
+	 * @param type          the type of batch
+	 * @param app           the application name
+	 * @param op            the operation name
+	 * @param thresholdTime the threshold time
+	 * @return a list of batches matching the criteria
+	 */
+	public List<Batches> findBatchesByType(char type, String app, String op, LocalDateTime thresholdTime) {
+		return batchesRepo.findByTypeAndAppAndOpAndReqatAfter(type, app, op, thresholdTime);
 	}
 
 	/**
