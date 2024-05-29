@@ -282,9 +282,9 @@ public class BatchJobService {
 				batchRowsList.add(batchRow);
 			}
 
-			// Save batch job and its rows in a single operation
-			batchesRepo.saveAll(List.of(batchJob));
 			if (!batchRowsList.isEmpty()) {
+				// Save batch job and its rows in a single operation
+				batchesRepo.save(batchJob);
 				batchRowRepo.saveAll(batchRowsList);
 			}
 
@@ -310,26 +310,38 @@ public class BatchJobService {
 	 */
 	@Transactional
 	public UUID saveBatch(String app, String op, JsonNode context, List<BatchInput> batchInput, BatchStatus status) {
-		Batches batchJob = new Batches();
-		batchJob.setApp(app);
-		batchJob.setOp(op);
-		batchJob.setContext(context);
-		batchJob.setStatus(status);
-		batchJob.setType(AlyaConstant.TYPE_B);
-		batchJob.setReqat(new Timestamp(System.currentTimeMillis()));
-		Batches savedBatch = batchesRepo.save(batchJob);
+		try {
+			Batches batchJob = new Batches();
+			batchJob.setApp(app);
+			batchJob.setOp(op);
+			batchJob.setContext(context);
+			batchJob.setStatus(status);
+			batchJob.setType(AlyaConstant.TYPE_B);
+			batchJob.setReqat(new Timestamp(System.currentTimeMillis()));
 
-		for (BatchInput batch : batchInput) {
-			BatchRows batchRow = new BatchRows();
-			batchRow.setBatch(savedBatch);
-			batchRow.setBatchStatus(status);
-			batchRow.setInput(batch.getInput());
-			batchRow.setLine(batch.getLine());
-			batchRow.setReqat(new Timestamp(System.currentTimeMillis()));
-			batchRowRepo.save(batchRow);
+			List<BatchRows> batchRowsList = new ArrayList<>();
+
+			batchInput.forEach(batch -> {
+				BatchRows batchRow = new BatchRows();
+				batchRow.setBatch(batchJob);
+				batchRow.setBatchStatus(status);
+				batchRow.setInput(batch.getInput());
+				batchRow.setLine(batch.getLine());
+				batchRow.setReqat(new Timestamp(System.currentTimeMillis()));
+				batchRowsList.add(batchRow);
+			});
+
+			if (!batchRowsList.isEmpty()) {
+				// Save batch job and its rows in a single operation
+				batchesRepo.save(batchJob);
+				batchRowRepo.saveAll(batchRowsList);
+			}
+
+			return batchJob.getId();
+		} catch (Exception e) {
+			logger.error("An error occurred while saving the batch: " + e.getMessage());
+			throw new RuntimeException("An error occurred while saving the batch: " + e.getMessage());
 		}
-
-		return savedBatch.getId();
 	}
 
 	/**

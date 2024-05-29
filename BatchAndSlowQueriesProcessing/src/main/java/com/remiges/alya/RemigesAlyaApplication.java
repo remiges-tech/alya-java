@@ -63,7 +63,7 @@ public class RemigesAlyaApplication {
 				list.add(batchInput);
 			}
 
-			batch.submitBatch("KRA", PANENQUIRY, JacksonUtil.toJsonNode("{" +
+			batch.submit("KRA", PANENQUIRY, JacksonUtil.toJsonNode("{" +
 					"   \"title\": \"High-Performance Java Persistence\"," +
 					"   \"author\": \"Vlad Mihalcea\"," + "   \"publisher\": \"Amazon\"," +
 					"   \"price\": 44.99" + "}"), list, false);
