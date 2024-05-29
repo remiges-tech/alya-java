@@ -45,7 +45,9 @@ public class AlyaFormatService {
             // If no validation errors, create a DataObject instance with the request data
             DataObject data = new DataObject(
                 request.getName(), request.getEmail(), request.getPan(), request.getAadhar(), request.getGst(), request.getMobileNumber(),
-                request.getDrivingLicense(), request.getPostalCode(), request.getPostOfficeName(), request.getPhoneNumber());
+                request.getDrivingLicense(), request.getPostalCode(), request.getPostOfficeName(), request.getPhoneNumber(),
+                request.getPassword());
+           
 
             // Return a success response with the data object
             AlyaSuccessResponse successResponse = AlyaSuccessResponse.success(data);

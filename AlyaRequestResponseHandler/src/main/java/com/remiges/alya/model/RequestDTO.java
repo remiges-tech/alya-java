@@ -21,6 +21,11 @@ public class RequestDTO{
     private String postalCode;
     private String postOfficeName;
     private String phoneNumber;
+    private String password;
+    private String url;
+    private String cardNumber;
+    private String vin;
+    private String passport;
 
 }
 // This is an example to give DTO as request.

@@ -19,6 +19,8 @@ public class DataObject  {
     private String postalCode;
     private String postOfficeName;
     private String phoneNumber;
+    private String password;
+
 
 }
 // This is an example just of Object to show data.

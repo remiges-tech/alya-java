@@ -31,6 +31,11 @@ public class AlyaValidation {
         validateField(request.getPostalCode(), "Postal Code", "Postal Code is not in correct format", ValidationConstant.POSTAL_CODE_REGEX, errors);
         validateField(request.getPostOfficeName(), "Post Office", "Post Office Name format is not proper", ValidationConstant.POST_OFFICE_NAME_REGEX, errors);
         validatePhoneNumber(request.getPhoneNumber(), errors);
+        validateField(request.getPassword(), "password", "Password is incorrect", ValidationConstant.PASSWORD_PATTERN, errors);
+        validateField(request.getUrl(), "url", "URL formate is not proper", ValidationConstant.URL_PATTERN, errors);
+        validateField(request.getCardNumber(), "cardNumber", "Card Number is not proper", ValidationConstant.CARD_NUMBER_PATTERN, errors);
+        validateField(request.getVin(), "vin", "VIN is incorrect", ValidationConstant.VIN_PATTERN, errors);
+        validateField(request.getPassport(), "passport", "Passport number is incorrect", ValidationConstant.PASSPORT_NUMBER_PATTERN, errors);
 
         return errors;
     }
