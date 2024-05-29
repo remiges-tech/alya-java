@@ -4,12 +4,16 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Logger;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.remiges.alya.config.JobManagerConfig;
 import com.remiges.alya.entity.Batches;
 import com.remiges.alya.service.BatchJobService;
+import com.remiges.alya.service.JedisService;
 
 import jakarta.transaction.Transactional;
 
@@ -20,14 +24,22 @@ import jakarta.transaction.Transactional;
 public class Batch {
 
 	private final BatchJobService batchJobService;
+	private final JedisService jedissrv;
+	private final Logger logger;
 
 	/**
-	 * Constructs a new Batch component.
+	 * Constructs a SlowQuery instance.
 	 *
-	 * @param batchJobService the BatchJobService instance
+	 * @param batchJobService Batch job service for managing batch jobs.
+	 * @param jedissrv        Jedis service for managing Redis operations.
+	 * @param mgrconfig       Configuration for job manager.
 	 */
-	public Batch(BatchJobService batchJobService) {
+	@Autowired
+	public Batch(BatchJobService batchJobService, JedisService jedissrv, JobManagerConfig mgrconfig,
+			Logger logger) {
 		this.batchJobService = batchJobService;
+		this.jedissrv = jedissrv;
+		this.logger = Logger.getLogger(SlowQuery.class.getName());
 	}
 
 	/**
@@ -40,11 +52,18 @@ public class Batch {
 	 * @param waitabit   whether to wait before processing
 	 * @return the ID of the submitted batch
 	 */
-	public String submitBatch(String app, String op, JsonNode jsonNode, List<BatchInput> batchInput, boolean waitabit) {
-		// Set the batch status based on waitabit
-		BatchStatus status = waitabit ? BatchStatus.BatchWait : BatchStatus.BatchQueued;
-		UUID batchId = batchJobService.saveBatch(app, op, jsonNode, batchInput, status);
-		return batchId.toString();
+	public String submit(String app, String op, JsonNode jsonNode, List<BatchInput> batchInput, boolean waitabit) {
+		try {
+			// Set the batch status based on waitabit
+			BatchStatus status = waitabit ? BatchStatus.BatchWait : BatchStatus.BatchQueued;
+			UUID batchId = batchJobService.saveBatch(app, op, jsonNode, batchInput, status);
+			return batchId.toString();
+		} catch (Exception e) {
+			logger.severe("Error occurred while submitting the batch: " + e.getMessage());
+			e.printStackTrace();
+			return "An error occurred while submitting the batch: " + e.getMessage();
+		}
+
 	}
 
 	/**
@@ -175,7 +194,8 @@ public class Batch {
 			LocalDateTime thresholdTime = LocalDateTime.now().minusDays(age);
 
 			// Query the database for matching batches
-			List<Batches> matchingBatches = batchJobService.findBatchesByAppAndOpAndReqAtAfter(app, op, thresholdTime);
+			List<Batches> matchingBatches = batchJobService.findBatchesByType(AlyaConstant.TYPE_B, app, op,
+					thresholdTime);
 
 			// Construct BatchDetails_t objects for each matching batch
 			List<BatchResultDTO> batchDetailsList = new ArrayList<>();
@@ -192,6 +212,12 @@ public class Batch {
 				batchDetails.setNsuccess(batch.getNsuccess());
 				batchDetails.setNfailed(batch.getNfailed());
 				batchDetails.setNaborted(batch.getNaborted());
+
+				// Fetch nrows from batchrows table and set it in the DTO
+				int nrows = batchJobService.getNrowsByBatchId(batch.getId()); // Assuming you have a method to fetch
+																				// nrows by batch ID
+				batchDetails.setNrows(nrows);
+
 				batchDetailsList.add(batchDetails);
 			});
 

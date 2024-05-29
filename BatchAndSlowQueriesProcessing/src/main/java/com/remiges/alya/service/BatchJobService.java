@@ -74,6 +74,12 @@ public class BatchJobService {
 
 	}
 
+	public int getNrowsByBatchId(UUID batchId) {
+		// Assuming BatchRowRepository has a method to find nrows by batchId
+		List<BatchRows> batchRows = batchRowRepo.findByBatchId(batchId);
+		return batchRows.size(); // Assuming you want to count the number of rows
+	}
+
 	/**
 	 * Counts the number of rows in batchrows associated with a batch.
 	 *
@@ -110,6 +116,20 @@ public class BatchJobService {
 		batchRow.setLine(lineNo);
 		batchRow.setInput(input);
 		batchRowRepo.save(batchRow);
+	}
+
+	/**
+	 * Finds batches by type, application, operation, and request time after a
+	 * specified threshold time.
+	 *
+	 * @param type          the type of batch
+	 * @param app           the application name
+	 * @param op            the operation name
+	 * @param thresholdTime the threshold time
+	 * @return a list of batches matching the criteria
+	 */
+	public List<Batches> findBatchesByType(char type, String app, String op, LocalDateTime thresholdTime) {
+		return batchesRepo.findByTypeAndAppAndOpAndReqatAfter(type, app, op, thresholdTime);
 	}
 
 	/**
@@ -262,9 +282,9 @@ public class BatchJobService {
 				batchRowsList.add(batchRow);
 			}
 
-			// Save batch job and its rows in a single operation
-			batchesRepo.saveAll(List.of(batchJob));
 			if (!batchRowsList.isEmpty()) {
+				// Save batch job and its rows in a single operation
+				batchesRepo.save(batchJob);
 				batchRowRepo.saveAll(batchRowsList);
 			}
 
@@ -290,26 +310,42 @@ public class BatchJobService {
 	 */
 	@Transactional
 	public UUID saveBatch(String app, String op, JsonNode context, List<BatchInput> batchInput, BatchStatus status) {
-		Batches batchJob = new Batches();
-		batchJob.setApp(app);
-		batchJob.setOp(op);
-		batchJob.setContext(context);
-		batchJob.setStatus(status);
-		batchJob.setType(AlyaConstant.TYPE_B);
-		batchJob.setReqat(new Timestamp(System.currentTimeMillis()));
-		Batches savedBatch = batchesRepo.save(batchJob);
+		try {
+			
+			if (context == null || !batchInput.isEmpty()) {
+				throw new IllegalArgumentException("Context or Input is null");
+			}
+			Batches batchJob = new Batches();
+			batchJob.setApp(app);
+			batchJob.setOp(op);
+			batchJob.setContext(context);
+			batchJob.setStatus(status);
+			batchJob.setType(AlyaConstant.TYPE_B);
+			batchJob.setReqat(new Timestamp(System.currentTimeMillis()));
 
-		for (BatchInput batch : batchInput) {
-			BatchRows batchRow = new BatchRows();
-			batchRow.setBatch(savedBatch);
-			batchRow.setBatchStatus(status);
-			batchRow.setInput(batch.getInput());
-			batchRow.setLine(batch.getLine());
-			batchRow.setReqat(new Timestamp(System.currentTimeMillis()));
-			batchRowRepo.save(batchRow);
+			List<BatchRows> batchRowsList = new ArrayList<>();
+
+			batchInput.forEach(batch -> {
+				BatchRows batchRow = new BatchRows();
+				batchRow.setBatch(batchJob);
+				batchRow.setBatchStatus(status);
+				batchRow.setInput(batch.getInput());
+				batchRow.setLine(batch.getLine());
+				batchRow.setReqat(new Timestamp(System.currentTimeMillis()));
+				batchRowsList.add(batchRow);
+			});
+
+			if (!batchRowsList.isEmpty()) {
+				// Save batch job and its rows in a single operation
+				batchesRepo.save(batchJob);
+				batchRowRepo.saveAll(batchRowsList);
+			}
+
+			return batchJob.getId();
+		} catch (Exception e) {
+			logger.error("An error occurred while saving the batch: " + e.getMessage());
+			throw new RuntimeException("An error occurred while saving the batch: " + e.getMessage());
 		}
-
-		return savedBatch.getId();
 	}
 
 	/**
