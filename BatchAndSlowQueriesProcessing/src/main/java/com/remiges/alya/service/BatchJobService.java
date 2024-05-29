@@ -153,23 +153,19 @@ public class BatchJobService {
 	 */
 	@Transactional
 	public void abortBatchAndRows(Batches batch) throws Exception {
-		if (batch.getType() == AlyaConstant.TYPE_Q) {
-			batch.setStatus(BatchStatus.BatchAborted);
-			batch.setDoneat(new Timestamp(System.currentTimeMillis()));
-			batchesRepo.save(batch);
+		batch.setStatus(BatchStatus.BatchAborted);
+		batch.setDoneat(new Timestamp(System.currentTimeMillis()));
+		batchesRepo.save(batch);
 
-			List<BatchRows> batchRows = batchRowRepo.findByBatch(batch, null);
-			for (BatchRows batchRow : batchRows) {
-				batchRow.setBatchStatus(BatchStatus.BatchAborted);
-				batchRow.setDoneat(new Timestamp(System.currentTimeMillis()));
-				batchRowRepo.save(batchRow);
-			}
-
-			String redisKey = "ALYA_BATCHSTATUS_" + batch.getId().toString();
-			jedisService.setRedisStatusSlowQuery(redisKey, BatchStatus.BatchAborted.name());
-		} else {
-			throw new Exception("Invalid batch type. Only 'Q' type batches can be aborted.");
+		List<BatchRows> batchRows = batchRowRepo.findByBatch(batch, null);
+		for (BatchRows batchRow : batchRows) {
+			batchRow.setBatchStatus(BatchStatus.BatchAborted);
+			batchRow.setDoneat(new Timestamp(System.currentTimeMillis()));
+			batchRowRepo.save(batchRow);
 		}
+
+		String redisKey = "ALYA_BATCHSTATUS_" + batch.getId().toString();
+		jedisService.setRedisStatusSlowQuery(redisKey, BatchStatus.BatchAborted.name());
 	}
 
 	/**
@@ -196,6 +192,24 @@ public class BatchJobService {
 	 */
 	public BatchStatus getSlowQueryStatusByReqId(String reqID) {
 		List<Batches> lstbatch = batchesRepo.findByIdAndType(UUID.fromString(reqID), AlyaConstant.TYPE_Q);
+
+		if (lstbatch.size() > 0) {
+
+			return lstbatch.get(0).getStatus();
+
+		} else {
+			return null;
+		}
+	}
+
+	/**
+	 * Retrieves the status of a batch by request ID.
+	 *
+	 * @param reqID the request ID
+	 * @return the batch status
+	 */
+	public BatchStatus getBatchStatusByReqId(String reqID) {
+		List<Batches> lstbatch = batchesRepo.findByIdAndType(UUID.fromString(reqID), AlyaConstant.TYPE_B);
 
 		if (lstbatch.size() > 0) {
 
@@ -311,7 +325,7 @@ public class BatchJobService {
 	@Transactional
 	public UUID saveBatch(String app, String op, JsonNode context, List<BatchInput> batchInput, BatchStatus status) {
 		try {
-			
+
 			if (context == null || !batchInput.isEmpty()) {
 				throw new IllegalArgumentException("Context or Input is null");
 			}

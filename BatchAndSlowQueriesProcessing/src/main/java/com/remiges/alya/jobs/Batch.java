@@ -35,8 +35,7 @@ public class Batch {
 	 * @param mgrconfig       Configuration for job manager.
 	 */
 	@Autowired
-	public Batch(BatchJobService batchJobService, JedisService jedissrv, JobManagerConfig mgrconfig,
-			Logger logger) {
+	public Batch(BatchJobService batchJobService, JedisService jedissrv, JobManagerConfig mgrconfig, Logger logger) {
 		this.batchJobService = batchJobService;
 		this.jedissrv = jedissrv;
 		this.logger = Logger.getLogger(SlowQuery.class.getName());
@@ -224,6 +223,30 @@ public class Batch {
 			return batchDetailsList;
 		} catch (Exception e) {
 			throw new RuntimeException("An error occurred while listing batches: " + e.getMessage(), e);
+		}
+	}
+
+	public void abort(String batchId) throws Exception {
+		try {
+			String redisKey = "ALYA_BATCHSTATUS_" + batchId;
+			String redisValue = jedissrv.getBatchStatusFromRedis(redisKey);
+			BatchStatus status = (redisValue != null) ? jedissrv.getBatchStatus(redisValue)
+					: batchJobService.getBatchStatusByReqId(batchId);
+
+			if (status == BatchStatus.BatchAborted || status == BatchStatus.BatchSuccess
+					|| status == BatchStatus.BatchFailed) {
+				throw new Exception("Cannot abort batch with status " + status);
+			}
+
+			Batches batch = batchJobService.getBatchByReqId(batchId);
+			batchJobService.abortBatchAndRows(batch);
+
+			jedissrv.updateStatusInRedis(UUID.fromString(batchId), BatchStatus.BatchAborted,
+					jedissrv.ALYA_BATCHSTATUS_CACHEDUR_SEC * 100);
+			logger.info("Batch with request ID " + batchId + " aborted successfully.");
+		} catch (Exception e) {
+			logger.severe("Error occurred while aborting the batch: " + e.getMessage());
+			throw e;
 		}
 	}
 
