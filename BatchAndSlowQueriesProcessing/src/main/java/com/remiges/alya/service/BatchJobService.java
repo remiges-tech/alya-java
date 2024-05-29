@@ -311,6 +311,10 @@ public class BatchJobService {
 	@Transactional
 	public UUID saveBatch(String app, String op, JsonNode context, List<BatchInput> batchInput, BatchStatus status) {
 		try {
+			
+			if (context == null || !batchInput.isEmpty()) {
+				throw new IllegalArgumentException("Context or Input is null");
+			}
 			Batches batchJob = new Batches();
 			batchJob.setApp(app);
 			batchJob.setOp(op);
