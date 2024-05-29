@@ -101,14 +101,14 @@ public class BatchJobService {
 	 *
 	 * @param batch  the batch associated with the row
 	 * @param lineNo the line number of the row
-	 * @param input  the input data of the row
+	 * @param string the input data of the row
 	 */
 	@Transactional
 	public void saveBatchRow(Batches batch, int lineNo, String input) {
 		BatchRows batchRow = new BatchRows();
 		batchRow.setBatch(batch);
 		batchRow.setLine(lineNo);
-		batchRow.setInput(input.toString());
+		batchRow.setInput(input);
 		batchRowRepo.save(batchRow);
 	}
 

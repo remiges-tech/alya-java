@@ -19,8 +19,6 @@ import com.remiges.alya.service.BatchJobService;
 import com.remiges.alya.service.JedisService;
 import com.remiges.alya.config.JobManagerConfig;
 import com.remiges.alya.entity.BatchJob;
-import com.remiges.alya.jobs.Initializer.InitBlock;
-
 
 @Component
 @Scope("prototype")
@@ -29,7 +27,7 @@ public class JobMgr {
     private static final Logger logger = LoggerFactory.getLogger(JobMgr.class);
 
     private final Map<String, Initializer> initializers = new ConcurrentHashMap<>();
-    private final Map<String, InitBlock> initBlocks = new ConcurrentHashMap<>();
+    private final Map<String, BatchInitBlocks> initBlocks = new ConcurrentHashMap<>();
     private final Map<String, BatchProcessor> batchProcessors = new ConcurrentHashMap<>();
     private final Map<String, SQProcessor> slowQueryProcessor = new ConcurrentHashMap<>();
     private final Object lock = new Object();
@@ -106,7 +104,7 @@ public class JobMgr {
         }
 
         try {
-            InitBlock batchInitBlock = getOrCreateInitBlock(rowtoprocess.getApp());
+            BatchInitBlocks batchInitBlock = getOrCreateInitBlock(rowtoprocess.getApp());
 
             BatchOutput batchoutput = sqProcessor.DoSlowQuery(batchInitBlock, rowtoprocess.getContext(),
                     rowtoprocess.getInput());
@@ -186,7 +184,7 @@ public class JobMgr {
         }
 
         try {
-            InitBlock batchInitBlock = getOrCreateInitBlock(rowtoprocess.getApp());
+            BatchInitBlocks batchInitBlock = getOrCreateInitBlock(rowtoprocess.getApp());
 
             BatchOutput batchoutput = batchProcessor.DoBatchJob(batchInitBlock, rowtoprocess.getContext(),
                     rowtoprocess.getLine(), rowtoprocess.getInput());
@@ -208,7 +206,6 @@ public class JobMgr {
             return erlog;
         }
     }
-
 
     /**
      * JobProcessor is a Runnable class that processes jobs in a separate thread.
@@ -284,7 +281,7 @@ public class JobMgr {
      * @param app the app for which to return InitBlock
      * @return the InitBlock for the given app
      */
-    public synchronized InitBlock getOrCreateInitBlock(String app) {
+    public synchronized BatchInitBlocks getOrCreateInitBlock(String app) {
         logger.info("getOrCreateInitBlock method to retrieve or create an InitBlock for the given app...");
         synchronized (lock) {
             if (initBlocks.containsKey(app)) {
@@ -298,7 +295,7 @@ public class JobMgr {
                 throw new IllegalStateException(erlog);
             }
 
-            InitBlock initBlock = initializer.init(app);
+            BatchInitBlocks initBlock = initializer.init(app);
             initBlocks.put(app, initBlock);
             logger.debug("Create a new InitBlock using the registered Initializer...");
 

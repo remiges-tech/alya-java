@@ -38,7 +38,7 @@ public class SlowQueryTest {
     public void setUp() {
         batchJobServiceMock = mock(BatchJobService.class);
         jedisServiceMock = mock(JedisService.class);
-        slowQuery = new SlowQuery(batchJobServiceMock, jedisServiceMock, null, null);
+        slowQuery = new SlowQuery(batchJobServiceMock, jedisServiceMock, null);
     }
 
     @Test
@@ -46,7 +46,7 @@ public class SlowQueryTest {
         // Define inputs
         String app = "TestApp";
         String op = "TestOp";
-     // Define your JSON strings
+        // Define your JSON strings
         String contextJsonString = "{\"key\": \"value\"}";
         String inputJsonString = "{\"key\": \"value\"}";
 
@@ -124,14 +124,14 @@ public class SlowQueryTest {
         batch1.setId(UUID.randomUUID());
         batch1.setApp(app);
         batch1.setOp(op);
-        //batch1.setReqat(LocalDateTime.now().minusDays(5)); // within the age limit
+        // batch1.setReqat(LocalDateTime.now().minusDays(5)); // within the age limit
         batchRowsList.add(batch1);
         // Add another dummy batch row outside the age limit
         Batches batch2 = new Batches();
         batch2.setId(UUID.randomUUID());
         batch2.setApp(app);
         batch2.setOp(op);
-       // batch2.setReqat(LocalDateTime.now().minusDays(10)); // outside the age limit
+        // batch2.setReqat(LocalDateTime.now().minusDays(10)); // outside the age limit
         batchRowsList.add(batch2);
         // Stub the service method
         when(batchJobServiceMock.findBatchesByAppAndOpAndReqAtAfter(app, op, thresholdTime))
