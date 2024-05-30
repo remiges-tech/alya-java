@@ -1,24 +1,27 @@
 package com.remiges.alya.jobs;
 
+import java.util.List;
 import java.util.Map;
+
+import com.remiges.alya.jobs.SlowQueryResult.AlyaErrorMessage;
 
 public class BatchOutputResult {
 
 	private BatchStatus status;
-	private Map<String, String> batchOutput;
+	private List<BatchOutput_t> batchOutput;
 	private Map<String, String> outputFiles;
 	private int nsuccess;
 	private int nfailed;
 	private int naborted;
-	private String err;
+	private List<AlyaBatchErrorMessage> err;
 
 	public BatchOutputResult() {
 	}
 
-	public BatchOutputResult(BatchStatus status, Map<String, String> batchOutput, Map<String, String> outputFiles,
-			int nsuccess, int nfailed, int naborted, String err) {
+	public BatchOutputResult(BatchStatus status, BatchOutput_t batchOutput_t, Map<String, String> outputFiles,
+			int nsuccess, int nfailed, int naborted, List<AlyaBatchErrorMessage> err) {
 		this.status = status;
-		this.batchOutput = batchOutput;
+		this.batchOutput = (List<BatchOutput_t>) batchOutput_t;
 		this.outputFiles = outputFiles;
 		this.nsuccess = nsuccess;
 		this.nfailed = nfailed;
@@ -34,12 +37,12 @@ public class BatchOutputResult {
 		this.status = status;
 	}
 
-	public Map<String, String> getBatchOutput() {
+	public List<BatchOutput_t> getBatchOutput() {
 		return batchOutput;
 	}
 
-	public void setBatchOutput(Map<String, String> batchOutput) {
-		this.batchOutput = batchOutput;
+	public void setBatchOutput(List<BatchOutput_t> batchOutput) {
+		this.batchOutput = (List<BatchOutput_t>) batchOutput;
 	}
 
 	public Map<String, String> getOutputFiles() {
@@ -74,12 +77,73 @@ public class BatchOutputResult {
 		this.naborted = naborted;
 	}
 
-	public String getErr() {
+	public List<AlyaBatchErrorMessage> getErr() {
 		return err;
 	}
 
-	public void setErr(String err) {
+	public void setErr(List<AlyaBatchErrorMessage> err) {
 		this.err = err;
+	}
+
+	// Nested AlyaErrorMessage class
+	public static class AlyaBatchErrorMessage {
+		private String message;
+
+		public AlyaBatchErrorMessage(String message) {
+			this.message = message;
+		}
+
+		public String getMessage() {
+			return message;
+		}
+	}
+
+}
+
+class BatchOutput_t {
+	private int line;
+	private BatchStatus status;
+	private String res;
+	private String messages;
+
+	public BatchOutput_t(int line, BatchStatus status, String res, String messages) {
+		super();
+		this.line = line;
+		this.status = status;
+		this.res = res;
+		this.messages = messages;
+	}
+
+	public int getLine() {
+		return line;
+	}
+
+	public void setLine(int line) {
+		this.line = line;
+	}
+
+	public BatchStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(BatchStatus status) {
+		this.status = status;
+	}
+
+	public String getRes() {
+		return res;
+	}
+
+	public void setRes(String res) {
+		this.res = res;
+	}
+
+	public String getMessages() {
+		return messages;
+	}
+
+	public void setMessages(String messages) {
+		this.messages = messages;
 	}
 
 }

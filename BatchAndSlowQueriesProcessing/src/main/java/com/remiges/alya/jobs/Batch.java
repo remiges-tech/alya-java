@@ -2,7 +2,9 @@ package com.remiges.alya.jobs;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 import java.util.logging.Logger;
 
@@ -11,7 +13,9 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.remiges.alya.config.JobManagerConfig;
+import com.remiges.alya.entity.BatchRows;
 import com.remiges.alya.entity.Batches;
+import com.remiges.alya.jobs.BatchOutputResult.AlyaBatchErrorMessage;
 import com.remiges.alya.service.BatchJobService;
 import com.remiges.alya.service.JedisService;
 
@@ -278,6 +282,68 @@ public class Batch {
 		} catch (Exception e) {
 			logger.severe("Error occurred while aborting the batch: " + e.getMessage());
 			throw e;
+		}
+	}
+
+	/**
+	 * Checks if a specific batch processing task is complete. This function polls
+	 * the batch processing framework to determine the status of the given batch ID.
+	 * It does not alter any processing or data state, except for occasional cache
+	 * insertions.
+	 *
+	 * @param batchID The unique identifier of the batch to be checked.
+	 * @return status The status of the batch, represented by one of the values in
+	 *         BatchStatus_t enum. batchOutput An array containing information about
+	 *         each record of the batch, if applicable. Each element corresponds to
+	 *         a record and contains line number, status, result, and messages.
+	 *         outputFiles A map specifying the output files associated with the
+	 *         batch. nsuccess The count of records that completed successfully.
+	 *         nfailed The count of records that failed. naborted The count of
+	 *         records that were aborted. This is only applicable if the overall
+	 *         status is BatchAborted. err An error indicating any critical system
+	 *         error or input error. If null, the function call completed
+	 *         successfully.
+	 *
+	 * @throws Exception Thrown if there is any unexpected error during the function
+	 *                   call.
+	 */
+
+	public BatchOutputResult done(String reqID) {
+		try {
+			String redisKey = "ALYA_BATCHSTATUS_" + reqID;
+			String redisValue = jedissrv.getBatchStatusFromRedis(redisKey);
+			BatchStatus status = (redisValue != null) ? jedissrv.getBatchStatus(redisValue)
+					: batchJobService.getBatchStatusByReqId(reqID);
+
+			if (status == BatchStatus.BatchSuccess || status == BatchStatus.BatchFailed) {
+				Batches batch = batchJobService.getBatchByReqId(reqID);
+				BatchRows batchRow = batchJobService.getBatchRowByReqId(reqID);
+
+				if (batch != null && batchRow != null) {
+					return new BatchOutputResult(status,
+							new BatchOutput_t(batchRow.getLine(), status, batchRow.getRes(), batchRow.getMessages()),
+							batch.getOutputfiles(), batch.getNsuccess(), batch.getNfailed(), batch.getNaborted(),
+							Collections.singletonList(new AlyaBatchErrorMessage(batchRow.getMessages())));
+				} else {
+					throw new RuntimeException(
+							"Invalid request ID: Entry is not available in batch rows for request ID: " + reqID);
+				}
+			} else if (status == BatchStatus.BatchAborted) {
+				return new BatchOutputResult(status, null, null, 0, 0, 0, null);
+			} else {
+				jedissrv.setRedisStatus(redisKey, status);
+				status = BatchStatus.BatchTryLater;
+			}
+			return new BatchOutputResult(status, null, null, 0, 0, 0, null);
+		} catch (NoSuchElementException e) {
+			return new BatchOutputResult(BatchStatus.BatchAborted, null, null, 0, 0, 0,
+					Collections.singletonList(new AlyaBatchErrorMessage("No such element: " + e.getMessage())));
+		} catch (RuntimeException e) {
+			return new BatchOutputResult(BatchStatus.BatchAborted, null, null, 0, 0, 0,
+					Collections.singletonList(new AlyaBatchErrorMessage(e.getMessage())));
+		} catch (Exception e) {
+			return new BatchOutputResult(BatchStatus.BatchAborted, null, null, 0, 0, 0,
+					Collections.singletonList(new AlyaBatchErrorMessage("An unexpected error occurred")));
 		}
 	}
 
