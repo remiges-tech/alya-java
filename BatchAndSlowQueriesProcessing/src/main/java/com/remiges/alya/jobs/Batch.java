@@ -92,46 +92,45 @@ public class Batch {
 	 */
 	@Transactional
 	public AlyaBatchResponse append(String batchId, List<BatchInput> batchInput, boolean waitABit) {
-	    // Check if batchInput has at least one entry
-	    if (batchInput.isEmpty()) {
-	        throw new IllegalArgumentException("batchInput must have at least one entry");
-	    }
+		// Check if batchInput has at least one entry
+		if (batchInput.isEmpty()) {
+			throw new IllegalArgumentException("batchInput must have at least one entry");
+		}
 
-	    // Validate line numbers
-	    if (batchInput.stream().anyMatch(input -> input.getLine() <= 0)) {
-	        throw new IllegalArgumentException("all lineno values must be greater than 0");
-	    }
+		// Validate line numbers
+		if (batchInput.stream().anyMatch(input -> input.getLine() <= 0)) {
+			throw new IllegalArgumentException("all lineno values must be greater than 0");
+		}
 
-	    try {
-	        // Retrieve batch record from the database
-	        Batches batch = batchJobService.getBatchByReqId(batchId);
-	        if (batch == null) {
-	            throw new IllegalArgumentException("Batch record not found");
-	        }
+		try {
+			// Retrieve batch record from the database
+			Batches batch = batchJobService.getBatchByReqId(batchId);
+			if (batch == null) {
+				throw new IllegalArgumentException("Batch record not found");
+			}
 
-	        // Check if the status of the batch is wait
-	        if (!batch.getStatus().equals(BatchStatus.BatchWait)) {
-	            throw new IllegalArgumentException("Batch status must be wait");
-	        }
+			// Check if the status of the batch is wait
+			if (!batch.getStatus().equals(BatchStatus.BatchWait)) {
+				throw new IllegalArgumentException("Batch status must be wait");
+			}
 
-	        // Write records to batch rows
-	        batchInput.forEach(input -> batchJobService.saveBatchRow(batch, input.getLine(), input.getInput()));
+			// Write records to batch rows
+			batchInput.forEach(input -> batchJobService.saveBatchRow(batch, input.getLine(), input.getInput()));
 
-	        // Change the status of the batch record if not waiting
-	        if (!waitABit) {
-	            batch.setStatus(BatchStatus.BatchQueued);
-	            batchJobService.saveBatch(batch);
-	        }
+			// Change the status of the batch record if not waiting
+			if (!waitABit) {
+				batch.setStatus(BatchStatus.BatchQueued);
+				batchJobService.saveBatch(batch);
+			}
 
-	        // Return AlyaBatchResponse
-	        return new AlyaBatchResponse(batchId, batchInput.size());
-	    } catch (Exception e) {
-	        // Log the error for debugging and rethrow as a more generic exception
-	        logger.severe("An error occurred while appending to the batch: " + e.getMessage());
-	        throw new RuntimeException("An error occurred while appending to the batch");
-	    }
+			// Return AlyaBatchResponse
+			return new AlyaBatchResponse(batchId, batchInput.size());
+		} catch (Exception e) {
+			// Log the error for debugging and rethrow as a more generic exception
+			logger.severe("An error occurred while appending to the batch: " + e.getMessage());
+			throw new RuntimeException("An error occurred while appending to the batch");
+		}
 	}
-
 
 	/**
 	 * Sets the status of a batch from 'wait' to 'queued'.
@@ -144,35 +143,35 @@ public class Batch {
 	 *                          during the process.
 	 */
 	public AlyaBatchResponse waitOff(String batchId) {
-		Batches batch = null;
-		try {
-			// Retrieve batch record from the database
-			batch = batchJobService.getBatchByReqId(batchId);
+	    Logger logger = Logger.getLogger(AlyaBatchResponse.class.getName());
+	    try {
+	        Batches batch = batchJobService.getBatchByReqId(batchId);
 
-			// Check if the batch record exists and its status is 'wait'
-			if (batch == null) {
-				throw new IllegalArgumentException("Batch record not found");
-			} else if (!batch.getStatus().equals(BatchStatus.BatchWait)) {
-				throw new IllegalArgumentException("Batch status must be 'wait'");
-			}
+	        // Check if the batch record exists and its status is 'wait'
+	        if (batch == null) {
+	            throw new IllegalArgumentException("Batch record not found");
+	        } else if (batch.getStatus() != BatchStatus.BatchWait) {
+	            throw new IllegalArgumentException("Batch status must be 'wait'");
+	        }
 
-			// Change the status of the batch record to 'queued'
-			batch.setStatus(BatchStatus.BatchQueued);
-			batchJobService.saveBatch(batch);
+	        // Change the status of the batch record to 'queued' and save
+	        batch.setStatus(BatchStatus.BatchQueued);
+	        batchJobService.saveBatch(batch);
 
-			// Get the total number of rows in batchrows against this batch
-			int numberOfRows = batchJobService.countBatchRowsByBatch(batch);
+	        // Get the total number of rows in batchrows against this batch
+	        int numberOfRows = batchJobService.countBatchRowsByBatch(batch);
 
-			// Return AlyaBatchResponse
-			return new AlyaBatchResponse(batchId, numberOfRows);
-		} catch (IllegalArgumentException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new RuntimeException(
-					"An error occurred while setting the status of the batch from 'wait' to 'queued': "
-							+ e.getMessage(),
-					e);
-		}
+	        // Return AlyaBatchResponse
+	        return new AlyaBatchResponse(batchId, numberOfRows);
+	    } catch (IllegalArgumentException e) {
+	        // Log the exception with a warning level
+	        logger.severe("IllegalArgumentException occurred: " + e.getMessage());
+	        throw e; // Rethrow the exception
+	    } catch (Exception e) {
+	        // Log the exception with an error level
+	        logger.severe("An error occurred while setting the status of the batch from 'wait' to 'queued': " + e.getMessage());
+	        throw new RuntimeException("An error occurred while setting the status of the batch from 'wait' to 'queued'", e);
+	    }
 	}
 
 	/**
