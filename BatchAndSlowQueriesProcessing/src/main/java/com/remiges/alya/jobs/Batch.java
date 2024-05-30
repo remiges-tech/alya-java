@@ -91,20 +91,18 @@ public class Batch {
 	 *                                  the batch.
 	 */
 	@Transactional
-	public AlyaBatchResponse appendToBatch(String batchId, List<BatchInput> batchInput, boolean waitABit) {
+	public AlyaBatchResponse append(String batchId, List<BatchInput> batchInput, boolean waitABit) {
+		// Check if batchInput has at least one entry
+		if (batchInput.isEmpty()) {
+			throw new IllegalArgumentException("batchInput must have at least one entry");
+		}
+
+		// Validate line numbers
+		if (batchInput.stream().anyMatch(input -> input.getLine() <= 0)) {
+			throw new IllegalArgumentException("all lineno values must be greater than 0");
+		}
+
 		try {
-			// Check if batchInput has at least one entry
-			if (batchInput.isEmpty()) {
-				throw new IllegalArgumentException("batchInput must have at least one entry");
-			}
-
-			// Validate line numbers
-			for (BatchInput input : batchInput) {
-				if (input.getLine() <= 0) {
-					throw new IllegalArgumentException("all lineno values must be greater than 0");
-				}
-			}
-
 			// Retrieve batch record from the database
 			Batches batch = batchJobService.getBatchByReqId(batchId);
 			if (batch == null) {
@@ -117,9 +115,7 @@ public class Batch {
 			}
 
 			// Write records to batch rows
-			for (BatchInput input : batchInput) {
-				batchJobService.saveBatchRow(batch, input.getLine(), input.getInput());
-			}
+			batchInput.forEach(input -> batchJobService.saveBatchRow(batch, input.getLine(), input.getInput()));
 
 			// Change the status of the batch record if not waiting
 			if (!waitABit) {
@@ -129,10 +125,10 @@ public class Batch {
 
 			// Return AlyaBatchResponse
 			return new AlyaBatchResponse(batchId, batchInput.size());
-		} catch (IllegalArgumentException e) {
-			throw e;
 		} catch (Exception e) {
-			throw new RuntimeException("An error occurred while appending to the batch: " + e.getMessage(), e);
+			// Log the error for debugging and rethrow as a more generic exception
+			logger.severe("An error occurred while appending to the batch: " + e.getMessage());
+			throw new RuntimeException("An error occurred while appending to the batch");
 		}
 	}
 
@@ -147,19 +143,18 @@ public class Batch {
 	 *                          during the process.
 	 */
 	public AlyaBatchResponse waitOff(String batchId) {
-		Batches batch = null;
+		Logger logger = Logger.getLogger(AlyaBatchResponse.class.getName());
 		try {
-			// Retrieve batch record from the database
-			batch = batchJobService.getBatchByReqId(batchId);
+			Batches batch = batchJobService.getBatchByReqId(batchId);
 
 			// Check if the batch record exists and its status is 'wait'
 			if (batch == null) {
 				throw new IllegalArgumentException("Batch record not found");
-			} else if (!batch.getStatus().equals(BatchStatus.BatchWait)) {
+			} else if (batch.getStatus() != BatchStatus.BatchWait) {
 				throw new IllegalArgumentException("Batch status must be 'wait'");
 			}
 
-			// Change the status of the batch record to 'queued'
+			// Change the status of the batch record to 'queued' and save
 			batch.setStatus(BatchStatus.BatchQueued);
 			batchJobService.saveBatch(batch);
 
@@ -169,12 +164,15 @@ public class Batch {
 			// Return AlyaBatchResponse
 			return new AlyaBatchResponse(batchId, numberOfRows);
 		} catch (IllegalArgumentException e) {
-			throw e;
+			// Log the exception with a warning level
+			logger.severe("IllegalArgumentException occurred: " + e.getMessage());
+			throw e; // Rethrow the exception
 		} catch (Exception e) {
+			// Log the exception with an error level
+			logger.severe("An error occurred while setting the status of the batch from 'wait' to 'queued': "
+					+ e.getMessage());
 			throw new RuntimeException(
-					"An error occurred while setting the status of the batch from 'wait' to 'queued': "
-							+ e.getMessage(),
-					e);
+					"An error occurred while setting the status of the batch from 'wait' to 'queued'", e);
 		}
 	}
 
@@ -188,6 +186,7 @@ public class Batch {
 	 * @return Returns an array of BatchDetails_t objects representing the batches.
 	 */
 	public List<BatchResultDTO> list(String app, String op, int age) {
+		Logger logger = Logger.getLogger(this.getClass().getName());
 		try {
 			// Calculate the threshold time based on the age parameter
 			LocalDateTime thresholdTime = LocalDateTime.now().minusDays(age);
@@ -196,35 +195,67 @@ public class Batch {
 			List<Batches> matchingBatches = batchJobService.findBatchesByType(AlyaConstant.TYPE_B, app, op,
 					thresholdTime);
 
-			// Construct BatchDetails_t objects for each matching batch
-			List<BatchResultDTO> batchDetailsList = new ArrayList<>();
-			matchingBatches.forEach(batch -> {
-				BatchResultDTO batchDetails = new BatchResultDTO();
-				batchDetails.setId(batch.getId().toString());
-				batchDetails.setApp(batch.getApp());
-				batchDetails.setOp(batch.getOp());
-				batchDetails.setInputfile(""); // You may set this based on your business logic
-				batchDetails.setStatus(batch.getStatus());
-				batchDetails.setReqat(batch.getReqat().toLocalDateTime());
-				batchDetails.setDoneat(batch.getDoneat() != null ? batch.getDoneat().toLocalDateTime() : null);
-				batchDetails.setOutputfiles(batch.getOutputfiles());
-				batchDetails.setNsuccess(batch.getNsuccess());
-				batchDetails.setNfailed(batch.getNfailed());
-				batchDetails.setNaborted(batch.getNaborted());
+			// Preallocate list capacity for batchDetailsList
+			List<BatchResultDTO> batchDetailsList = new ArrayList<>(matchingBatches.size());
 
-				// Fetch nrows from batchrows table and set it in the DTO
-				int nrows = batchJobService.getNrowsByBatchId(batch.getId()); // Assuming you have a method to fetch
-																				// nrows by batch ID
-				batchDetails.setNrows(nrows);
-
+			// Use parallel stream for processing matching batches concurrently
+			matchingBatches.parallelStream().forEach(batch -> {
+				BatchResultDTO batchDetails = createBatchResultDTO(batch);
 				batchDetailsList.add(batchDetails);
 			});
 
 			return batchDetailsList;
 		} catch (Exception e) {
-			throw new RuntimeException("An error occurred while listing batches: " + e.getMessage(), e);
+			logger.severe("An error occurred while listing batches: " + e.getMessage());
+			throw new RuntimeException("An error occurred while listing batches", e);
 		}
 	}
+
+	private BatchResultDTO createBatchResultDTO(Batches batch) {
+		BatchResultDTO batchDetails = new BatchResultDTO();
+		batchDetails.setId(batch.getId().toString());
+		batchDetails.setApp(batch.getApp());
+		batchDetails.setOp(batch.getOp());
+		batchDetails.setInputfile(""); // You may set this based on your business logic
+		batchDetails.setStatus(batch.getStatus());
+		batchDetails.setReqat(batch.getReqat().toLocalDateTime());
+		batchDetails.setDoneat(batch.getDoneat() != null ? batch.getDoneat().toLocalDateTime() : null);
+		batchDetails.setOutputfiles(batch.getOutputfiles());
+		batchDetails.setNsuccess(batch.getNsuccess());
+		batchDetails.setNfailed(batch.getNfailed());
+		batchDetails.setNaborted(batch.getNaborted());
+
+		// Fetch nrows from batchrows table and set it in the DTO
+		int nrows = batchJobService.getNrowsByBatchId(batch.getId()); // Assuming you have a method to fetch nrows by
+																		// batch ID
+		batchDetails.setNrows(nrows);
+
+		return batchDetails;
+	}
+
+	/**
+	 * Aborts a batch after it has been submitted.
+	 *
+	 * @param batchID The ID of the batch to be aborted.
+	 * @return Returns an error if the abort operation fails, otherwise returns nil.
+	 *
+	 *         Request: The input parameter batchID specifies the ID of the batch to
+	 *         be aborted.
+	 *
+	 *         Processing: - Checks the REDIS record for the batch status. If the
+	 *         status is "success", "failed", or "aborted", the abort operation
+	 *         fails. - Begins a transaction and locks the batch record and all
+	 *         associated batchrows records. - Updates the batch status to "aborted"
+	 *         and sets the doneat field to the current time. - Updates the
+	 *         batchrows records with status "queued" or "inprog" to "aborted" and
+	 *         sets doneat to the current timestamp. - Sets the REDIS batch status
+	 *         record for this batch to "aborted" with an expiry time. - Logs with
+	 *         INFO priority if the abort operation fails.
+	 *
+	 *         Response: Returns an error if the abort operation fails, otherwise
+	 *         returns nil. One cannot abort a completed batch, i.e., a batch where
+	 *         doneat has been set.
+	 */
 
 	public void abort(String batchId) throws Exception {
 		try {
