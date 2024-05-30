@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Supplier;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -111,11 +112,17 @@ public class BatchJobService {
 	 */
 	@Transactional
 	public void saveBatchRow(Batches batch, int lineNo, String input) {
-		BatchRows batchRow = new BatchRows();
-		batchRow.setBatch(batch);
-		batchRow.setLine(lineNo);
-		batchRow.setInput(input);
-		batchRowRepo.save(batchRow);
+		// Define a supplier for creating BatchRows
+		Supplier<BatchRows> batchRowSupplier = () -> {
+			BatchRows batchRow = new BatchRows();
+			batchRow.setBatch(batch);
+			batchRow.setLine(lineNo);
+			batchRow.setInput(input);
+			return batchRow;
+		};
+
+		// Save the BatchRows
+		batchRowRepo.save(batchRowSupplier.get());
 	}
 
 	/**

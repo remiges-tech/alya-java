@@ -91,50 +91,47 @@ public class Batch {
 	 *                                  the batch.
 	 */
 	@Transactional
-	public AlyaBatchResponse appendToBatch(String batchId, List<BatchInput> batchInput, boolean waitABit) {
-		try {
-			// Check if batchInput has at least one entry
-			if (batchInput.isEmpty()) {
-				throw new IllegalArgumentException("batchInput must have at least one entry");
-			}
+	public AlyaBatchResponse append(String batchId, List<BatchInput> batchInput, boolean waitABit) {
+	    // Check if batchInput has at least one entry
+	    if (batchInput.isEmpty()) {
+	        throw new IllegalArgumentException("batchInput must have at least one entry");
+	    }
 
-			// Validate line numbers
-			for (BatchInput input : batchInput) {
-				if (input.getLine() <= 0) {
-					throw new IllegalArgumentException("all lineno values must be greater than 0");
-				}
-			}
+	    // Validate line numbers
+	    if (batchInput.stream().anyMatch(input -> input.getLine() <= 0)) {
+	        throw new IllegalArgumentException("all lineno values must be greater than 0");
+	    }
 
-			// Retrieve batch record from the database
-			Batches batch = batchJobService.getBatchByReqId(batchId);
-			if (batch == null) {
-				throw new IllegalArgumentException("Batch record not found");
-			}
+	    try {
+	        // Retrieve batch record from the database
+	        Batches batch = batchJobService.getBatchByReqId(batchId);
+	        if (batch == null) {
+	            throw new IllegalArgumentException("Batch record not found");
+	        }
 
-			// Check if the status of the batch is wait
-			if (!batch.getStatus().equals(BatchStatus.BatchWait)) {
-				throw new IllegalArgumentException("Batch status must be wait");
-			}
+	        // Check if the status of the batch is wait
+	        if (!batch.getStatus().equals(BatchStatus.BatchWait)) {
+	            throw new IllegalArgumentException("Batch status must be wait");
+	        }
 
-			// Write records to batch rows
-			for (BatchInput input : batchInput) {
-				batchJobService.saveBatchRow(batch, input.getLine(), input.getInput());
-			}
+	        // Write records to batch rows
+	        batchInput.forEach(input -> batchJobService.saveBatchRow(batch, input.getLine(), input.getInput()));
 
-			// Change the status of the batch record if not waiting
-			if (!waitABit) {
-				batch.setStatus(BatchStatus.BatchQueued);
-				batchJobService.saveBatch(batch);
-			}
+	        // Change the status of the batch record if not waiting
+	        if (!waitABit) {
+	            batch.setStatus(BatchStatus.BatchQueued);
+	            batchJobService.saveBatch(batch);
+	        }
 
-			// Return AlyaBatchResponse
-			return new AlyaBatchResponse(batchId, batchInput.size());
-		} catch (IllegalArgumentException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new RuntimeException("An error occurred while appending to the batch: " + e.getMessage(), e);
-		}
+	        // Return AlyaBatchResponse
+	        return new AlyaBatchResponse(batchId, batchInput.size());
+	    } catch (Exception e) {
+	        // Log the error for debugging and rethrow as a more generic exception
+	        logger.severe("An error occurred while appending to the batch: " + e.getMessage());
+	        throw new RuntimeException("An error occurred while appending to the batch");
+	    }
 	}
+
 
 	/**
 	 * Sets the status of a batch from 'wait' to 'queued'.
