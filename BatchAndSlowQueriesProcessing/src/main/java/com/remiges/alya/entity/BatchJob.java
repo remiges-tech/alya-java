@@ -11,7 +11,7 @@ import lombok.ToString;
 public class BatchJob {
 
     // java.lang.String,java.lang.String,java.util.UUID,java.lang.Long,com.fasterxml.jackson.databind.JsonNode,java.lang.Integer,java.lang.String],
-    BatchJob(String app, String op, UUID Id, Long rowId, JsonNode context, Integer line, JsonNode input) {
+    BatchJob(String app, String op, UUID Id, Long rowId, JsonNode context, Integer line, String input) {
         this.app = app;
         this.op = op;
         this.id = Id;
@@ -33,6 +33,6 @@ public class BatchJob {
 
     Integer line;
 
-    JsonNode input;
+    String input;
 
 }

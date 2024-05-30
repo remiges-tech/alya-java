@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 public class SQProcessor {
 
-    public BatchOutput DoSlowQuery(BatchInitBlocks any, JsonNode jsonNode, JsonNode input) {
+    public BatchOutput DoSlowQuery(BatchInitBlocks any, JsonNode jsonNode, String input) {
 
         return BatchOutput.builder().build();
     }

@@ -68,7 +68,7 @@ public class SlowQuery {
 	 * as database access failure.
 	 */
 
-	public String submit(String app, String op, JsonNode context, JsonNode input) {
+	public String submit(String app, String op, JsonNode context, String input) {
 		try {
 			UUID reqID = batchJobService.saveSlowQueries(app, op, context, input, BatchStatus.BatchQueued);
 			logger.info("Submitted job with request ID: " + reqID);
