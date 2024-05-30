@@ -270,7 +270,7 @@ public class BatchJobService {
 	 * @return the ID of the saved batch
 	 */
 	@Transactional
-	public UUID saveSlowQueries(String app, String op, JsonNode context, JsonNode input, BatchStatus status) {
+	public UUID saveSlowQueries(String app, String op, JsonNode context, String input, BatchStatus status) {
 		try {
 			if (context == null || input == null) {
 				throw new IllegalArgumentException("Context or input is null");
@@ -286,7 +286,7 @@ public class BatchJobService {
 
 			List<BatchRows> batchRowsList = new ArrayList<>();
 
-			if (input.size() > 0) {
+			if (input.length() > 0) {
 				BatchRows batchRow = new BatchRows();
 				batchRow.setBatch(batchJob);
 				batchRow.setBatchStatus(status);
@@ -326,7 +326,7 @@ public class BatchJobService {
 	public UUID saveBatch(String app, String op, JsonNode context, List<BatchInput> batchInput, BatchStatus status) {
 		try {
 
-			if (context == null || !batchInput.isEmpty()) {
+			if (context == null || batchInput.isEmpty()) {
 				throw new IllegalArgumentException("Context or Input is null");
 			}
 			Batches batchJob = new Batches();

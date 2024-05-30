@@ -25,7 +25,7 @@ public class Batch {
 
 	private final BatchJobService batchJobService;
 	private final JedisService jedissrv;
-	private final Logger logger;
+	private final Logger logger = Logger.getLogger(Batch.class.getName());;
 
 	/**
 	 * Constructs a SlowQuery instance.
@@ -35,10 +35,10 @@ public class Batch {
 	 * @param mgrconfig       Configuration for job manager.
 	 */
 	@Autowired
-	public Batch(BatchJobService batchJobService, JedisService jedissrv, JobManagerConfig mgrconfig, Logger logger) {
+	public Batch(BatchJobService batchJobService, JedisService jedissrv, JobManagerConfig mgrconfig) {
 		this.batchJobService = batchJobService;
 		this.jedissrv = jedissrv;
-		this.logger = Logger.getLogger(SlowQuery.class.getName());
+
 	}
 
 	/**

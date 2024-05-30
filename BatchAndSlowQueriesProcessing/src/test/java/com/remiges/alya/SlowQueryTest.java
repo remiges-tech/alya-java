@@ -59,11 +59,11 @@ public class SlowQueryTest {
         // Stub the service method to return a UUID
         UUID requestId = UUID.randomUUID();
 
-        when(batchJobServiceMock.saveSlowQueries(app, op, context, input, BatchStatus.BatchQueued))
+        when(batchJobServiceMock.saveSlowQueries(app, op, context, inputJsonString, BatchStatus.BatchQueued))
                 .thenReturn(requestId);
 
         // Call the method
-        String result = slowQuery.submit(app, op, context, input);
+        String result = slowQuery.submit(app, op, context, inputJsonString);
         System.out.println(result);
 
         // Verify the result
