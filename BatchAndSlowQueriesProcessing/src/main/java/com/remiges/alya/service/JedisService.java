@@ -67,7 +67,7 @@ public class JedisService {
 		}
 	}
 
-	public void setRedisStatusSlowQuery(String redisKey, BatchStatus status) {
+	public void setRedisStatus(String redisKey, BatchStatus status) {
 		// Set the status for the slow query in Redis
 		jedis.set(redisKey, status.toString());
 	}

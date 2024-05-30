@@ -2,6 +2,7 @@ package com.remiges.alya.jobs;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
@@ -116,51 +117,43 @@ public class SlowQuery {
 	 * database access failure.
 	 */
 	public SlowQueryResult done(String reqID) {
-		// Initialization
-		BatchStatus status = null;
-		Exception error = null;
+		String redisKey = "ALYA_BATCHSTATUS_" + reqID;
+		BatchStatus status;
 
 		try {
-			// Check REDIS for the status entry
-			String redisKey = "ALYA_BATCHSTATUS_" + reqID; // constant
 			String redisValue = jedissrv.getBatchStatusFromRedis(redisKey);
+
 			if (redisValue != null) {
 				status = jedissrv.getBatchStatus(redisValue);
 			} else {
 				status = batchJobService.getSlowQueryStatusByReqId(reqID);
 			}
 
-			// Check database for status
-
 			if (status == BatchStatus.BatchSuccess || status == BatchStatus.BatchFailed) {
 				BatchRows batchRow = batchJobService.getBatchRowByReqId(reqID);
 				if (batchRow != null) {
 					status = batchRow.getBatchStatus();
-					// batchJobService.updateBatchRowStatus(batchRow.getRowId(), status);
-					jedissrv.setRedisStatusSlowQuery(redisKey, status);
+					jedissrv.setRedisStatus(redisKey, status);
 
-					List<AlyaErrorMessage> errlist = new ArrayList<SlowQueryResult.AlyaErrorMessage>();
-					errlist.add(new AlyaErrorMessage(batchRow.getMessages()));
+					List<AlyaErrorMessage> errlist = Collections
+							.singletonList(new AlyaErrorMessage(batchRow.getMessages()));
 					return new SlowQueryResult(status, batchRow.getRes(), errlist, batchRow.getBlobrows(), null);
-				} else if (batchRow == null) {
+				} else {
 					throw new Exception(
-							"Invalid request ID : As entry is not available in batch rows for this request ID :"
-									+ reqID);
+							"Invalid request ID: No entry available in batch rows for request ID: " + reqID);
 				}
-
 			} else if (status == BatchStatus.BatchAborted) {
 				return new SlowQueryResult(BatchStatus.BatchAborted, null, null, null, null);
 			} else {
-				// Insert new REDIS record
-				jedissrv.setRedisStatusSlowQuery(redisKey, status);
+				jedissrv.setRedisStatus(redisKey, status);
 				status = BatchStatus.BatchTryLater;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			error = e;
+			return new SlowQueryResult(null, null, null, null, e);
 		}
 
-		return new SlowQueryResult(status, null, null, null, error);
+		return new SlowQueryResult(status, null, null, null, null);
 	}
 
 	/**
