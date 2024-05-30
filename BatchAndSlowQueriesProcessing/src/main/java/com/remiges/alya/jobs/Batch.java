@@ -143,35 +143,37 @@ public class Batch {
 	 *                          during the process.
 	 */
 	public AlyaBatchResponse waitOff(String batchId) {
-	    Logger logger = Logger.getLogger(AlyaBatchResponse.class.getName());
-	    try {
-	        Batches batch = batchJobService.getBatchByReqId(batchId);
+		Logger logger = Logger.getLogger(AlyaBatchResponse.class.getName());
+		try {
+			Batches batch = batchJobService.getBatchByReqId(batchId);
 
-	        // Check if the batch record exists and its status is 'wait'
-	        if (batch == null) {
-	            throw new IllegalArgumentException("Batch record not found");
-	        } else if (batch.getStatus() != BatchStatus.BatchWait) {
-	            throw new IllegalArgumentException("Batch status must be 'wait'");
-	        }
+			// Check if the batch record exists and its status is 'wait'
+			if (batch == null) {
+				throw new IllegalArgumentException("Batch record not found");
+			} else if (batch.getStatus() != BatchStatus.BatchWait) {
+				throw new IllegalArgumentException("Batch status must be 'wait'");
+			}
 
-	        // Change the status of the batch record to 'queued' and save
-	        batch.setStatus(BatchStatus.BatchQueued);
-	        batchJobService.saveBatch(batch);
+			// Change the status of the batch record to 'queued' and save
+			batch.setStatus(BatchStatus.BatchQueued);
+			batchJobService.saveBatch(batch);
 
-	        // Get the total number of rows in batchrows against this batch
-	        int numberOfRows = batchJobService.countBatchRowsByBatch(batch);
+			// Get the total number of rows in batchrows against this batch
+			int numberOfRows = batchJobService.countBatchRowsByBatch(batch);
 
-	        // Return AlyaBatchResponse
-	        return new AlyaBatchResponse(batchId, numberOfRows);
-	    } catch (IllegalArgumentException e) {
-	        // Log the exception with a warning level
-	        logger.severe("IllegalArgumentException occurred: " + e.getMessage());
-	        throw e; // Rethrow the exception
-	    } catch (Exception e) {
-	        // Log the exception with an error level
-	        logger.severe("An error occurred while setting the status of the batch from 'wait' to 'queued': " + e.getMessage());
-	        throw new RuntimeException("An error occurred while setting the status of the batch from 'wait' to 'queued'", e);
-	    }
+			// Return AlyaBatchResponse
+			return new AlyaBatchResponse(batchId, numberOfRows);
+		} catch (IllegalArgumentException e) {
+			// Log the exception with a warning level
+			logger.severe("IllegalArgumentException occurred: " + e.getMessage());
+			throw e; // Rethrow the exception
+		} catch (Exception e) {
+			// Log the exception with an error level
+			logger.severe("An error occurred while setting the status of the batch from 'wait' to 'queued': "
+					+ e.getMessage());
+			throw new RuntimeException(
+					"An error occurred while setting the status of the batch from 'wait' to 'queued'", e);
+		}
 	}
 
 	/**
@@ -184,6 +186,7 @@ public class Batch {
 	 * @return Returns an array of BatchDetails_t objects representing the batches.
 	 */
 	public List<BatchResultDTO> list(String app, String op, int age) {
+		Logger logger = Logger.getLogger(this.getClass().getName());
 		try {
 			// Calculate the threshold time based on the age parameter
 			LocalDateTime thresholdTime = LocalDateTime.now().minusDays(age);
@@ -192,34 +195,42 @@ public class Batch {
 			List<Batches> matchingBatches = batchJobService.findBatchesByType(AlyaConstant.TYPE_B, app, op,
 					thresholdTime);
 
-			// Construct BatchDetails_t objects for each matching batch
-			List<BatchResultDTO> batchDetailsList = new ArrayList<>();
-			matchingBatches.forEach(batch -> {
-				BatchResultDTO batchDetails = new BatchResultDTO();
-				batchDetails.setId(batch.getId().toString());
-				batchDetails.setApp(batch.getApp());
-				batchDetails.setOp(batch.getOp());
-				batchDetails.setInputfile(""); // You may set this based on your business logic
-				batchDetails.setStatus(batch.getStatus());
-				batchDetails.setReqat(batch.getReqat().toLocalDateTime());
-				batchDetails.setDoneat(batch.getDoneat() != null ? batch.getDoneat().toLocalDateTime() : null);
-				batchDetails.setOutputfiles(batch.getOutputfiles());
-				batchDetails.setNsuccess(batch.getNsuccess());
-				batchDetails.setNfailed(batch.getNfailed());
-				batchDetails.setNaborted(batch.getNaborted());
+			// Preallocate list capacity for batchDetailsList
+			List<BatchResultDTO> batchDetailsList = new ArrayList<>(matchingBatches.size());
 
-				// Fetch nrows from batchrows table and set it in the DTO
-				int nrows = batchJobService.getNrowsByBatchId(batch.getId()); // Assuming you have a method to fetch
-																				// nrows by batch ID
-				batchDetails.setNrows(nrows);
-
+			// Use parallel stream for processing matching batches concurrently
+			matchingBatches.parallelStream().forEach(batch -> {
+				BatchResultDTO batchDetails = createBatchResultDTO(batch);
 				batchDetailsList.add(batchDetails);
 			});
 
 			return batchDetailsList;
 		} catch (Exception e) {
-			throw new RuntimeException("An error occurred while listing batches: " + e.getMessage(), e);
+			logger.severe("An error occurred while listing batches: " + e.getMessage());
+			throw new RuntimeException("An error occurred while listing batches", e);
 		}
+	}
+
+	private BatchResultDTO createBatchResultDTO(Batches batch) {
+		BatchResultDTO batchDetails = new BatchResultDTO();
+		batchDetails.setId(batch.getId().toString());
+		batchDetails.setApp(batch.getApp());
+		batchDetails.setOp(batch.getOp());
+		batchDetails.setInputfile(""); // You may set this based on your business logic
+		batchDetails.setStatus(batch.getStatus());
+		batchDetails.setReqat(batch.getReqat().toLocalDateTime());
+		batchDetails.setDoneat(batch.getDoneat() != null ? batch.getDoneat().toLocalDateTime() : null);
+		batchDetails.setOutputfiles(batch.getOutputfiles());
+		batchDetails.setNsuccess(batch.getNsuccess());
+		batchDetails.setNfailed(batch.getNfailed());
+		batchDetails.setNaborted(batch.getNaborted());
+
+		// Fetch nrows from batchrows table and set it in the DTO
+		int nrows = batchJobService.getNrowsByBatchId(batch.getId()); // Assuming you have a method to fetch nrows by
+																		// batch ID
+		batchDetails.setNrows(nrows);
+
+		return batchDetails;
 	}
 
 	public void abort(String batchId) throws Exception {
