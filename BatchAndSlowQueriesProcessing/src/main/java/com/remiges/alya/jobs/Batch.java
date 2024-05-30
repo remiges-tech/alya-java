@@ -233,6 +233,30 @@ public class Batch {
 		return batchDetails;
 	}
 
+	/**
+	 * Aborts a batch after it has been submitted.
+	 *
+	 * @param batchID The ID of the batch to be aborted.
+	 * @return Returns an error if the abort operation fails, otherwise returns nil.
+	 *
+	 *         Request: The input parameter batchID specifies the ID of the batch to
+	 *         be aborted.
+	 *
+	 *         Processing: - Checks the REDIS record for the batch status. If the
+	 *         status is "success", "failed", or "aborted", the abort operation
+	 *         fails. - Begins a transaction and locks the batch record and all
+	 *         associated batchrows records. - Updates the batch status to "aborted"
+	 *         and sets the doneat field to the current time. - Updates the
+	 *         batchrows records with status "queued" or "inprog" to "aborted" and
+	 *         sets doneat to the current timestamp. - Sets the REDIS batch status
+	 *         record for this batch to "aborted" with an expiry time. - Logs with
+	 *         INFO priority if the abort operation fails.
+	 *
+	 *         Response: Returns an error if the abort operation fails, otherwise
+	 *         returns nil. One cannot abort a completed batch, i.e., a batch where
+	 *         doneat has been set.
+	 */
+
 	public void abort(String batchId) throws Exception {
 		try {
 			String redisKey = "ALYA_BATCHSTATUS_" + batchId;

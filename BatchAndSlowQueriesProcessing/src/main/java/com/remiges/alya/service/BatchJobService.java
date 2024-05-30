@@ -162,13 +162,19 @@ public class BatchJobService {
 	public void abortBatchAndRows(Batches batch) throws Exception {
 		batch.setStatus(BatchStatus.BatchAborted);
 		batch.setDoneat(new Timestamp(System.currentTimeMillis()));
-		batchesRepo.save(batch);
+		List<BatchRows> batchRowsList = new ArrayList<>();
 
 		List<BatchRows> batchRows = batchRowRepo.findByBatch(batch, null);
 		for (BatchRows batchRow : batchRows) {
 			batchRow.setBatchStatus(BatchStatus.BatchAborted);
 			batchRow.setDoneat(new Timestamp(System.currentTimeMillis()));
-			batchRowRepo.save(batchRow);
+			batchRowsList.add(batchRow);
+		}
+
+		if (!batchRowsList.isEmpty()) {
+			// Save batch job and its rows in a single operation
+			batchesRepo.save(batch);
+			batchRowRepo.saveAll(batchRowsList);
 		}
 
 		String redisKey = "ALYA_BATCHSTATUS_" + batch.getId().toString();
