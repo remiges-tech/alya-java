@@ -2,8 +2,6 @@ package com.remiges.alya.model;
 
 import com.remiges.alya.annotation.ValidField;
 import com.remiges.alya.constant.ValidationConstant;
-
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -55,6 +53,11 @@ public class RequestDTO{
 
     @ValidField(regex = ValidationConstant.PASSPORT_NUMBER_PATTERN, message = "Invalid passport format")
     private String passport;
+
+    // public Object getField() {
+    //     // TODO Auto-generated method stub
+    //     throw new UnsupportedOperationException("Unimplemented method 'getField'");
+    // }
 
 
 }

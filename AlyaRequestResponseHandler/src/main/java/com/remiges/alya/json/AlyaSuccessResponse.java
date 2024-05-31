@@ -21,5 +21,6 @@ public class AlyaSuccessResponse {
      public static AlyaSuccessResponse success(String status, RequestDTO data ) {
         return new AlyaSuccessResponse("success", data, Collections.emptyList());
     }
+
 }
 
