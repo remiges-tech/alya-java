@@ -13,15 +13,15 @@ public class BatchOutputResult {
 	private int nsuccess;
 	private int nfailed;
 	private int naborted;
-	private List<AlyaBatchErrorMessage> err;
+	private ErrorCodes err;
 
 	public BatchOutputResult() {
 	}
 
-	public BatchOutputResult(BatchStatus status, BatchOutput_t batchOutput_t, Map<String, String> outputFiles,
-			int nsuccess, int nfailed, int naborted, List<AlyaBatchErrorMessage> err) {
+	public BatchOutputResult(BatchStatus status, List<BatchOutput_t> batchOutput_t, Map<String, String> outputFiles,
+			int nsuccess, int nfailed, int naborted, ErrorCodes err) {
 		this.status = status;
-		this.batchOutput = (List<BatchOutput_t>) batchOutput_t;
+		this.batchOutput = batchOutput_t;
 		this.outputFiles = outputFiles;
 		this.nsuccess = nsuccess;
 		this.nfailed = nfailed;
@@ -77,11 +77,11 @@ public class BatchOutputResult {
 		this.naborted = naborted;
 	}
 
-	public List<AlyaBatchErrorMessage> getErr() {
+	public ErrorCodes getErr() {
 		return err;
 	}
 
-	public void setErr(List<AlyaBatchErrorMessage> err) {
+	public void setErr(ErrorCodes err) {
 		this.err = err;
 	}
 

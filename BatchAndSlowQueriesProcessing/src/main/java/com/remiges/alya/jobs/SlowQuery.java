@@ -118,14 +118,13 @@ public class SlowQuery {
 	 */
 	public SlowQueryResult done(String reqID) {
 		String redisKey = "ALYA_BATCHSTATUS_" + reqID;
-		BatchStatus status;
+		BatchStatus status = BatchStatus.BatchTryLater;
 
 		try {
 			String redisValue = jedissrv.getBatchStatusFromRedis(redisKey);
 
-			if (redisValue != null) {
-				status = jedissrv.getBatchStatus(redisValue);
-			} else {
+			if (redisValue == null) {
+
 				status = batchJobService.getSlowQueryStatusByReqId(reqID);
 			}
 
@@ -133,7 +132,6 @@ public class SlowQuery {
 				BatchRows batchRow = batchJobService.getBatchRowByReqId(reqID);
 				if (batchRow != null) {
 					status = batchRow.getBatchStatus();
-					jedissrv.setRedisStatus(redisKey, status);
 
 					List<AlyaErrorMessage> errlist = Collections
 							.singletonList(new AlyaErrorMessage(batchRow.getMessages()));
@@ -145,7 +143,7 @@ public class SlowQuery {
 			} else if (status == BatchStatus.BatchAborted) {
 				return new SlowQueryResult(BatchStatus.BatchAborted, null, null, null, null);
 			} else {
-				jedissrv.setRedisStatus(redisKey, status);
+				// jedissrv.setRedisStatus(redisKey, status);
 				status = BatchStatus.BatchTryLater;
 			}
 		} catch (Exception e) {
@@ -198,8 +196,7 @@ public class SlowQuery {
 			}
 
 			batchJobService.abortBatchAndRows(batch);
-			jedissrv.updateStatusInRedis(UUID.fromString(reqID), BatchStatus.BatchAborted,
-					jedissrv.ALYA_BATCHSTATUS_CACHEDUR_SEC * 100);
+			jedissrv.updateStatusInRedis(UUID.fromString(reqID), BatchStatus.BatchAborted);
 			logger.info("Batch with request ID " + reqID + " aborted successfully.");
 		} catch (Exception e) {
 			logger.severe("Error occurred while aborting the batch: " + e.getMessage());

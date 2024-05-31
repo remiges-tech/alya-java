@@ -16,6 +16,7 @@ import org.apache.commons.csv.CSVParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -24,15 +25,20 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.remiges.alya.jobs.AlyaBatchResponse;
 import com.remiges.alya.jobs.Batch;
 import com.remiges.alya.jobs.BatchInput;
+import com.remiges.alya.jobs.BatchOutputResult;
 import com.remiges.alya.jobs.BatchProcessor;
+import com.remiges.alya.jobs.BatchStatus;
 import com.remiges.alya.jobs.Initializer;
 import com.remiges.alya.jobs.JobMgr;
 import com.remiges.alya.jobs.JobMgrClient;
 import com.remiges.demoalya.component.TransactionInitializer;
 import com.remiges.demoalya.component.TransactionProcessor;
+import com.remiges.demoalya.dto.BatchAppendDto;
 
+import ch.qos.logback.core.util.Duration;
 import io.hypersistence.utils.hibernate.type.json.internal.JacksonUtil;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -43,13 +49,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @EnableWebMvc
-@RequestMapping("/demo")
-public class DemoController {
+@RequestMapping("/Batch")
+public class BatchController {
 
-    Logger logger = LoggerFactory.getLogger(DemoController.class);
+    Logger logger = LoggerFactory.getLogger(BatchController.class);
 
     @Autowired
     private Batch batch;
+
+    @Autowired
+    ObjectMapper objectMapper;
 
     @Autowired
     private JobMgrClient jobMgrcli;
@@ -67,7 +76,6 @@ public class DemoController {
         String PANENQUIRY = "PANENQURY";
 
         List<Map<String, String>> inputdata = loadCSV(base64File);
-        ObjectMapper objectMapper = new ObjectMapper();
 
         List<BatchInput> list = new ArrayList<>();
         AtomicInteger lineNumber = new AtomicInteger(1);
@@ -83,12 +91,12 @@ public class DemoController {
             }
         });
 
-        batch.submit("KRA", PANENQUIRY, JacksonUtil.toJsonNode("{" +
-                "   \"title\": \"High-Performance Java Persistence\"," +
-                "   \"author\": \"Vlad Mihalcea\"," + "   \"publisher\": \"Amazon\"," +
-                "   \"price\": 44.99" + "}"), list, false);
+        String batchId = batch.submit("KRA", PANENQUIRY, JacksonUtil.toJsonNode("{" +
+                "   \"fileName\": \"Transaction.csv\"}"), list, false);
 
         JobMgr jobMgr = jobMgrcli.getJobmrg();
+
+        logger.info(jobMgr.toString());
 
         TransactionInitializer intr = new TransactionInitializer(); // JobMgr jobm = new
         try {
@@ -96,11 +104,75 @@ public class DemoController {
 
             jobMgr.RegisterProcessor(KRA, PANENQUIRY, new TransactionProcessor());
         } catch (Exception ex) {
-
+            logger.debug("Exception while registering processor Manager{}", ex);
         }
-        jobMgr.DoJobs();
+        try {
+            jobMgr.DoJobs();
+        } catch (Exception ex) {
+            logger.debug("Exception while starting Job Manager{}", ex);
+        }
 
-        return "entity";
+        return batchId;
+    }
+
+    @PostMapping("BatchAppend")
+    public ResponseEntity<String> BatchAppend(@RequestBody BatchAppendDto dBatchAppendDto) {
+        // TODO: process POST request
+        try {
+            List<Map<String, String>> inputdata = loadCSV(dBatchAppendDto.getBase64File());
+
+            List<BatchInput> list = new ArrayList<>();
+            AtomicInteger lineNumber = new AtomicInteger(1);
+            inputdata.stream().forEach((map) -> {
+                try {
+                    String jsonstr = objectMapper.writeValueAsString(map);
+
+                    BatchInput batchInput = BatchInput.builder().input(jsonstr).line(lineNumber.getAndIncrement())
+                            .build();
+                    list.add(batchInput);
+                } catch (Exception ex) {
+                    logger.debug(ex.getMessage());
+                    System.out.println(ex.toString());
+                }
+            });
+
+            AlyaBatchResponse res = batch.append(dBatchAppendDto.getBatchId(), list, dBatchAppendDto.getWaitoff());
+
+            return ResponseEntity.ok(res.toString());
+
+        } catch (Exception e) {
+            return ResponseEntity.ok(e.getMessage());
+        }
+
+    }
+
+    @PostMapping("batchWaitOff")
+    public ResponseEntity<String> batchWaitOff(@RequestBody String entity) {
+        try {
+
+            AlyaBatchResponse res = batch.waitOff(entity);
+            return ResponseEntity.ok(res.toString());
+        } catch (Exception e) {
+            return ResponseEntity.ok(e.toString());
+        }
+
+    }
+
+    @GetMapping("getBatchStatus")
+    public ResponseEntity<BatchOutputResult> getBatchStatus(@RequestParam String batchId) {
+        BatchOutputResult output;
+        output = batch.done(batchId);
+
+        if (output.getStatus().equals(BatchStatus.BatchInProgress)
+                || output.getStatus().equals(BatchStatus.BatchQueued)) {
+        } else {
+            output.getNsuccess();
+            output.getNaborted();
+            output.getNfailed();
+            output.getOutputFiles();
+        }
+
+        return ResponseEntity.ok(output);
     }
 
     public static String convertEntryToJson(Map.Entry<String, ?> entry) {

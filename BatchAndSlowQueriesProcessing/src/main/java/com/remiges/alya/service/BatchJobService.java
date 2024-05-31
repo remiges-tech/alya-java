@@ -82,6 +82,18 @@ public class BatchJobService {
 	}
 
 	/**
+	 * 
+	 * @param batchId batchId to query
+	 * @return list of batch row for the specified batch
+	 */
+	@Transactional
+	public List<BatchRows> getListOfBatchRowBatchId(UUID batchId) {
+
+		List<BatchRows> batchRows = batchRowRepo.findByBatchId(batchId);
+		return batchRows;
+	}
+
+	/**
 	 * Counts the number of rows in batchrows associated with a batch.
 	 *
 	 * @param batch The batch for which to count the rows.
@@ -177,8 +189,7 @@ public class BatchJobService {
 			batchRowRepo.saveAll(batchRowsList);
 		}
 
-		String redisKey = "ALYA_BATCHSTATUS_" + batch.getId().toString();
-		jedisService.setRedisStatusSlowQuery(redisKey, BatchStatus.BatchAborted.name());
+		jedisService.updateStatusInRedis(batch.getId(), BatchStatus.BatchAborted);
 	}
 
 	/**
@@ -230,28 +241,6 @@ public class BatchJobService {
 
 		} else {
 			return null;
-		}
-	}
-
-	/**
-	 * 
-	 * 
-	 * 
-	 * Updates the status of a batch row.
-	 *
-	 * @param rowId     the ID of the row
-	 * @param newStatus the new status
-	 * @throws Exception if the row ID is invalid or the row is not found
-	 */
-	@Transactional
-	public void updateBatchRowStatus1(Long rowId, BatchStatus newStatus) throws Exception {
-		Optional<BatchRows> batchRowOptional = batchRowRepo.findById(rowId);
-		if (batchRowOptional.isPresent()) {
-			BatchRows batchRow = batchRowOptional.get();
-			batchRow.setBatchStatus(newStatus);
-			batchRowRepo.save(batchRow);
-		} else {
-			throw new Exception("Batch row with ID " + rowId + " not found.");
 		}
 	}
 
@@ -607,8 +596,7 @@ public class BatchJobService {
 			return erlog;
 		}
 
-		jedisService.updateStatusInRedis(batchId, sumutils.getSummaryStatus(),
-				mgrConfig.getALYA_BATCHSTATUS_CACHEDUR_SEC() * 100);
+		jedisService.updateStatusInRedis(batchId, sumutils.getSummaryStatus());
 
 		return "";
 	}

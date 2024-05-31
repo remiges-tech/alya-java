@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.remiges.alya.config.JobManagerConfig;
 import com.remiges.alya.jobs.BatchStatus;
 
 import redis.clients.jedis.Jedis;
@@ -16,16 +17,19 @@ public class JedisService {
 
 	Jedis jedis;
 	private static final Logger logger = LoggerFactory.getLogger(JedisService.class);
-	public static final int ALYA_BATCHSTATUS_CACHEDUR_SEC = 60; 
 
+	JobManagerConfig mgrConfig;
 
-	JedisService(Jedis jedis) {
+	JedisService(Jedis jedis, JobManagerConfig mgrConfig)
+
+	{
+		this.mgrConfig = mgrConfig;
 		this.jedis = jedis;
 	}
 
-	public void updateStatusInRedis(UUID batchID, BatchStatus batchStatus, int expirySec) {
+	public void updateStatusInRedis(UUID batchID, BatchStatus batchStatus) {
 		String redisKey = "ALYA_BATCHSTATUS_" + batchID.toString();
-		long expiry = expirySec;
+		long expiry = mgrConfig.getALYA_BATCHSTATUS_CACHEDUR_SEC() * 100;
 
 		try {
 			jedis.watch(redisKey);
@@ -65,29 +69,6 @@ public class JedisService {
 			e.printStackTrace();
 			return null;
 		}
-	}
-
-	public void setRedisStatus(String redisKey, BatchStatus status) {
-		// Set the status for the slow query in Redis
-		jedis.set(redisKey, status.toString());
-	}
-
-	public BatchStatus getBatchStatus(String redisValue) {
-		return switch (redisValue) {
-		case "SUCCESS" -> BatchStatus.BatchSuccess;
-		case "FAILED" -> BatchStatus.BatchFailed;
-		case "ABORTED" -> BatchStatus.BatchAborted;
-		default -> BatchStatus.BatchTryLater;
-		};
-	}
-
-	// Method to set Redis status for slow query
-	public void setRedisStatusSlowQuery(String redisKey, String status) {
-		// Set the status in Redis
-		jedis.set(redisKey, status);
-
-		// Set expiration time (100 times the cache duration in seconds)
-		jedis.expire(redisKey, 100 * ALYA_BATCHSTATUS_CACHEDUR_SEC);
 	}
 
 }

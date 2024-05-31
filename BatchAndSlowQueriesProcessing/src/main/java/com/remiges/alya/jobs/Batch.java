@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 import java.util.logging.Logger;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -147,21 +149,22 @@ public class Batch {
 	 *                          during the process.
 	 */
 	public AlyaBatchResponse waitOff(String batchId) {
-		Logger logger = Logger.getLogger(AlyaBatchResponse.class.getName());
 		try {
 			Batches batch = batchJobService.getBatchByReqId(batchId);
 
 			// Check if the batch record exists and its status is 'wait'
 			if (batch == null) {
 				throw new IllegalArgumentException("Batch record not found");
-			} else if (batch.getStatus() != BatchStatus.BatchWait) {
+			} else if (batch.getStatus() != BatchStatus.BatchWait &&
+					batch.getStatus() != BatchStatus.BatchQueued) {
 				throw new IllegalArgumentException("Batch status must be 'wait'");
 			}
+			if (batch.getStatus() != BatchStatus.BatchQueued) {
 
 			// Change the status of the batch record to 'queued' and save
 			batch.setStatus(BatchStatus.BatchQueued);
 			batchJobService.saveBatch(batch);
-
+		}
 			// Get the total number of rows in batchrows against this batch
 			int numberOfRows = batchJobService.countBatchRowsByBatch(batch);
 
@@ -265,8 +268,11 @@ public class Batch {
 		try {
 			String redisKey = "ALYA_BATCHSTATUS_" + batchId;
 			String redisValue = jedissrv.getBatchStatusFromRedis(redisKey);
-			BatchStatus status = (redisValue != null) ? jedissrv.getBatchStatus(redisValue)
-					: batchJobService.getBatchStatusByReqId(batchId);
+			BatchStatus status = BatchStatus.BatchTryLater;
+
+			if (redisValue == null) {
+				status = batchJobService.getBatchStatusByReqId(batchId);
+			}
 
 			if (status == BatchStatus.BatchAborted || status == BatchStatus.BatchSuccess
 					|| status == BatchStatus.BatchFailed) {
@@ -276,8 +282,6 @@ public class Batch {
 			Batches batch = batchJobService.getBatchByReqId(batchId);
 			batchJobService.abortBatchAndRows(batch);
 
-			jedissrv.updateStatusInRedis(UUID.fromString(batchId), BatchStatus.BatchAborted,
-					jedissrv.ALYA_BATCHSTATUS_CACHEDUR_SEC * 100);
 			logger.info("Batch with request ID " + batchId + " aborted successfully.");
 		} catch (Exception e) {
 			logger.severe("Error occurred while aborting the batch: " + e.getMessage());
@@ -312,38 +316,50 @@ public class Batch {
 		try {
 			String redisKey = "ALYA_BATCHSTATUS_" + reqID;
 			String redisValue = jedissrv.getBatchStatusFromRedis(redisKey);
-			BatchStatus status = (redisValue != null) ? jedissrv.getBatchStatus(redisValue)
-					: batchJobService.getBatchStatusByReqId(reqID);
+			BatchStatus status = BatchStatus.BatchTryLater;
+			Boolean foundInCache = false;
+			if (redisValue != null) {
+				status = BatchStatus.valueOf(redisValue);
+				foundInCache = true;
+			} else {
+				status = batchJobService.getBatchStatusByReqId(reqID);
+			}
 
-			if (status == BatchStatus.BatchSuccess || status == BatchStatus.BatchFailed) {
+			if (status == BatchStatus.BatchSuccess || status == BatchStatus.BatchFailed ||
+					status == BatchStatus.BatchAborted) {
 				Batches batch = batchJobService.getBatchByReqId(reqID);
-				BatchRows batchRow = batchJobService.getBatchRowByReqId(reqID);
+				UUID batchId = UUID.fromString(reqID);
+				List<BatchRows> batchrows = batchJobService.getListOfBatchRowBatchId(batchId);
 
-				if (batch != null && batchRow != null) {
+				List<BatchOutput_t> listofoutput = batchrows.stream().map(batchRow -> {
+					return new BatchOutput_t(batchRow.getLine(), batchRow.getBatchStatus(), batchRow.getRes(),
+							batchRow.getMessages());
+				}).collect(Collectors.toList());
+
+				// if Status not found in cache and status is failed, abort, success
+				// then set status in redis
+				if (!foundInCache)
+					jedissrv.updateStatusInRedis(batchId, status);
+
+				if (batch != null) {
 					return new BatchOutputResult(status,
-							new BatchOutput_t(batchRow.getLine(), status, batchRow.getRes(), batchRow.getMessages()),
+							listofoutput,
 							batch.getOutputfiles(), batch.getNsuccess(), batch.getNfailed(), batch.getNaborted(),
-							Collections.singletonList(new AlyaBatchErrorMessage(batchRow.getMessages())));
+							ErrorCodes.NOERROR);
 				} else {
 					throw new RuntimeException(
 							"Invalid request ID: Entry is not available in batch rows for request ID: " + reqID);
 				}
-			} else if (status == BatchStatus.BatchAborted) {
-				return new BatchOutputResult(status, null, null, 0, 0, 0, null);
+
 			} else {
-				jedissrv.setRedisStatus(redisKey, status);
+
 				status = BatchStatus.BatchTryLater;
 			}
 			return new BatchOutputResult(status, null, null, 0, 0, 0, null);
-		} catch (NoSuchElementException e) {
-			return new BatchOutputResult(BatchStatus.BatchAborted, null, null, 0, 0, 0,
-					Collections.singletonList(new AlyaBatchErrorMessage("No such element: " + e.getMessage())));
-		} catch (RuntimeException e) {
-			return new BatchOutputResult(BatchStatus.BatchAborted, null, null, 0, 0, 0,
-					Collections.singletonList(new AlyaBatchErrorMessage(e.getMessage())));
 		} catch (Exception e) {
-			return new BatchOutputResult(BatchStatus.BatchAborted, null, null, 0, 0, 0,
-					Collections.singletonList(new AlyaBatchErrorMessage("An unexpected error occurred")));
+			logger.severe("Exception " + e.getMessage());
+			return new BatchOutputResult(BatchStatus.BatchTryLater, null, null, 0, 0, 0,
+					ErrorCodes.ERROR);
 		}
 	}
 
