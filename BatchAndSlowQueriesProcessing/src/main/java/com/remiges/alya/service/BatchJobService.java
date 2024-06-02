@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -473,20 +474,35 @@ public class BatchJobService {
 	}
 
 	/**
-	 * Updates the batch row with the results of a slow query.
+	 * Updates the batches & batch row with the results of a slow query.
 	 *
 	 * @param rowtoproces the batch job to update
 	 * @param batchOutput the batch output
 	 */
-	public void updateBatchRowForSlowQueryoutput(BatchJob rowtoproces, BatchOutput batchOutput) {
-		Optional<BatchRows> sqRow = batchRowRepo.findById(rowtoproces.getRowId());
-		if (sqRow.isPresent()) {
+	public void updateBatchRowForSlowQueryOutput(BatchJob rowToProcess, BatchOutput batchOutput) {
+		Optional<BatchRows> sqRow = batchRowRepo.findById(rowToProcess.getRowId());
+		Optional<Batches> sqBatches = batchesRepo.findById(rowToProcess.getId());
+
+		if (sqRow.isPresent() && sqBatches.isPresent()) {
 			BatchRows batchRows = sqRow.get();
+			Batches batch = sqBatches.get();
+
+			// Update Batches entity
+			batch.setOutputfiles(batchOutput.getBlobRows());
+			batch.setDoneat(Timestamp.from(Instant.now()));
+			batch.setStatus(batchOutput.getStatus());
+
+			// Update BatchRows entity
 			batchRows.setDoneat(Timestamp.from(Instant.now()));
 			batchRows.setBatchStatus(batchOutput.getStatus());
 			batchRows.setRes(batchOutput.getResult());
 			batchRows.setMessages(batchOutput.getMessages());
+
+			// Save changes to the database
+			batchesRepo.save(batch);
 			batchRowRepo.save(batchRows);
+		} else {
+			logger.error("Unable to update batch rows and batches: Row or batch not found");
 		}
 	}
 
@@ -628,5 +644,23 @@ public class BatchJobService {
 			}
 		}
 		return outputfiles;
+	}
+
+	public static String convertSlowQueryResultToCSV(Map<String, String> outputFileData) {
+		StringBuilder csvBuilder = new StringBuilder();
+
+		// Append CSV header (optional, depends on your requirements)
+		csvBuilder.append("Key,Value").append(System.lineSeparator());
+
+		// Append each entry from the HashMap as a CSV row
+		for (Map.Entry<String, String> entry : outputFileData.entrySet()) {
+			csvBuilder.append(entry.getKey()).append(",").append(entry.getValue()).append(System.lineSeparator());
+		}
+
+		return convertToBase64(csvBuilder.toString());
+	}
+
+	public static String convertToBase64(String data) {
+		return Base64.getEncoder().encodeToString(data.getBytes());
 	}
 }

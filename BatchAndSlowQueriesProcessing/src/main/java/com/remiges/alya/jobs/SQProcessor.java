@@ -2,13 +2,9 @@ package com.remiges.alya.jobs;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-public class SQProcessor {
+public abstract class SQProcessor {
 
-    public BatchOutput DoSlowQuery(BatchInitBlocks any, JsonNode jsonNode, String input) {
-
-        return BatchOutput.builder().build();
-    }
-
+    public abstract BatchOutput DoSlowQuery(BatchInitBlocks any, JsonNode jsonNode, String input);
     // public void MarkDone(BatchInitBlock any, String context, batch
     // BatchDetails_t)
 

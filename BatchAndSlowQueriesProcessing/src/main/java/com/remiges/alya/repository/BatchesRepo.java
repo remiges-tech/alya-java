@@ -15,15 +15,14 @@ import com.remiges.alya.entity.Batches;
 public interface BatchesRepo extends JpaRepository<Batches, UUID> {
 //	List<Batches> findByBatch(Batch batch, Sort sort);
 
-    Batches findByReqat(Timestamp reqat);
-	
-    List<Batches> findByAppAndOpAndReqatAfter(String app, String op, LocalDateTime thresholdTime);
-    
-    List<Batches> findByIdAndType(UUID id, char type);
-    
-    List<Batches> findByTypeAndAppAndOpAndReqatAfter(char type, String app, String op, LocalDateTime thresholdTime);
+	Batches findByReqat(Timestamp reqat);
 
+	List<Batches> findByAppAndOpAndReqatAfter(String app, String op, LocalDateTime thresholdTime);
 
+	List<Batches> findByIdAndType(UUID id, char type);
 
+	List<Batches> findByTypeAndAppAndOpAndReqatAfter(char type, String app, String op, LocalDateTime thresholdTime);
+
+	Optional<Batches> findById(UUID id);
 
 }
