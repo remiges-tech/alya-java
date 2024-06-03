@@ -102,65 +102,42 @@ public class JobMgr {
 	 * @param rowtoprocess the batch job row to process
 	 * @return a message indicating the result of the processing
 	 */
-	private String processSlowQuery(BatchJob rowToProcess) {
-	    String processorKey = rowToProcess.getApp() + rowToProcess.getOp();
-	    SQProcessor sqProcessor = slowQueryProcessor.get(processorKey);
+	 private String processSlowQuery(BatchJob rowtoprocess) {
+	        String processorKey = rowtoprocess.getApp() + rowtoprocess.getOp();
+	        SQProcessor sqProcessor = slowQueryProcessor.get(processorKey);
 
-	    if (sqProcessor == null) {
-	        String errorMessage = "No SQ Processor found for app " + rowToProcess.getApp() + " and for OP "
-	                + rowToProcess.getOp();
-	        logger.debug(errorMessage);
-	        return errorMessage;
-	    }
-
-	    try {
-	        // Generate unique identifier for the object
-	        String objectId = "SlowQueryData_" + UUID.randomUUID().toString();
-	        // Generate timestamp for the object
-	        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
-	        // Combine unique identifier and timestamp to create object name
-	        String objectName = objectId + "_" + timestamp + ".csv";
-
-	        // Get or create batch initialization blocks
-	        BatchInitBlocks batchInitBlock = getOrCreateInitBlock(rowToProcess.getApp());
-
-	        // Execute slow query
-	        BatchOutput batchOutput = sqProcessor.DoSlowQuery(batchInitBlock, rowToProcess.getContext(),
-	                rowToProcess.getInput());
-
-	        // Convert slow query result to CSV
-	        String csvData = batchJobService.convertSlowQueryResultToCSV(batchOutput.getBlobRows());
-
-	        // Upload CSV data to MinIO and get object ID
-	        String minioObjId = minioService.uploadBlobToMinio(objectName, csvData, "text/plain");
-
-	        // Update batch job result
-	        HashMap<String, String> blobMap = new HashMap<>();
-	        blobMap.put(minioObjId, csvData);
-	        batchOutput.setBlobRows(blobMap);
-	        updateSlowQueryJobResult(rowToProcess, batchOutput);
-
-	        // Log success message
-	        if (batchOutput.error.equals(ErrorCodes.NOERROR)) {
-	            String successMessage = "Success to process row for app " + rowToProcess.getApp();
-	            logger.debug(successMessage);
-	        } else {
-	            String errorMessage = "Failed to process sq for app " + rowToProcess.getApp();
-	            logger.debug(errorMessage);
-	            return errorMessage;
+	        if (sqProcessor == null) {
+	            String erlog = "No SQ Processor found for app " + rowtoprocess.getApp()
+	                    + " and for OP " + rowtoprocess.getOp();
+	            logger.debug(erlog);
+	            return erlog;
 	        }
 
-	        return "";
-	    } catch (IllegalStateException | IOException ex) {
-	        String errorMessage = "Error processing slow query for app " + rowToProcess.getApp() + ": " + ex.getMessage();
-	        logger.error(errorMessage);
-	        return errorMessage;
-	    } catch (InvalidKeyException | NoSuchAlgorithmException ex) {
-	        String errorMessage = "Error uploading blob to MinIO: " + ex.getMessage();
-	        logger.error(errorMessage);
-	        return errorMessage;
+	        try {
+	            BatchInitBlocks batchInitBlock = getOrCreateInitBlock(rowtoprocess.getApp());
+
+	            BatchOutput batchoutput = sqProcessor.DoSlowQuery(batchInitBlock, rowtoprocess.getContext(),
+	                    rowtoprocess.getInput());
+
+	            updateSlowQueryJobResult(rowtoprocess, batchoutput);
+
+	            if (batchoutput.error.equals(ErrorCodes.NOERROR)) {
+	                String erlog = "Success to process row for app " + rowtoprocess.getApp();
+	                logger.debug(erlog);
+
+	            } else {
+	                String erlog = "failed to process sq for app " + rowtoprocess.getApp();
+	                logger.debug(erlog);
+	                return erlog;
+	            }
+
+	            return "";
+	        } catch (IllegalStateException exs) {
+	            String erlog = "No Initializer found for app " + rowtoprocess.getApp();
+	            logger.debug(erlog);
+	            return erlog;
+	        }
 	    }
-	}
 	/**
 	 * Update slow query processor result to database.
 	 * 
@@ -170,7 +147,7 @@ public class JobMgr {
 	 */
 	private String updateSlowQueryJobResult(BatchJob rowtoproces, BatchOutput batchOutput) {
 		try {
-			batchJobService.updateBatchRowForSlowQueryOutput(rowtoproces, batchOutput);
+			batchJobService.updateBatchRowForSlowQueryoutput(rowtoproces, batchOutput);
 			return "";
 		} catch (Exception ex) {
 			String erlog = "failed to update result for app " + rowtoproces.getApp();

@@ -479,30 +479,16 @@ public class BatchJobService {
 	 * @param rowtoproces the batch job to update
 	 * @param batchOutput the batch output
 	 */
-	public void updateBatchRowForSlowQueryOutput(BatchJob rowToProcess, BatchOutput batchOutput) {
-		Optional<BatchRows> sqRow = batchRowRepo.findById(rowToProcess.getRowId());
-		Optional<Batches> sqBatches = batchesRepo.findById(rowToProcess.getId());
-
-		if (sqRow.isPresent() && sqBatches.isPresent()) {
+	public void updateBatchRowForSlowQueryoutput(BatchJob rowtoproces, BatchOutput batchOutput) {
+		Optional<BatchRows> sqRow = batchRowRepo.findById(rowtoproces.getRowId());
+		if (sqRow.isPresent()) {
 			BatchRows batchRows = sqRow.get();
-			Batches batch = sqBatches.get();
-
-			// Update Batches entity
-			batch.setOutputfiles(batchOutput.getBlobRows());
-			batch.setDoneat(Timestamp.from(Instant.now()));
-			batch.setStatus(batchOutput.getStatus());
-
-			// Update BatchRows entity
 			batchRows.setDoneat(Timestamp.from(Instant.now()));
 			batchRows.setBatchStatus(batchOutput.getStatus());
 			batchRows.setRes(batchOutput.getResult());
 			batchRows.setMessages(batchOutput.getMessages());
-
-			// Save changes to the database
-			batchesRepo.save(batch);
+			batchRows.setBlobrows(batchOutput.getBlobRows());
 			batchRowRepo.save(batchRows);
-		} else {
-			logger.error("Unable to update batch rows and batches: Row or batch not found");
 		}
 	}
 
