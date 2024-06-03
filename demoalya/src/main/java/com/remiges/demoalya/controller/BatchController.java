@@ -96,7 +96,7 @@ public class BatchController {
         String batchId = batch.submit("KRA", PANENQUIRY, JacksonUtil.toJsonNode("{" +
                 "   \"fileName\": \"Transaction.csv\"}"), list, false);
 
-        JobMgr jobMgr = jobMgrcli.getJobMgr();
+        JobMgr jobMgr = jobMgrcli.getJobmrg();
 
         logger.info(jobMgr.toString());
 
