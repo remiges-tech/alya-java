@@ -30,6 +30,7 @@ import com.remiges.alya.jobs.Batch;
 import com.remiges.alya.jobs.BatchInput;
 import com.remiges.alya.jobs.BatchOutputResult;
 import com.remiges.alya.jobs.BatchProcessor;
+import com.remiges.alya.jobs.BatchResultDTO;
 import com.remiges.alya.jobs.BatchStatus;
 import com.remiges.alya.jobs.Initializer;
 import com.remiges.alya.jobs.JobMgr;
@@ -37,6 +38,7 @@ import com.remiges.alya.jobs.JobMgrClient;
 import com.remiges.demoalya.component.TransactionInitializer;
 import com.remiges.demoalya.component.TransactionProcessor;
 import com.remiges.demoalya.dto.BatchAppendDto;
+import com.remiges.demoalya.dto.BatchListDto;
 
 import ch.qos.logback.core.util.Duration;
 import io.hypersistence.utils.hibernate.type.json.internal.JacksonUtil;
@@ -94,25 +96,66 @@ public class BatchController {
         String batchId = batch.submit("KRA", PANENQUIRY, JacksonUtil.toJsonNode("{" +
                 "   \"fileName\": \"Transaction.csv\"}"), list, false);
 
-        JobMgr jobMgr = jobMgrcli.getJobmrg();
+        JobMgr jobMgr = jobMgrcli.getJobMgr();
 
         logger.info(jobMgr.toString());
 
+        /*
+         * JobMgr jobMgr2 = jobMgrcli.getJobMgr();
+         * 
+         * logger.info(jobMgr2.toString());
+         */
         TransactionInitializer intr = new TransactionInitializer(); // JobMgr jobm = new
         try {
             jobMgr.registerInitializer(KRA, intr);
 
             jobMgr.RegisterProcessor(KRA, PANENQUIRY, new TransactionProcessor());
+
+            /*
+             * jobMgr2.registerInitializer(KRA, intr);
+             * 
+             * jobMgr2.RegisterProcessor(KRA, PANENQUIRY, new TransactionProcessor());
+             */
         } catch (Exception ex) {
             logger.debug("Exception while registering processor Manager{}", ex);
         }
         try {
             jobMgr.DoJobs();
+            // jobMgr2.DoJobs();
         } catch (Exception ex) {
             logger.debug("Exception while starting Job Manager{}", ex);
         }
 
         return batchId;
+    }
+
+    @PostMapping("/abort")
+    public String abortBatch(@RequestParam String batchId) {
+        // TODO: process POST request
+        String strerror = "";
+        try {
+
+            batch.abort(batchId);
+            strerror = "Batch aborted successfully";
+        } catch (Exception ex) {
+            strerror = " Exception while aborting batch" + ex.getMessage();
+
+        }
+
+        return strerror;
+    }
+
+    @GetMapping("list")
+    public ResponseEntity<?> listBatches(@RequestBody BatchListDto lstbatchDto) {
+
+        List<BatchResultDTO> batchList = batch.list(lstbatchDto.getApp(), lstbatchDto.getOp(), lstbatchDto.getAge());
+        String error = "No batch found";
+        if (batchList.size() <= 0) {
+            return ResponseEntity.ok().body(error);
+        }
+
+        return ResponseEntity.ok().body(batchList);
+
     }
 
     @PostMapping("BatchAppend")
@@ -147,10 +190,10 @@ public class BatchController {
     }
 
     @PostMapping("batchWaitOff")
-    public ResponseEntity<String> batchWaitOff(@RequestBody String entity) {
+    public ResponseEntity<String> batchWaitOff(@RequestParam String batchId) {
         try {
 
-            AlyaBatchResponse res = batch.waitOff(entity);
+            AlyaBatchResponse res = batch.waitOff(batchId);
             return ResponseEntity.ok(res.toString());
         } catch (Exception e) {
             return ResponseEntity.ok(e.toString());

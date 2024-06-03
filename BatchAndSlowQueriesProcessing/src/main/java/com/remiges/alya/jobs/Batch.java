@@ -227,10 +227,19 @@ public class Batch {
 		batchDetails.setStatus(batch.getStatus());
 		batchDetails.setReqat(batch.getReqat().toLocalDateTime());
 		batchDetails.setDoneat(batch.getDoneat() != null ? batch.getDoneat().toLocalDateTime() : null);
-		batchDetails.setOutputfiles(batch.getOutputfiles());
-		batchDetails.setNsuccess(batch.getNsuccess());
-		batchDetails.setNfailed(batch.getNfailed());
-		batchDetails.setNaborted(batch.getNaborted());
+		batchDetails.setOutputfiles(batch.getOutputfiles() != null ? batch.getOutputfiles() : null);
+		if (batch.getNsuccess() != null) {
+			batchDetails.setNsuccess(batch.getNsuccess());
+		}
+
+		if (batch.getNfailed() != null) {
+			batchDetails.setNfailed(batch.getNfailed());
+		}
+
+		if (batch.getNaborted() != null) {
+			batchDetails.setNaborted(batch.getNaborted());
+
+		}
 
 		// Fetch nrows from batchrows table and set it in the DTO
 		int nrows = batchJobService.getNrowsByBatchId(batch.getId()); // Assuming you have a method to fetch nrows by

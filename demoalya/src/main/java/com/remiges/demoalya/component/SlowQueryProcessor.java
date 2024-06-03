@@ -16,7 +16,7 @@ import com.remiges.alya.jobs.SQProcessor;
 
 import redis.clients.jedis.Jedis;
 
-public class SlowQueryProcessor implements SQProcessor {
+public class SlowQueryProcessor extends SQProcessor {
 
 	@Override
 	public BatchOutput DoSlowQuery(BatchInitBlocks initBlock, JsonNode context, String input) {
