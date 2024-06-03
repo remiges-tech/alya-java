@@ -1,5 +1,6 @@
 package com.remiges.alya.jobs;
 
+import java.util.List;
 import java.util.Map;
 
 import lombok.AllArgsConstructor;
@@ -15,5 +16,7 @@ public class BatchOutput {
     String result;
     String messages;
     Map<String, String> blobRows;
+    Map<String, List<Map<String, String>>> slowQueryblobRows;
+
     ErrorCodes error;
 }
