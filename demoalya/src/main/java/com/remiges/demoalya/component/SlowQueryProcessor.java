@@ -3,9 +3,13 @@ package com.remiges.demoalya.component;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.remiges.alya.jobs.BatchInitBlocks;
@@ -20,23 +24,37 @@ public class SlowQueryProcessor extends SQProcessor {
 
 	@Override
 	public BatchOutput DoSlowQuery(BatchInitBlocks initBlock, JsonNode context, String input) {
-		Map<String, String> blobRows = new HashMap<>();
+		Map<String, List<Map<String, String>>> blobMap = new HashMap<>();
 		String messages = "";
 
 		SlowQueryInitBlock slowQueryInitializer = (SlowQueryInitBlock) initBlock;
 
 		Jedis jedis = slowQueryInitializer.getRedisConnection();
 		Connection dbConnection = slowQueryInitializer.getDatabaseConnection();
+		String fileName = generateUniqueFileName();
 
 		try {
 			// Execute the PostgreSQL query
 			try (PreparedStatement statement = dbConnection.prepareStatement(input)) {
 				try (ResultSet resultSet = statement.executeQuery()) {
+					ResultSetMetaData metaData = resultSet.getMetaData();
+					int columnCount = metaData.getColumnCount();
+
 					while (resultSet.next()) {
-						// Assuming the result contains columns "id" and "output"
-						String id = resultSet.getString("id");
-						String output = resultSet.getString("output");
-						blobRows.put(id, output);
+						// Generate unique file name
+
+						// Create a map to store the column names and values dynamically
+						Map<String, String> rowMap = new HashMap<>();
+						for (int i = 1; i <= columnCount; i++) {
+							String columnName = metaData.getColumnName(i);
+							String columnValue = resultSet.getString(i);
+							rowMap.put(columnName, columnValue);
+						}
+
+						// Add the row map to the list corresponding to the file name
+						List<Map<String, String>> fileList = blobMap.getOrDefault(fileName, new ArrayList<>());
+						fileList.add(rowMap);
+						blobMap.put(fileName, fileList);
 					}
 				}
 			}
@@ -45,9 +63,14 @@ public class SlowQueryProcessor extends SQProcessor {
 			e.printStackTrace(); // Log the exception for debugging
 		}
 
-		// Now you have the query output stored in the blobRows map
+		// Now you have the query output stored in the blobMap map
 		// You can perform further processing or return it as needed
 
-		return new BatchOutput(BatchStatus.BatchSuccess, null, null, blobRows, ErrorCodes.NOERROR);
+		return new BatchOutput(BatchStatus.BatchSuccess, null, null, null, blobMap, ErrorCodes.NOERROR);
+	}
+
+	// Method to generate a unique file name
+	private String generateUniqueFileName() {
+		return System.currentTimeMillis() + "_" + UUID.randomUUID().toString();
 	}
 }
