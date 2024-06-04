@@ -3,7 +3,7 @@ package com.remiges.demoalya.dto;
 import lombok.Data;
 
 @Data
-public class BatchAppendDto {
+public class BatchInputDto {
 
     String batchId;
 

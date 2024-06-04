@@ -27,7 +27,7 @@ public class JedisService {
 		this.jedis = jedis;
 	}
 
-	public void updateStatusInRedis(UUID batchID, BatchStatus batchStatus) {
+	public synchronized void updateStatusInRedis(UUID batchID, BatchStatus batchStatus) {
 		String redisKey = "ALYA_BATCHSTATUS_" + batchID.toString();
 		long expiry = mgrConfig.getALYA_BATCHSTATUS_CACHEDUR_SEC() * 100;
 

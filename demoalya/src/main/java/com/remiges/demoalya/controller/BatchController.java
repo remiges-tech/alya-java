@@ -37,7 +37,8 @@ import com.remiges.alya.jobs.JobMgr;
 import com.remiges.alya.jobs.JobMgrClient;
 import com.remiges.demoalya.component.TransactionInitializer;
 import com.remiges.demoalya.component.TransactionProcessor;
-import com.remiges.demoalya.dto.BatchAppendDto;
+
+import com.remiges.demoalya.dto.BatchInputDto;
 import com.remiges.demoalya.dto.BatchListDto;
 
 import ch.qos.logback.core.util.Duration;
@@ -71,13 +72,13 @@ public class BatchController {
     }
 
     @PostMapping("/submitbatch")
-    public String submitBatch(@RequestParam("base64File") String base64File) {
+    public String submitBatch(@RequestBody BatchInputDto batchDto) {
         // TODO: process POST request
 
         String KRA = "KRA";
         String PANENQUIRY = "PANENQURY";
 
-        List<Map<String, String>> inputdata = loadCSV(base64File);
+        List<Map<String, String>> inputdata = loadCSV(batchDto.getBase64File());
 
         List<BatchInput> list = new ArrayList<>();
         AtomicInteger lineNumber = new AtomicInteger(1);
@@ -94,9 +95,9 @@ public class BatchController {
         });
 
         String batchId = batch.submit("KRA", PANENQUIRY, JacksonUtil.toJsonNode("{" +
-                "   \"fileName\": \"Transaction.csv\"}"), list, false);
+                "   \"fileName\": \"Transaction.csv\"}"), list, batchDto.getWaitoff());
 
-        JobMgr jobMgr = jobMgrcli.getJobmrg();
+        JobMgr jobMgr = jobMgrcli.getJobMgr();
 
         logger.info(jobMgr.toString());
 
@@ -159,7 +160,7 @@ public class BatchController {
     }
 
     @PostMapping("BatchAppend")
-    public ResponseEntity<String> BatchAppend(@RequestBody BatchAppendDto dBatchAppendDto) {
+    public ResponseEntity<String> BatchAppend(@RequestBody BatchInputDto dBatchAppendDto) {
         // TODO: process POST request
         try {
             List<Map<String, String>> inputdata = loadCSV(dBatchAppendDto.getBase64File());

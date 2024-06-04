@@ -2,6 +2,7 @@ package com.remiges.alya.jobs;
 
 import org.hibernate.bytecode.internal.bytebuddy.PrivateAccessorException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -15,10 +16,11 @@ import lombok.RequiredArgsConstructor;
 @Scope("prototype")
 public class JobMgrClient {
 
-    private JobMgr jobmrg;
 
-    JobMgrClient(JobMgr jobmrg) {
-        this.jobmrg = jobmrg;
+    @Lookup
+    public JobMgr getJobMgr() {
+        return null;
     }
+
 
 }

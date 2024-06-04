@@ -76,6 +76,7 @@ public class BatchJobService {
 
 	}
 
+	@Transactional
 	public int getNrowsByBatchId(UUID batchId) {
 		// Assuming BatchRowRepository has a method to find nrows by batchId
 		List<BatchRows> batchRows = batchRowRepo.findByBatchId(batchId);
@@ -116,27 +117,7 @@ public class BatchJobService {
 		return batchesRepo.save(batch);
 	}
 
-	/**
-	 * Saves a batch row into the database.
-	 *
-	 * @param batch  the batch associated with the row
-	 * @param lineNo the line number of the row
-	 * @param string the input data of the row
-	 */
-	@Transactional
-	public void saveBatchRow(Batches batch, int lineNo, String input) {
-		// Define a supplier for creating BatchRows
-		Supplier<BatchRows> batchRowSupplier = () -> {
-			BatchRows batchRow = new BatchRows();
-			batchRow.setBatch(batch);
-			batchRow.setLine(lineNo);
-			batchRow.setInput(input);
-			return batchRow;
-		};
 
-		// Save the BatchRows
-		batchRowRepo.save(batchRowSupplier.get());
-	}
 
 	/**
 	 * Finds batches by type, application, operation, and request time after a
@@ -293,7 +274,7 @@ public class BatchJobService {
 				BatchRows batchRow = new BatchRows();
 				batchRow.setBatch(batchJob);
 				batchRow.setBatchStatus(status);
-				batchRow.setLine(1);
+				batchRow.setLine(0);
 				batchRow.setReqat(new Timestamp(System.currentTimeMillis()));
 				batchRow.setInput(input.toString());
 				batchRowsList.add(batchRow);
@@ -365,6 +346,51 @@ public class BatchJobService {
 		}
 	}
 
+	@Transactional
+	public void appendBatchToExisting(Batches batch, List<BatchInput> batchInput, boolean waitABit) {
+
+		List<BatchRows> batchRowsList = new ArrayList<>();
+
+		batchInput.forEach(input -> {
+
+			BatchStatus status = BatchStatus.BatchQueued;
+			if (waitABit) {
+				status = BatchStatus.BatchWait;
+			}
+
+			BatchRows batchRow = new BatchRows();
+			batchRow.setBatch(batch);
+			batchRow.setBatchStatus(status);
+			batchRow.setLine(input.getLine());
+			batchRow.setReqat(new Timestamp(System.currentTimeMillis()));
+			batchRow.setInput(input.getInput());
+			batchRowsList.add(batchRow);
+
+		});
+
+		List<BatchRows> existingBatchrw = batchRowRepo.findByBatch(batch, null);
+
+		if (!waitABit) {
+			for (BatchRows batchRows : existingBatchrw) {
+				batchRows.setBatchStatus(BatchStatus.BatchQueued);
+			}
+
+			batchRowRepo.saveAll(existingBatchrw);
+			// batchRowsList.addAll(existingBatchrw);
+		}
+
+		if (!batchRowsList.isEmpty()) {
+			// Save batch job and its rows in a single operation
+			batchRowRepo.saveAll(batchRowsList);
+		}
+
+		// Change the status of the batch record if not waiting
+		if (!waitABit) {
+			batch.setStatus(BatchStatus.BatchQueued);
+			saveBatch(batch);
+		}
+	}
+
 	/**
 	 * Retrieves all queued batch rows with the specified status.
 	 *
@@ -379,6 +405,29 @@ public class BatchJobService {
 
 		return batchRowRepo.findAllWithBatches(status, pageable);
 
+	}
+
+	public void updateBatchRowsStatusByBatch(Batches batch, BatchStatus batchStatus) throws Exception {
+
+		List<BatchRows> batchRowsToUpdate = batchRowRepo.findByBatchId(batch.getId());
+
+		for (BatchRows batchRow : batchRowsToUpdate) {
+			batchRow.setBatchStatus(batchStatus);
+		}
+		batchRowRepo.saveAll(batchRowsToUpdate);
+
+	}
+
+	public void updateBatchListStatus(Set<UUID> batchIds, BatchStatus status) throws Exception {
+		List<Batches> batchesToUpdate = batchesRepo.findAllById(batchIds);
+		if (!batchesToUpdate.isEmpty()) {
+			for (Batches batch : batchesToUpdate) {
+				batch.setStatus(status);
+			}
+			batchesRepo.saveAll(batchesToUpdate);
+		} else {
+			throw new Exception("No batches found for the given IDs.");
+		}
 	}
 
 	@Transactional
@@ -402,6 +451,7 @@ public class BatchJobService {
 	@Transactional
 	public void updateBatchStatus(UUID batchId, BatchStatus status) throws Exception {
 		Optional<Batches> batch = batchesRepo.findById(batchId);
+
 		if (batch.isPresent()) {
 			batch.get().setStatus(status);
 			batchesRepo.save(batch.get());
@@ -409,6 +459,7 @@ public class BatchJobService {
 			throw new Exception("Batch not found for ID: " + batchId);
 		}
 	}
+
 
 	/**
 	 * Updates the summary of a batch.
@@ -462,15 +513,19 @@ public class BatchJobService {
 			}
 		}
 
-		for (UUID batchId : batchIds) {
-			try {
-				updateBatchStatus(batchId, status);
-			} catch (Exception e) {
-				String erlog = "exception while updating batch status ex = " + e.getMessage();
-				logger.debug(erlog);
-				throw e;
-			}
-		}
+		this.updateBatchListStatus(batchIds, status);
+		/*
+		 * for (UUID batchId : batchIds) {
+		 * try {
+		 * updateBatchStatus(batchId, status);
+		 * } catch (Exception e) {
+		 * String erlog = "exception while updating batch status ex = " +
+		 * e.getMessage();
+		 * logger.debug(erlog);
+		 * throw e;
+		 * }
+		 * }
+		 */
 	}
 
 	/**

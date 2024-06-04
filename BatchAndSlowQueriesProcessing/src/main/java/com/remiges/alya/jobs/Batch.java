@@ -120,14 +120,9 @@ public class Batch {
 				throw new IllegalArgumentException("Batch status must be wait");
 			}
 
+			
 			// Write records to batch rows
-			batchInput.forEach(input -> batchJobService.saveBatchRow(batch, input.getLine(), input.getInput()));
-
-			// Change the status of the batch record if not waiting
-			if (!waitABit) {
-				batch.setStatus(BatchStatus.BatchQueued);
-				batchJobService.saveBatch(batch);
-			}
+			batchJobService.appendBatchToExisting(batch, batchInput, waitABit);
 
 			// Return AlyaBatchResponse
 			return new AlyaBatchResponse(batchId, batchInput.size());
@@ -164,6 +159,8 @@ public class Batch {
 			// Change the status of the batch record to 'queued' and save
 			batch.setStatus(BatchStatus.BatchQueued);
 			batchJobService.saveBatch(batch);
+			
+			batchJobService.updateBatchRowsStatusByBatch(batch, BatchStatus.BatchQueued);
 		}
 			// Get the total number of rows in batchrows against this batch
 			int numberOfRows = batchJobService.countBatchRowsByBatch(batch);
@@ -281,10 +278,16 @@ public class Batch {
 
 			if (redisValue == null) {
 				status = batchJobService.getBatchStatusByReqId(batchId);
+			} else {
+
+				status = BatchStatus.valueOf(redisValue);
 			}
+
+			logger.info("trying to abort batch with status " + status);
 
 			if (status == BatchStatus.BatchAborted || status == BatchStatus.BatchSuccess
 					|| status == BatchStatus.BatchFailed) {
+				logger.info("Cannot abort batch with status " + status);
 				throw new Exception("Cannot abort batch with status " + status);
 			}
 
@@ -351,9 +354,12 @@ public class Batch {
 					jedissrv.updateStatusInRedis(batchId, status);
 
 				if (batch != null) {
+
+					
 					return new BatchOutputResult(status,
 							listofoutput,
-							batch.getOutputfiles(), batch.getNsuccess(), batch.getNfailed(), batch.getNaborted(),
+							batch.getOutputfiles(), (batch.getNsuccess() != null) ? batch.getNsuccess().intValue() : 0,
+																	( batch.getNfailed() != null ) ? batch.getNfailed() : 0,  ( batch.getNaborted() != null ) ? batch.getNaborted() : 0,
 							ErrorCodes.NOERROR);
 				} else {
 					throw new RuntimeException(
