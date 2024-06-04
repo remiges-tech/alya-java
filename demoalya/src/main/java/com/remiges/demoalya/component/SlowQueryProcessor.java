@@ -24,9 +24,9 @@ public class SlowQueryProcessor extends SQProcessor {
 
 	@Override
 	public BatchOutput DoSlowQuery(BatchInitBlocks initBlock, JsonNode context, String input) {
-		Map<String, List<Map<String, String>>> blobMap = new HashMap<>();
+		Map<String, String> blobMap = new HashMap<>();
 		String messages = "";
-
+		Map<String, String> rowMap = null;
 		SlowQueryInitBlock slowQueryInitializer = (SlowQueryInitBlock) initBlock;
 
 		Jedis jedis = slowQueryInitializer.getRedisConnection();
@@ -44,20 +44,17 @@ public class SlowQueryProcessor extends SQProcessor {
 						// Generate unique file name
 
 						// Create a map to store the column names and values dynamically
-						Map<String, String> rowMap = new HashMap<>();
+						rowMap = new HashMap<>();
 						for (int i = 1; i <= columnCount; i++) {
 							String columnName = metaData.getColumnName(i);
 							String columnValue = resultSet.getString(i);
 							rowMap.put(columnName, columnValue);
 						}
 
-						// Add the row map to the list corresponding to the file name
-						List<Map<String, String>> fileList = blobMap.getOrDefault(fileName, new ArrayList<>());
-						fileList.add(rowMap);
-						blobMap.put(fileName, fileList);
 					}
 				}
 			}
+			blobMap.put("SlowQueryResultFile", rowMap.toString());
 		} catch (SQLException e) {
 			messages = "Error executing SQL query: " + e.getMessage();
 			e.printStackTrace(); // Log the exception for debugging
@@ -66,7 +63,7 @@ public class SlowQueryProcessor extends SQProcessor {
 		// Now you have the query output stored in the blobMap map
 		// You can perform further processing or return it as needed
 
-		return new BatchOutput(BatchStatus.BatchSuccess, null, null, null, blobMap, ErrorCodes.NOERROR);
+		return new BatchOutput(BatchStatus.BatchSuccess, null, null, null, ErrorCodes.NOERROR);
 	}
 
 	// Method to generate a unique file name
