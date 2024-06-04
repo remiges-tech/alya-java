@@ -1,5 +1,11 @@
 package com.remiges.alya.constant;
 
+/**
+ * Class containing regex patterns for field validation.
+ * This class provides constant regex patterns for validating various types of fields,
+ * such as names, emails, PAN numbers, Aadhar numbers, etc.
+ */
+
 public class ValidationConstant {
 
  // Regex patterns for validation

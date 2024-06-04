@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.remiges.alya.model.RequestDTO;
 import com.remiges.alya.service.AlyaFormatService;
-import com.remiges.alya.service.AlyaValidation;
+import com.remiges.alya.validation.AlyaValidation;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,7 +19,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/request")
 @Validated
-@Slf4j
 public class ExampleController {
 
         @Autowired

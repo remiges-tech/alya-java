@@ -1,64 +1,60 @@
 package com.remiges.alya.model;
 
+import com.remiges.alya.annotation.FieldType;
 import com.remiges.alya.annotation.ValidField;
-import com.remiges.alya.constant.ValidationConstant;
-import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Represents a data transfer object (DTO) used for making requests in the Alya system.
+ * This class contains fields annotated with {@link ValidField} to specify validation rules.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class RequestDTO{
 
-    
-    @ValidField(regex = ValidationConstant.NAME_REGEX, message = "Name must contain only alphabets")
+    @ValidField(message = "Invalid name", fieldType = FieldType.NAME)
     private String name;
 
-    @ValidField(regex = ValidationConstant.EMAIL_REGEX, message = "Invalid email format")
+    @ValidField(message = "Invalid email", fieldType = FieldType.EMAIL)
     private String email;
 
-    @ValidField(regex = ValidationConstant.PAN_REGEX, message = "Invalid PAN format")
+    @ValidField(message = "Invalid PAN format", fieldType = FieldType.PAN)
     private String pan;
 
-    @ValidField(regex = ValidationConstant.AADHAR_REGEX, message = "Invalid Aadhar number format")
+    @ValidField(message = "Invalid Aadhar number format", fieldType = FieldType.AADHAR)
     private String aadhar;
 
-    @ValidField(regex = ValidationConstant.GST_REGEX, message = "Invalid GST format")
+    @ValidField(message = "Invalid GST format", fieldType = FieldType.GST)
     private String gst;
 
-    @ValidField(regex = "\\d{10}", message = "Invalid mobile number format")
+    @ValidField(message = "Invalid mobile number format", fieldType = FieldType.MOBILE_NUMBER)
     private String mobileNumber;
 
-    @ValidField(regex = ValidationConstant.DRIVING_LICENSE_REGEX, message = "Invalid driving license format")
+    @ValidField(message = "Invalid driving license format", fieldType = FieldType.DRIVING_LICENSE)
     private String drivingLicense;
 
-    @ValidField(regex = ValidationConstant.POSTAL_CODE_REGEX, message = "Invalid postal code format")
+    @ValidField(message = "Invalid postal code format", fieldType = FieldType.POSTAL_CODE)
     private String postalCode;
 
-    @ValidField(regex = ValidationConstant.POST_OFFICE_NAME_REGEX, message = "Invalid post office name format")
+    @ValidField(message = "Invalid post office name format", fieldType = FieldType.POST_OFFICE_NAME)
     private String postOfficeName;
 
-    @ValidField(regex = ValidationConstant.PASSWORD_PATTERN, message = "Password must contain at least one digit, one lowercase and one uppercase letter, and at least 8 characters")
+    @ValidField(message = "Password must contain at least one digit, one lowercase and one uppercase letter, and at least 8 characters", fieldType = FieldType.PASSWORD)
     private String password;
 
-    @Pattern(regexp = ValidationConstant.URL_PATTERN, message = "Invalid URL format")
+    @ValidField(message = "check url", fieldType = FieldType.URL)
     private String url;
 
-    @ValidField(regex = ValidationConstant.CARD_NUMBER_PATTERN, message = "Invalid card number format")
+    @ValidField(message = "Invalid card number format", fieldType = FieldType.CARD_NUMBER)
     private String cardNumber;
 
-    @ValidField(regex = ValidationConstant.PASSPORT_NUMBER_PATTERN, message = "Invalid passport format")
+    @ValidField(message = "Invalid passport format", fieldType = FieldType.PASSPORT_NUMBER)
     private String passport;
-
-    // public Object getField() {
-    //     // TODO Auto-generated method stub
-    //     throw new UnsupportedOperationException("Unimplemented method 'getField'");
-    // }
-
 
 }
 // This is an example to give DTO as request.
