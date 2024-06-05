@@ -37,18 +37,18 @@ public class TransactionProcessor implements BatchProcessor {
             } catch (Exception ex) {
                 messages = ex.getMessage();
                 result = "failed to update balance in redis ";
-                return new BatchOutput(BatchStatus.BatchFailed, result, messages, null, null, ErrorCodes.ERROR);
+                return new BatchOutput(BatchStatus.BatchFailed, result, messages, null, ErrorCodes.ERROR);
 
             }
 
         } catch (Exception ex) {
             messages = ex.getMessage();
             result = "failed to process transaction  ";
-            return new BatchOutput(BatchStatus.BatchFailed, result, messages, null, null, ErrorCodes.ERROR);
+            return new BatchOutput(BatchStatus.BatchFailed, result, messages, null, ErrorCodes.ERROR);
 
         }
 
-        return new BatchOutput(BatchStatus.BatchSuccess, result, null, blobRows, null, ErrorCodes.NOERROR);
+        return new BatchOutput(BatchStatus.BatchSuccess, result, null, blobRows, ErrorCodes.NOERROR);
 
     }
 

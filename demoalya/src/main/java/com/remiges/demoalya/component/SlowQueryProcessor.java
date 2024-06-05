@@ -22,10 +22,16 @@ import redis.clients.jedis.Jedis;
 
 public class SlowQueryProcessor extends SQProcessor {
 
+	// Method to generate a unique file name
+	private String generateUniqueFileName() {
+		return System.currentTimeMillis() + "_" + UUID.randomUUID().toString();
+	}
+
 	@Override
-	public BatchOutput DoSlowQuery(SlowQueryInitBlock initBlock, JsonNode context, String input) {
+	public BatchOutput DoSlowQuery(BatchInitBlocks initBlock, JsonNode jsonNode, String input) {
 		Map<String, String> blobMap = new HashMap<>();
 		String messages = "";
+		String result = "";
 		Map<String, String> rowMap = null;
 		SlowQueryInitBlock slowQueryInitializer = (SlowQueryInitBlock) initBlock;
 
@@ -60,14 +66,10 @@ public class SlowQueryProcessor extends SQProcessor {
 			e.printStackTrace(); // Log the exception for debugging
 		}
 
+		result = "Query executed successfully";
 		// Now you have the query output stored in the blobMap map
 		// You can perform further processing or return it as needed
 
-		return new BatchOutput(BatchStatus.BatchSuccess, null, null, null, ErrorCodes.NOERROR);
-	}
-
-	// Method to generate a unique file name
-	private String generateUniqueFileName() {
-		return System.currentTimeMillis() + "_" + UUID.randomUUID().toString();
+		return new BatchOutput(BatchStatus.BatchSuccess, result, messages, blobMap, ErrorCodes.NOERROR);
 	}
 }

@@ -6,9 +6,11 @@ import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.ToString;
 
 @Data
 @Builder
+@ToString
 @AllArgsConstructor
 public class BatchOutput {
 
@@ -16,7 +18,6 @@ public class BatchOutput {
     String result;
     String messages;
     Map<String, String> blobRows;
-    Map<String, List<Map<String, String>>> slowQueryblobRows;
 
     ErrorCodes error;
 }

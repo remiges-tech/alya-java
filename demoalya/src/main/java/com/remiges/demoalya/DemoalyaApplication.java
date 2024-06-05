@@ -15,21 +15,7 @@ import com.remiges.demoalya.component.SlowQueryProcessor;
 @EntityScan(basePackages = { "com.remiges.alya.entity" })
 public class DemoalyaApplication {
 
-	public static void main(String[] args) {
-        SlowQueryInitBlock initBlock = new SlowQueryInitBlock();
-        JsonNode context = null; // You can initialize this if needed
-        String inputQuery = "SELECT * FROM batches"; // Replace with your SQL query
-
-        // Instantiate the SlowQueryProcessor
-        SlowQueryProcessor processor = new SlowQueryProcessor();
-
-        // Execute the method
-        BatchOutput output = processor.DoSlowQuery(initBlock, context, inputQuery);
-
-        // Print or process the output as needed
-        System.out.println("Batch status: " + output.getStatus());
-       System.out.println("Error code: " + output.getBlobRows());
-        // Process blobMap if needed
+    public static void main(String[] args) {
        
 		SpringApplication.run(DemoalyaApplication.class, args);
 

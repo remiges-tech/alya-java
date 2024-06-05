@@ -83,7 +83,7 @@ public class SlowQueryTest {
         batch.setStatus(BatchStatus.BatchSuccess);
         BatchRows batchRow = new BatchRows();
         batchRow.setBatchStatus(BatchStatus.BatchSuccess);
-        when(batchJobServiceMock.getBatchRowByReqId(requestId.toString())).thenReturn(batchRow);
+        when(batchJobServiceMock.getSQBatchRowByReqId(requestId.toString())).thenReturn(batchRow);
         doNothing().when(batchJobServiceMock).updateBatchRowStatus(batchRow.getRowId(), BatchStatus.BatchSuccess);
 
         // Call the method

@@ -35,6 +35,7 @@ import com.remiges.alya.jobs.BatchStatus;
 import com.remiges.alya.jobs.Initializer;
 import com.remiges.alya.jobs.JobMgr;
 import com.remiges.alya.jobs.JobMgrClient;
+import com.remiges.demoalya.component.TransactionGenerator;
 import com.remiges.demoalya.component.TransactionInitializer;
 import com.remiges.demoalya.component.TransactionProcessor;
 
@@ -97,7 +98,7 @@ public class BatchController {
         String batchId = batch.submit("KRA", PANENQUIRY, JacksonUtil.toJsonNode("{" +
                 "   \"fileName\": \"Transaction.csv\"}"), list, batchDto.getWaitoff());
 
-        JobMgr jobMgr = jobMgrcli.getJobmrg();
+        JobMgr jobMgr = jobMgrcli.getJobMgr();
 
         logger.info(jobMgr.toString());
 
@@ -199,6 +200,16 @@ public class BatchController {
         } catch (Exception e) {
             return ResponseEntity.ok(e.toString());
         }
+
+    }
+
+    @GetMapping("generate")
+    public String generate() {
+
+        TransactionGenerator t = new TransactionGenerator();
+        t.Generate("records.csv", 10);
+
+        return "success";
 
     }
 

@@ -2,6 +2,7 @@ package com.remiges.demoalya.controller;
 
 import java.util.List;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,13 +12,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.remiges.alya.jobs.JobMgr;
 import com.remiges.alya.jobs.JobMgrClient;
 import com.remiges.alya.jobs.SlowQueriesResultList;
 import com.remiges.alya.jobs.SlowQuery;
 import com.remiges.alya.jobs.SlowQueryResult;
+import com.remiges.demoalya.component.SQInitializer;
 import com.remiges.demoalya.component.SlowQueryInitBlock;
 import com.remiges.demoalya.component.SlowQueryProcessor;
+
+import io.hypersistence.utils.hibernate.type.json.internal.JacksonUtil;
 
 @RestController
 @RequestMapping("/api")
@@ -30,20 +35,22 @@ public class SlowQueryController {
 	private JobMgrClient jobMgrcli;
 
 	@PostMapping("/submit")
-	public String submit(@RequestParam String app, @RequestParam String op, @RequestBody JsonNode context,
-			@RequestParam String input) {
+	public String submit() {
 
 		String apps = "KRA";
 		String ops = "PANENQURY";
 
-		SlowQueryInitBlock initBlock = new SlowQueryInitBlock();
-		JsonNode contexts = null; // You can initialize this if needed
+		SQInitializer sqInitializer = new SQInitializer();
+
+		JsonNode context = JacksonUtil.toJsonNode("{" +
+				"   \"fileName\": \"Transaction.csv\"}");
+
 		String inputQuery = "SELECT * FROM batches"; // Replace with your SQL query
 
-		String batchId = slowQueryService.submit(apps, ops, contexts, inputQuery);
-		JobMgr jobMgr = jobMgrcli.getJobmrg();
+		String batchId = slowQueryService.submit(apps, ops, context, inputQuery);
+		JobMgr jobMgr = jobMgrcli.getJobMgr();
 
-		jobMgr.registerInitializer(apps, initBlock);
+		jobMgr.registerInitializer(apps, sqInitializer);
 
 		jobMgr.RegisterSQProcessor(apps, ops, new SlowQueryProcessor());
 		jobMgr.DoJobs();
@@ -58,7 +65,12 @@ public class SlowQueryController {
 
 	@PostMapping("/abort")
 	public void abort(@RequestParam String reqID) throws Exception {
-		slowQueryService.abort(reqID);
+		try {
+			slowQueryService.abort(reqID);
+		} catch (Exception ex) {
+
+		}
+
 	}
 
 	@GetMapping("/list")

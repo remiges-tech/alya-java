@@ -122,16 +122,23 @@ public class SlowQuery {
 
 		try {
 			String redisValue = jedissrv.getBatchStatusFromRedis(redisKey);
-
-			if (redisValue == null) {
-
+			Boolean foundInCache = false;
+			if (redisValue != null) {
+				status = BatchStatus.valueOf(redisValue);
+				foundInCache = true;
+			} else {
 				status = batchJobService.getSlowQueryStatusByReqId(reqID);
 			}
 
 			if (status == BatchStatus.BatchSuccess || status == BatchStatus.BatchFailed) {
-				BatchRows batchRow = batchJobService.getBatchRowByReqId(reqID);
+				BatchRows batchRow = batchJobService.getSQBatchRowByReqId(reqID);
 				if (batchRow != null) {
 					status = batchRow.getBatchStatus();
+
+					// if Status not found in cache and status is failed, abort, success
+					// then set status in redis
+					if (!foundInCache)
+						jedissrv.updateStatusInRedis(UUID.fromString(reqID), status);
 
 					List<AlyaErrorMessage> errlist = Collections
 							.singletonList(new AlyaErrorMessage(batchRow.getMessages()));
@@ -143,7 +150,7 @@ public class SlowQuery {
 			} else if (status == BatchStatus.BatchAborted) {
 				return new SlowQueryResult(BatchStatus.BatchAborted, null, null, null, null);
 			} else {
-				// jedissrv.setRedisStatus(redisKey, status);
+
 				status = BatchStatus.BatchTryLater;
 			}
 		} catch (Exception e) {

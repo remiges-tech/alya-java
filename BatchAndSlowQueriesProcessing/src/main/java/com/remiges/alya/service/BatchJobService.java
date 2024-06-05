@@ -196,6 +196,7 @@ public class BatchJobService {
 	 * @param reqID the request ID
 	 * @return the batch status
 	 */
+	@Transactional
 	public BatchStatus getSlowQueryStatusByReqId(String reqID) {
 		List<Batches> lstbatch = batchesRepo.findByIdAndType(UUID.fromString(reqID), AlyaConstant.TYPE_Q);
 
@@ -232,7 +233,8 @@ public class BatchJobService {
 	 * @param reqId the request ID
 	 * @return the batch row, or null if not found
 	 */
-	public BatchRows getBatchRowByReqId(String reqId) {
+	@Transactional
+	public BatchRows getSQBatchRowByReqId(String reqId) {
 		Optional<Batches> batch = batchesRepo.findById(UUID.fromString(reqId));
 		if (batch.isPresent()) {
 			List<BatchRows> batchRowsList = batchRowRepo.findByBatch(batch.get(), null);
@@ -346,6 +348,21 @@ public class BatchJobService {
 		}
 	}
 
+	/**
+	 * Appends the given list of BatchInput objects to an existing Batches object,
+	 * creating BatchRows for each input.
+	 * This method is transactional, ensuring that all database operations within it
+	 * are executed within a single transaction.
+	 *
+	 * @param batch      The existing Batches object to which the batchInput will be
+	 *                   appended.
+	 * @param batchInput The list of BatchInput objects to be appended to the
+	 *                   existing batch.
+	 * @param waitABit   A boolean indicating whether to wait before queuing the
+	 *                   batch.
+	 *                   If true, the batch will be queued with status BatchWait; if
+	 *                   false, it will be queued with status BatchQueued.
+	 */
 	@Transactional
 	public void appendBatchToExisting(Batches batch, List<BatchInput> batchInput, boolean waitABit) {
 
@@ -407,6 +424,16 @@ public class BatchJobService {
 
 	}
 
+	/**
+	 * Updates the status of all BatchRows associated with the given Batches object
+	 * to the specified BatchStatus.
+	 * 
+	 * @param batch       The Batches object whose associated BatchRows' statuses
+	 *                    will be updated.
+	 * @param batchStatus The BatchStatus to which the statuses of the BatchRows
+	 *                    will be updated.
+	 * @throws Exception If any error occurs during the update process.
+	 */
 	public void updateBatchRowsStatusByBatch(Batches batch, BatchStatus batchStatus) throws Exception {
 
 		List<BatchRows> batchRowsToUpdate = batchRowRepo.findByBatchId(batch.getId());
@@ -418,6 +445,17 @@ public class BatchJobService {
 
 	}
 
+	/**
+	 * Updates the status of multiple Batches objects identified by their IDs to the
+	 * specified BatchStatus.
+	 * 
+	 * @param batchIds The set of UUIDs representing the IDs of the Batches objects
+	 *                 to be updated.
+	 * @param status   The BatchStatus to which the statuses of the Batches will be
+	 *                 updated.
+	 * @throws Exception If no batches are found for the given IDs or if any error
+	 *                   occurs during the update process.
+	 */
 	public void updateBatchListStatus(Set<UUID> batchIds, BatchStatus status) throws Exception {
 		List<Batches> batchesToUpdate = batchesRepo.findAllById(batchIds);
 		if (!batchesToUpdate.isEmpty()) {
@@ -430,6 +468,16 @@ public class BatchJobService {
 		}
 	}
 
+	/**
+	 * Updates the status of a single BatchRows object identified by its ID to the
+	 * specified BatchStatus.
+	 * 
+	 * @param rowId       The ID of the BatchRows object to be updated.
+	 * @param batchStatus The BatchStatus to which the status of the BatchRows will
+	 *                    be updated.
+	 * @throws Exception If the BatchRows object is not found for the given ID or if
+	 *                   any error occurs during the update process.
+	 */
 	@Transactional
 	public void updateBatchRowStatus(Long rowId, BatchStatus batchStatus) throws Exception {
 		Optional<BatchRows> batchRow = batchRowRepo.findById(rowId);
@@ -514,18 +562,7 @@ public class BatchJobService {
 		}
 
 		this.updateBatchListStatus(batchIds, status);
-		/*
-		 * for (UUID batchId : batchIds) {
-		 * try {
-		 * updateBatchStatus(batchId, status);
-		 * } catch (Exception e) {
-		 * String erlog = "exception while updating batch status ex = " +
-		 * e.getMessage();
-		 * logger.debug(erlog);
-		 * throw e;
-		 * }
-		 * }
-		 */
+
 	}
 
 	/**

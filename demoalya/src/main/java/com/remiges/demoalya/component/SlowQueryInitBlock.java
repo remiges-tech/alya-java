@@ -7,9 +7,11 @@ import java.sql.SQLException;
 import com.remiges.alya.jobs.BatchInitBlocks;
 import com.remiges.alya.jobs.Initializer;
 
+import lombok.AllArgsConstructor;
 import redis.clients.jedis.Jedis;
 
-public class SlowQueryInitBlock extends Initializer {
+@AllArgsConstructor
+public class SlowQueryInitBlock extends BatchInitBlocks {
 
 	private Connection databaseConnection; // Database connection
 	private Jedis redisConnection; // Redis connection
@@ -17,7 +19,7 @@ public class SlowQueryInitBlock extends Initializer {
 	// Database connection parameters
 	private static final String DB_URL = "jdbc:postgresql://localhost:5432/postgres";
 	private static final String DB_USER = "postgres";
-	private static final String DB_PASSWORD = "root";
+	private static final String DB_PASSWORD = "postg13";
 
 	// Redis connection parameters
 	private static final String REDIS_HOST = "localhost";
@@ -42,5 +44,17 @@ public class SlowQueryInitBlock extends Initializer {
 
 	public Jedis getRedisConnection() {
 		return redisConnection;
+	}
+
+	@Override
+	public boolean isAlive(String appName) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'isAlive'");
+	}
+
+	@Override
+	public void close(String appName) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'close'");
 	}
 }
