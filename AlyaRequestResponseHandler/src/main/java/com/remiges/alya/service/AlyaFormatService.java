@@ -40,7 +40,7 @@ public ResponseEntity<?> processAndValidateRequest(RequestDTO request) {
                     .map(entry -> new ErrorMessage("invalid_value", 100, entry.getKey(), List.of(entry.getValue())))
                     .collect(Collectors.toList());
             AlyaErrorResponse errorResponse = AlyaErrorResponse.badRequest(errorMessages);
-           // log.info("Got the Error for each field");
+            log.info("Got the Error for each field");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
 
@@ -50,12 +50,12 @@ public ResponseEntity<?> processAndValidateRequest(RequestDTO request) {
             request.getCardNumber(), request.getPassport());
 
         AlyaSuccessResponse successResponse = AlyaSuccessResponse.success(null, data);
-       // log.info("Got success as response");
+        log.info("Got success as response");
         return ResponseEntity.ok(successResponse);
 
     } catch (ResourceNotFoundException e) {
         AlyaErrorResponse errorResponse = AlyaErrorResponse.internalServerError();
-       // log.error("Internal server error occurred: {}", e.getMessage(), e);
+        log.error("Internal server error occurred: {}", e.getMessage(), e);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
     }
 }
