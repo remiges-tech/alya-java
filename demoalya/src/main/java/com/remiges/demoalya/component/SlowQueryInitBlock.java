@@ -5,10 +5,11 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import com.remiges.alya.jobs.BatchInitBlocks;
+import com.remiges.alya.jobs.Initializer;
 
 import redis.clients.jedis.Jedis;
 
-public class SlowQueryInitBlock extends BatchInitBlocks {
+public class SlowQueryInitBlock extends Initializer {
 
 	private Connection databaseConnection; // Database connection
 	private Jedis redisConnection; // Redis connection
@@ -32,29 +33,6 @@ public class SlowQueryInitBlock extends BatchInitBlocks {
 
 		// Initialize Redis connection
 		this.redisConnection = new Jedis(REDIS_HOST, REDIS_PORT);
-	}
-
-	@Override
-	public boolean isAlive(String appName) {
-		// Implement logic to check if both database and Redis connections are alive
-		return databaseConnection != null && redisConnection.isConnected();
-	}
-
-	@Override
-	public void close(String appName) {
-		// Close database connection
-		if (databaseConnection != null) {
-			try {
-				databaseConnection.close();
-			} catch (SQLException e) {
-				e.printStackTrace(); // Handle connection closing errors
-			}
-		}
-
-		// Close Redis connection
-		if (redisConnection != null) {
-			redisConnection.close();
-		}
 	}
 
 	// Optionally, provide getter methods to access the connections externally

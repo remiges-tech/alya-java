@@ -23,7 +23,7 @@ import redis.clients.jedis.Jedis;
 public class SlowQueryProcessor extends SQProcessor {
 
 	@Override
-	public BatchOutput DoSlowQuery(BatchInitBlocks initBlock, JsonNode context, String input) {
+	public BatchOutput DoSlowQuery(SlowQueryInitBlock initBlock, JsonNode context, String input) {
 		Map<String, String> blobMap = new HashMap<>();
 		String messages = "";
 		Map<String, String> rowMap = null;
