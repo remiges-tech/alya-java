@@ -5,12 +5,12 @@ import java.util.Map;
 
 public class SlowQueryResult {
 	private BatchStatus status;
-	private String result;
-	private List<AlyaErrorMessage> messages;
+	private Map<String, String> result;
+	private Map<String, String> messages;
 	private Map<String, String> outputFiles;
 	private Exception error;
 
-	public SlowQueryResult(BatchStatus status, String result, List<AlyaErrorMessage> messages,
+	public SlowQueryResult(BatchStatus status, Map<String, String> result, Map<String, String> messages,
 			Map<String, String> outputFiles, Exception error) {
 		this.status = status;
 		this.result = result;
@@ -23,11 +23,11 @@ public class SlowQueryResult {
 		return status;
 	}
 
-	public String getResult() {
+	public Map<String, String> getResult() {
 		return result;
 	}
 
-	public List<AlyaErrorMessage> getMessages() {
+	public Map<String, String> getMessages() {
 		return messages;
 	}
 

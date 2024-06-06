@@ -15,8 +15,8 @@ import lombok.ToString;
 public class BatchOutput {
 
     BatchStatus status;
-    String result;
-    String messages;
+    Map<String, String> result;
+    Map<String, String> messages;
     Map<String, String> blobRows;
 
     ErrorCodes error;

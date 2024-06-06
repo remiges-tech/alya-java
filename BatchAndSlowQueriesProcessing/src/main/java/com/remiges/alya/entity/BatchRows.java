@@ -49,16 +49,17 @@ public class BatchRows {
 	@Column
 	private Timestamp doneat;
 
-	@Column
-	private String res;
+	@JdbcTypeCode(SqlTypes.JSON)
+	@Column(columnDefinition = "jsonb")
+	private Map<String, String> res;
 
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(columnDefinition = "jsonb")
 	private Map<String, String> blobrows;
 
-	@Column
-	@Lob
-	private String messages;
+	@JdbcTypeCode(SqlTypes.JSON)
+	@Column(columnDefinition = "jsonb")
+	private Map<String, String> messages;
 
 	@Column
 	private String doneby;
@@ -119,11 +120,11 @@ public class BatchRows {
 		this.doneat = doneat;
 	}
 
-	public String getRes() {
+	public Map<String, String> getRes() {
 		return res;
 	}
 
-	public void setRes(String res) {
+	public void setRes(Map<String, String> res) {
 		this.res = res;
 	}
 
@@ -135,11 +136,11 @@ public class BatchRows {
 		this.blobrows = blobrows;
 	}
 
-	public String getMessages() {
+	public Map<String, String> getMessages() {
 		return messages;
 	}
 
-	public void setMessages(String messages) {
+	public void setMessages(Map<String, String> messages) {
 		this.messages = messages;
 	}
 

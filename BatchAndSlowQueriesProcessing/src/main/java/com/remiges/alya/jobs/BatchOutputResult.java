@@ -103,10 +103,10 @@ public class BatchOutputResult {
 class BatchOutput_t {
 	private int line;
 	private BatchStatus status;
-	private String res;
-	private String messages;
+	private Map<String, String> res;
+	private Map<String, String> messages;
 
-	public BatchOutput_t(int line, BatchStatus status, String res, String messages) {
+	public BatchOutput_t(int line, BatchStatus status, Map<String, String> res, Map<String, String> messages) {
 		super();
 		this.line = line;
 		this.status = status;
@@ -130,19 +130,19 @@ class BatchOutput_t {
 		this.status = status;
 	}
 
-	public String getRes() {
+	public Map<String, String> getRes() {
 		return res;
 	}
 
-	public void setRes(String res) {
+	public void setRes(Map<String, String> res) {
 		this.res = res;
 	}
 
-	public String getMessages() {
+	public Map<String, String> getMessages() {
 		return messages;
 	}
 
-	public void setMessages(String messages) {
+	public void setMessages(Map<String, String> messages) {
 		this.messages = messages;
 	}
 

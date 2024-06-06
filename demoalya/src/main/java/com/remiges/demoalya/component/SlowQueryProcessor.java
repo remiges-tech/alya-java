@@ -30,8 +30,8 @@ public class SlowQueryProcessor extends SQProcessor {
 	@Override
 	public BatchOutput DoSlowQuery(BatchInitBlocks initBlock, JsonNode jsonNode, String input) {
 		Map<String, String> blobMap = new HashMap<>();
-		String messages = "";
-		String result = "";
+		Map<String, String> messages = new HashMap<>();
+		Map<String, String> result = new HashMap<>();
 		Map<String, String> rowMap = null;
 		SlowQueryInitBlock slowQueryInitializer = (SlowQueryInitBlock) initBlock;
 
@@ -62,11 +62,11 @@ public class SlowQueryProcessor extends SQProcessor {
 			}
 			blobMap.put("SlowQueryResultFile", rowMap.toString());
 		} catch (SQLException e) {
-			messages = "Error executing SQL query: " + e.getMessage();
+			messages.put("err", "Error executing SQL query: " + e.getMessage());
 			e.printStackTrace(); // Log the exception for debugging
 		}
 
-		result = "Query executed successfully";
+		result.put("res", "Query executed successfully");
 		// Now you have the query output stored in the blobMap map
 		// You can perform further processing or return it as needed
 

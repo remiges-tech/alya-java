@@ -140,9 +140,8 @@ public class SlowQuery {
 					if (!foundInCache)
 						jedissrv.updateStatusInRedis(UUID.fromString(reqID), status);
 
-					List<AlyaErrorMessage> errlist = Collections
-							.singletonList(new AlyaErrorMessage(batchRow.getMessages()));
-					return new SlowQueryResult(status, batchRow.getRes(), errlist, batchRow.getBlobrows(), null);
+					return new SlowQueryResult(status, batchRow.getRes(), batchRow.getMessages(),
+							batchRow.getBlobrows(), null);
 				} else {
 					throw new Exception(
 							"Invalid request ID: No entry available in batch rows for request ID: " + reqID);

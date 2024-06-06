@@ -2,8 +2,8 @@ package com.remiges.alya.jobs;
 
 public enum ErrorCodes {
 
-    NOERROR(0, ""),
-    ERROR(-1, "");
+    NOERROR(0, "Success"),
+            ERROR(-1, "");
 
     Integer error;
     String description;

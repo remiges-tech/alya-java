@@ -21,8 +21,9 @@ public class TransactionProcessor implements BatchProcessor {
     public BatchOutput DoBatchJob(BatchInitBlocks any, JsonNode context, int line, String input) {
         // TODO Auto-generated method stub
         Map<String, String> blobRows = new HashMap<>();
-        String result = "";
-        String messages = "";
+        Map<String, String> result = new HashMap<>();
+        Map<String, String> messages = new HashMap<>();
+
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             TransactionInput txInput = objectMapper.readValue(input, TransactionInput.class);
@@ -34,17 +35,20 @@ public class TransactionProcessor implements BatchProcessor {
 
                 blobRows.put("transaction_summary.txt",
                         "Trans Id: " + txInput.getId() + " Amount : " + txInput.getAmount());
+                result.put("res", "Success");
             } catch (Exception ex) {
-                messages = ex.getMessage();
-                result = "failed to update balance in redis ";
-                return new BatchOutput(BatchStatus.BatchFailed, result, messages, null, ErrorCodes.ERROR);
+                messages.put("Err", ex.getMessage());
+                messages.put("Err2", "failed to update balance in redis");
+
+                return new BatchOutput(BatchStatus.BatchFailed, null, messages, null, ErrorCodes.ERROR);
 
             }
 
         } catch (Exception ex) {
-            messages = ex.getMessage();
-            result = "failed to process transaction  ";
-            return new BatchOutput(BatchStatus.BatchFailed, result, messages, null, ErrorCodes.ERROR);
+            messages.put("Err", ex.getMessage());
+            messages.put("Err2", "failed to process transaction  ");
+
+            return new BatchOutput(BatchStatus.BatchFailed, null, messages, null, ErrorCodes.ERROR);
 
         }
 
