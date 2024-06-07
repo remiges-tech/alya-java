@@ -1,6 +1,8 @@
 package com.remiges.alya.validation;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -13,7 +15,7 @@ import java.util.Set;
  * Service class for performing validation on request DTOs in the Alya system.
  * This class provides methods for validating request DTO fields using Bean Validation API.
  */
-@Service
+@Component
 public class AlyaValidation {
 
     @Autowired

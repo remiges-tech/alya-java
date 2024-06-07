@@ -1,15 +1,17 @@
 package com.remiges.alya.service;
 
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.remiges.alya.exception.ResourceNotFoundException;
 import com.remiges.alya.json.AlyaErrorResponse;
 import com.remiges.alya.json.AlyaSuccessResponse;
 import com.remiges.alya.json.ErrorMessage;
-import com.remiges.alya.model.RequestDTO;
 import com.remiges.alya.validation.AlyaValidation;
 
 import java.util.List;
@@ -23,6 +25,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @Slf4j
+@Scope("prototype")
 public class AlyaFormatService {
 
  /**
@@ -31,7 +34,7 @@ public class AlyaFormatService {
  * @param request the request data to process
  * @return a ResponseEntity containing either success or error response
  */
-public ResponseEntity<?> processAndValidateRequest(RequestDTO request) {
+    public <T> ResponseEntity<?> processAndValidateRequest(@RequestBody T request) {
     try {
         Map<String, String> validationErrors = AlyaValidation.alyaValidator(request);
 
@@ -44,12 +47,7 @@ public ResponseEntity<?> processAndValidateRequest(RequestDTO request) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
 
-        RequestDTO data = new RequestDTO(
-            request.getName(), request.getEmail(), request.getPan(), request.getAadhar(), request.getGst(), request.getMobileNumber(),
-            request.getDrivingLicense(), request.getPostalCode(), request.getPostOfficeName(), request.getPassword(), request.getUrl(), 
-            request.getCardNumber(), request.getPassport());
-
-        AlyaSuccessResponse successResponse = AlyaSuccessResponse.success(null, data);
+        AlyaSuccessResponse successResponse = AlyaSuccessResponse.success("success", null);
         log.info("Got success as response");
         return ResponseEntity.ok(successResponse);
 
