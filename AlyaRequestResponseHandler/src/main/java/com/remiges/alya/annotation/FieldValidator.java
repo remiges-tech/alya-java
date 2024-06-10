@@ -4,6 +4,9 @@ package com.remiges.alya.annotation;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
+import com.google.i18n.phonenumbers.NumberParseException;
+import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber;
 import com.remiges.alya.constant.ValidationConstant;
 
 /**
@@ -49,9 +52,10 @@ public class FieldValidator implements ConstraintValidator<ValidField, String> {
                 return isValidPAN(value);
             case AADHAR:
                 return isValidAadhar(value);
-            // Add cases for more field types
+            case PHONE_NUMBER:
+                return isValidPhoneNumber(value, value);    
             case MOBILE_NUMBER:
-                return isValidMobileNumber(value);
+                return isValidMobileNumber(value, value);
             case GST:
                 return isValidGST(value);  
             case DRIVING_LICENSE:
@@ -65,7 +69,27 @@ public class FieldValidator implements ConstraintValidator<ValidField, String> {
             case URL:
                 return isValidUrl(value); 
             case CARD_NUMBER:
-                return isValidCardNumber(value);     
+                return isValidCardNumber(value);  
+            case VISA_CARD:
+                return isValidVisaCard(value);
+            case MASTER_CARD:
+                return isValidMasterCard(value);
+            case AMERICAN_EXPRESS:
+                return isValidAmericanExpress(value);
+            case DISCOVER_CARD:
+                return isValidDiscoverCard(value);
+            case JCB_CARD:
+                return isValidJcbCard(value);
+            case DINNER_CLUB_CARD:
+                return isValidClubCard(value);  
+            case ISBN:
+                return isValidIsbn(value);  
+            case IBAN:
+                return isValidIban(value);  
+            case DD:
+                return isValidDd(value);         
+            case VIN:
+                return isValidVin(value);                      
             case PASSPORT_NUMBER:
                 return isValidPassport(value);
             default:
@@ -85,28 +109,29 @@ public class FieldValidator implements ConstraintValidator<ValidField, String> {
     }
 
     private boolean isValidEmail(String email) {
-        // Add your email regex pattern here
         return email.matches(ValidationConstant.EMAIL_REGEX);
     }
 
     private boolean isValidPAN(String pan) {
-        // Add your PAN regex pattern here
         return pan.matches(ValidationConstant.PAN_REGEX);
     }
 
     private boolean isValidAadhar(String aadhar) {
-        // Add your Aadhar regex pattern here
         return aadhar.matches(ValidationConstant.AADHAR_REGEX);
     }
 
     private boolean isValidGST(String gst) {
-        // Add your GST validation logic here
         return gst.matches(ValidationConstant.GST_REGEX);
     }
 
-    private boolean isValidMobileNumber(String mobileNumber) {
-        // Add your mobile number validation logic here
-        return true;
+    private boolean isValidMobileNumber(String mobileNumber, String region) {
+        PhoneNumberUtil phoneNumber = PhoneNumberUtil.getInstance();
+        try {
+            PhoneNumber number = phoneNumber.parse(mobileNumber, region);
+            return phoneNumber.isValidNumber(number);
+        } catch (NumberParseException e) {
+            return false;
+        }
     }
 
     private boolean isValidDL(String drivingLicense){
@@ -133,8 +158,57 @@ public class FieldValidator implements ConstraintValidator<ValidField, String> {
         return cardNumber.matches(ValidationConstant.CARD_NUMBER_PATTERN);
     }
 
+    private boolean isValidVisaCard(String visaCard){
+        return visaCard.matches(ValidationConstant.VISA_CARD);
+    }
+
+    private boolean isValidMasterCard(String masterCard){
+        return masterCard.matches(ValidationConstant.MASTER_CARD);
+    }
+
+    private boolean isValidAmericanExpress(String americanExpress){
+        return americanExpress.matches(ValidationConstant.AMERICAN_STRING_CARD);
+    }
+
+    private boolean isValidDiscoverCard(String discoverCard){
+        return discoverCard.matches(ValidationConstant.DISCOVER_CARD);
+    }
+    private boolean isValidJcbCard(String jcbCard){
+        return jcbCard.matches(ValidationConstant.JCB_CARD);
+    }
+
+    private boolean isValidClubCard(String clubCard){
+        return clubCard.matches(ValidationConstant.DINNER_CLUB_CARD);
+    }
+
+    private boolean isValidIsbn(String isbn){
+        return isbn.matches(ValidationConstant.ISBN);
+    }
+
+    private boolean isValidIban(String iban){
+        return iban.matches(ValidationConstant.IBAN);
+    }
+
+    private boolean isValidDd(String dd){
+        return dd.matches(ValidationConstant.DD);
+    }
+
+    public boolean isValidVin(String vin) {
+        return vin.matches(ValidationConstant.VIN_PATTERN);
+    }
+
     private boolean isValidPassport(String passport){
         return passport.matches(ValidationConstant.PASSPORT_NUMBER_PATTERN);
+    }
+
+     public boolean isValidPhoneNumber(String phoneNumber, String region) {
+        PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
+        try {
+            PhoneNumber number = phoneNumberUtil.parse(phoneNumber, region);
+            return phoneNumberUtil.isValidNumber(number);
+        } catch (NumberParseException e) {
+            return false;
+        }
     }
 
 
