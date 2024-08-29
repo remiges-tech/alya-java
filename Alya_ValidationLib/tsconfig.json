@@ -12,8 +12,8 @@
     "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
     "paths": {
-      "ngxAlyavalidation": [
-        "dist/ngx-alyavalidation"
+      "remigesAlyaValidator": [
+        "dist/remiges-alya-validator"
       ]
     },
     "declaration": false,

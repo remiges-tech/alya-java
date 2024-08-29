@@ -5,8 +5,8 @@
   "projects": {
     "ngxAlyavalidation": {
       "projectType": "library",
-      "root": "projects/ngx-alyavalidation",
-      "sourceRoot": "projects/ngx-alyavalidation/src",
+      "root": "projects/remiges-alya-validator",
+      "sourceRoot": "projects/remiges-alya-validator/src",
       "prefix": "lib",
       "i18n": {
         "sourceLocale":"en-US",
@@ -18,15 +18,15 @@
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
-"project": "projects/ngx-alyavalidation/ng-package.json"
+"project": "projects/remiges-alya-validator/ng-package.json"
 
           },
           "configurations": {
             "production": {
-              "tsConfig": "projects/ngx-alyavalidation/tsconfig.lib.prod.json"
+              "tsConfig": "projects/remiges-alya-validator/tsconfig.lib.prod.json"
             },
             "development": {
-              "tsConfig": "projects/ngx-alyavalidation/tsconfig.lib.json"
+              "tsConfig": "projects/remiges-alya-validator/tsconfig.lib.json"
             }
           },
           "defaultConfiguration": "production"
@@ -34,7 +34,7 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "tsConfig": "projects/ngx-alyavalidation/tsconfig.spec.json",
+            "tsConfig": "projects/remiges-alya-validator/tsconfig.spec.json",
             "polyfills": [
               "zone.js",
               "zone.js/testing"

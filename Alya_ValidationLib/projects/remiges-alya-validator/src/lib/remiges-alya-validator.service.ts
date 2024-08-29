@@ -5,7 +5,7 @@ import { PhoneNumberUtil } from 'google-libphonenumber';
 @Injectable({
   providedIn: 'root'
 })
-export class NgxAlyavalidationService {
+export class RemigesAlyaValidatorService {
 
   constructor() { }
 
@@ -39,13 +39,10 @@ export class NgxAlyavalidationService {
   ISBNRegex = /^(?:ISBN(?:-1[03])?:? )?(?=(?:[-0-9 ]{17}|[-0-9X ]{13}|[0-9X]{10})$)(?:97[89][- ]?)?[0-9]{1,5}[- ]?(?:[0-9]+[- ]?){2}[0-9X]$/; // A 13-digit ISBN, 978-3-16-148410-0, as represented by an EAN-13 bar code
   IBANRegex = /^[A-Z]{2}\d{2}[A-Z0-9]{11,}$/; // A typical IBAN is made up of a string of symbols that each stand for a step in the transfer of funds. Every country uses a similar format, however different locations use different numbers of digits.
   //Some nations employ 20 characters, whereas others employ only 15 characters. The most characters that a nation can utilise for the IBAN is about 34.
-
-  coordinatesRegex = /^-?([1-8]?[1-9]|[1-9]0)\.\d{1,6},\s*-?(1?[0-7]?[0-9]|180|[0-9]{1,2})\.\d{1,6}$/; //Decimal degrees (DD): 41.40338, 2.17403.
+ coordinatesRegex = /^-?([1-8]?[1-9]|[1-9]0)\.\d{1,6},\s*-?(1?[0-7]?[0-9]|180|[0-9]{1,2})\.\d{1,6}$/; //Decimal degrees (DD): 41.40338, 2.17403.
   currencyRegex = /^-?\d+(\.\d{1,2})?$/; //inamount 12.1111
   passportnoRegex = /^[A-Za-z0-9]{6,10}$/; //A123222  min 6 & max 10 characters
   colorhexRegex = /^#[0-9A-F]{6}$/i; //#FFFFFF (white)#000000 (black)#FF0000 (red) #00FF00 (green)#0000FF (blue) #FFFF00 (yellow) max 7 Characters
-
-
 
   // Define a map to store error messages
   panRegexMsg = "Enter a valid PAN Card number (e.g., ASDFG1234K)";
@@ -151,20 +148,15 @@ export class NgxAlyavalidationService {
         reject(new Error('File size exceeds limit'));
         return; // Return to prevent further execution
       }
-
-      // Perform file upload logic here (e.g., API call)
-      // Simulating file upload with a timeout
+       // Simulating file upload with a timeout
       setTimeout(() => {
         resolve('File uploaded successfully');
-      }, 2000); // Simulating 2 seconds of upload time
+      }, 1000); // Simulating 1 seconds of upload time
     });
   }
 
 
-
-
-
-  // Custom validation function for to show the  minimum length Massage
+ // Custom validation function for to show the  minimum length Massage
   minLengthValidationMessage(minLength: number) {
     return `Should have at least ${minLength} characters`;
   }
@@ -210,8 +202,6 @@ export class NgxAlyavalidationService {
     };
   }
 
-
-
   // validation for  date range 
   dateRangeValidator(control: any) {
     const value = new Date(control.value);
@@ -222,20 +212,17 @@ export class NgxAlyavalidationService {
     if (value < minDate || value > maxDate) {
       return { invalidDateRange: true };
     }
-
-    return null;
+   return null;
   }
 
-
-  validDateValidator(control: any) {
+ validDateValidator(control: any) {
     const value = control.value;
     const isValidDate = !isNaN(Date.parse(value));
 
     if (!isValidDate) {
       return { invalidDate: true };
     }
-
-    return null;
+ return null;
   }
 
   //validation for if age is less than 18 year
@@ -247,13 +234,10 @@ export class NgxAlyavalidationService {
     if (value >= minAgeDate) {
       return { underAge: true };
     }
-
     return null;
   }
 
-
-
-  //keyup or keypress Event
+//keyup or keypress Event
   allowOnly(event: KeyboardEvent, pattern: RegExp) {
     const inputChar = String.fromCharCode(event.charCode);
 
@@ -265,8 +249,7 @@ export class NgxAlyavalidationService {
 
   //phone number validator  using google-libphonenumber validator
   phoneNumberUtil = PhoneNumberUtil.getInstance();
-
-  isPhoneNumberValidator(regionCode: any = undefined): ValidatorFn {
+ isPhoneNumberValidator(regionCode: any = undefined): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } => {
       let validNumber = false;
       try {
@@ -277,6 +260,15 @@ export class NgxAlyavalidationService {
       } catch (e) { }
 
       return validNumber ? {} : { 'wrongNumber': { value: control.value } };
+    }
+  }
+
+   // General function to convert form input to uppercase and trim length
+   handleInputToUppercase(form: FormGroup, controlName: string, maxLength: number = 10): void {
+    const currentValue = form.controls[controlName].value;
+    if (currentValue) {
+      const uppercaseValue = currentValue.toUpperCase().substring(0, maxLength);
+      form.controls[controlName].setValue(uppercaseValue);
     }
   }
 }

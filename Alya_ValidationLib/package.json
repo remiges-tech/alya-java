@@ -1,5 +1,5 @@
 {
-  "name": "remigesvalidationvesrion16",
+  "name": "remigesalyavalidator",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -18,8 +18,6 @@
     "@angular/platform-browser": "^16.2.0",
     "@angular/platform-browser-dynamic": "^16.2.0",
     "@angular/router": "^16.2.0",
-    "@ngx-translate/core": "^15.0.0",
-    "@ngx-translate/http-loader": "^8.0.0",
     "@types/google-libphonenumber": "^7.4.30",
     "google-libphonenumber": "^3.2.34",
     "rxjs": "~7.8.0",
