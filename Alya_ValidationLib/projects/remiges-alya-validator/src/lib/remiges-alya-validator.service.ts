@@ -79,21 +79,22 @@ export class RemigesAlyaValidatorService {
   passportnoRegexMsg = "Invalid passport number format. Please enter a valid passport number.(e.g. A2096457)"
   colorhexRegexMsg = "Invalid color code format. Please enter a valid color code.(e.g. #FFFFFF)"
 
-  // function for to pass the pattern and error massege 
-  customRegexValidator(pattern: RegExp, errorMsg: string): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const value = control.value as string;
+ // function for to pass the pattern and error massege
+ customRegexValidator(pattern: RegExp, errorMsg: string): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const value = control.value as string;
+    if (!value) {
+      return null; // Skip validation if the field is empty or null.
+    }
+    if (pattern.test(value)) {
+      return null; // Validation passed; the input matches the custom regex pattern.
+    } else {
+      return { customRegex: `${errorMsg}` }; // Validation failed; the input does not match the pattern.
+    }
+  };
+}
 
-      if (pattern.test(value)) {
-        return null; // Validation passed; the input matches the custom regex pattern.
-      } else {
-        return { 'customRegex': `'${value}',  ${errorMsg}` }; // Validation failed; the input does not match the pattern.
-      }
-    };
-  }
-
-
-  // validation to check two input filed are match ex:password and confirm password
+// validation to check two input filed are match ex:password and confirm password
   isMatchValidator(controlName: string, matchingControlName: string) {
     return (formGroup: FormGroup) => {
       let control = formGroup.controls[controlName];
@@ -111,8 +112,6 @@ export class RemigesAlyaValidatorService {
       }
     };
   }
-
-
 
   // validattion to check IP Address Ex. IPV4:"123.1.1.221" ,Ex. IPV6:"2001:0db8:85a3:0000:0000:8a2e:0370:7334"
   ipAddressValidator(control: AbstractControl): { [key: string]: any } | null {
@@ -133,8 +132,7 @@ export class RemigesAlyaValidatorService {
     return { 'invalidIp': true };
   }
 
-
-  // validattion to check File Type and File Size "
+// validattion to check File Type and File Size "
   validateAndUploadFile(file: File, allowedTypes: string[], maxSizeInBytes: number): Promise<string | null> {
     return new Promise((resolve, reject) => {
       // Validate file type
@@ -160,9 +158,9 @@ export class RemigesAlyaValidatorService {
   minLengthValidationMessage(minLength: number) {
     return `Should have at least ${minLength} characters`;
   }
+  
   // Custom validation function for to show the  maximum length Massage
-
-  maxLengthValidationMessage(maxLength: number) {
+ maxLengthValidationMessage(maxLength: number) {
     return `This value should be less than ${maxLength} characters`;
   }
 
