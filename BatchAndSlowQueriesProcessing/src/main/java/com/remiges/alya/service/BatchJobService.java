@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
-import java.util.function.Supplier;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -116,8 +115,6 @@ public class BatchJobService {
 	public Batches saveBatch(Batches batch) {
 		return batchesRepo.save(batch);
 	}
-
-
 
 	/**
 	 * Finds batches by type, application, operation, and request time after a
@@ -507,7 +504,6 @@ public class BatchJobService {
 			throw new Exception("Batch not found for ID: " + batchId);
 		}
 	}
-
 
 	/**
 	 * Updates the summary of a batch.
