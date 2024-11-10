@@ -9,7 +9,7 @@ export class RemigesAlyaValidatorService {
 
   constructor() { }
 
-  panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/; //ex:ASDFG1234K
+  // panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/; //ex:ASDFG1234K
   emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/; //EX:test123@gmail.com 
   aadharRegex = /^(\d{4}[ -]?\d{4}[ -]?\d{4})$/; // ex:1234 5678 9123 |  123456789123 | 1234-5678-9123 
   gstRegex = /^[0-9]{2}[A-Za-z]{5}\d{4}[A-Za-z]{1}\d{1}[A-Za-z0-9]{2}$/; //ex:22AAAAA0000A1Z5
@@ -39,10 +39,22 @@ export class RemigesAlyaValidatorService {
   ISBNRegex = /^(?:ISBN(?:-1[03])?:? )?(?=(?:[-0-9 ]{17}|[-0-9X ]{13}|[0-9X]{10})$)(?:97[89][- ]?)?[0-9]{1,5}[- ]?(?:[0-9]+[- ]?){2}[0-9X]$/; // A 13-digit ISBN, 978-3-16-148410-0, as represented by an EAN-13 bar code
   IBANRegex = /^[A-Z]{2}\d{2}[A-Z0-9]{11,}$/; // A typical IBAN is made up of a string of symbols that each stand for a step in the transfer of funds. Every country uses a similar format, however different locations use different numbers of digits.
   //Some nations employ 20 characters, whereas others employ only 15 characters. The most characters that a nation can utilise for the IBAN is about 34.
- coordinatesRegex = /^-?([1-8]?[1-9]|[1-9]0)\.\d{1,6},\s*-?(1?[0-7]?[0-9]|180|[0-9]{1,2})\.\d{1,6}$/; //Decimal degrees (DD): 41.40338, 2.17403.
+  coordinatesRegex = /^-?([1-8]?[1-9]|[1-9]0)\.\d{1,6},\s*-?(1?[0-7]?[0-9]|180|[0-9]{1,2})\.\d{1,6}$/; //Decimal degrees (DD): 41.40338, 2.17403.
   currencyRegex = /^-?\d+(\.\d{1,2})?$/; //inamount 12.1111
   passportnoRegex = /^[A-Za-z0-9]{6,10}$/; //A123222  min 6 & max 10 characters
   colorhexRegex = /^#[0-9A-F]{6}$/i; //#FFFFFF (white)#000000 (black)#FF0000 (red) #00FF00 (green)#0000FF (blue) #FFFF00 (yellow) max 7 Characters
+  mobileNumberRegex = /^(?!([0-9])\1{9})^\d{10}$/; //this for not repeatedly call 10 digit mobile no.
+  panRegex = /^[A-Z]{3}[PCHFT]{1}[A-Z]{1}[0-9]{4}[A-Z]{1}$/; //ex:ASDFG1234K
+  // panRegex = /^[A-Z]{3}[PCHFTBLJG]{1}[A-Z]{1}[0-9]{4}[A-Z]{1}$/; //ex:ASDFG1234K
+  pekraRegex = /^NDM\d{7}$/; //ex:ASDFG1234K
+  mblnoRegex = /^(?!.*(\d)\1{9})[6-9]\d{9}$/;
+  nameRegex = /^(?!.*[\'\.]{2})(?!.*\s{2})(?!.*[\s\'\.]{2})[a-zA-Z]+([\'\.]?[a-zA-Z]+)*(\s[a-zA-Z]+([\'\.]?[a-zA-Z]+)*)*$/;
+  addressRegex = /^(?!.*[\s]{2})(?!.*[\W_]{2})([a-zA-Z0-9]+([ .!@#$%^&*()_+\-={}|[\]\\:;"'<>,?/~`]*[a-zA-Z0-9]+)*)*$/;
+  incomeRegex = /^\d*\.?\d{0,2}$/
+  alphawithDotApostrophesRegex = /^[a-zA-Z\s.'\b]*$/;
+  alphawithApostrophesRegex = /^[a-zA-Z\s'\b]*$/;
+  alphanumericDotColonRegex = /^[a-zA-Z0-9\s.,'-]*$/;
+  alphanumericWithSpecialChars = /^[a-zA-Z0-9~!@#$%^&*()_+=`{}\[\]:;"'<>,.?\/\\| -]*$/;
 
   // Define a map to store error messages
   panRegexMsg = "Enter a valid PAN Card number (e.g., ASDFG1234K)";
@@ -78,23 +90,24 @@ export class RemigesAlyaValidatorService {
   currencyRegexMsg = "Invalid currency format. Please enter a valid currency amount.(e,g. 12.22)"
   passportnoRegexMsg = "Invalid passport number format. Please enter a valid passport number.(e.g. A2096457)"
   colorhexRegexMsg = "Invalid color code format. Please enter a valid color code.(e.g. #FFFFFF)"
+  mobileNumberRegexMsg = 'Please Enter Valid Mobile Number';
 
- // function for to pass the pattern and error massege
- customRegexValidator(pattern: RegExp, errorMsg: string): ValidatorFn {
-  return (control: AbstractControl): ValidationErrors | null => {
-    const value = control.value as string;
-    if (!value) {
-      return null; // Skip validation if the field is empty or null.
-    }
-    if (pattern.test(value)) {
-      return null; // Validation passed; the input matches the custom regex pattern.
-    } else {
-      return { customRegex: `${errorMsg}` }; // Validation failed; the input does not match the pattern.
-    }
-  };
-}
+  // function for to pass the pattern and error massege
+  customRegexValidator(pattern: RegExp, errorMsg: string): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = control.value as string;
+      if (!value) {
+        return null; // Skip validation if the field is empty or null.
+      }
+      if (pattern.test(value)) {
+        return null; // Validation passed; the input matches the custom regex pattern.
+      } else {
+        return { customRegex: `${errorMsg}` }; // Validation failed; the input does not match the pattern.
+      }
+    };
+  }
 
-// validation to check two input filed are match ex:password and confirm password
+  // validation to check two input filed are match ex:password and confirm password
   isMatchValidator(controlName: string, matchingControlName: string) {
     return (formGroup: FormGroup) => {
       let control = formGroup.controls[controlName];
@@ -132,7 +145,7 @@ export class RemigesAlyaValidatorService {
     return { 'invalidIp': true };
   }
 
-// validattion to check File Type and File Size "
+  // validattion to check File Type and File Size "
   validateAndUploadFile(file: File, allowedTypes: string[], maxSizeInBytes: number): Promise<string | null> {
     return new Promise((resolve, reject) => {
       // Validate file type
@@ -146,7 +159,7 @@ export class RemigesAlyaValidatorService {
         reject(new Error('File size exceeds limit'));
         return; // Return to prevent further execution
       }
-       // Simulating file upload with a timeout
+      // Simulating file upload with a timeout
       setTimeout(() => {
         resolve('File uploaded successfully');
       }, 1000); // Simulating 1 seconds of upload time
@@ -154,16 +167,15 @@ export class RemigesAlyaValidatorService {
   }
 
 
- // Custom validation function for to show the  minimum length Massage
+  // Custom validation function for to show the  minimum length Massage
   minLengthValidationMessage(minLength: number) {
     return `Should have at least ${minLength} characters`;
   }
-  
+
   // Custom validation function for to show the  maximum length Massage
- maxLengthValidationMessage(maxLength: number) {
+  maxLengthValidationMessage(maxLength: number) {
     return `This value should be less than ${maxLength} characters`;
   }
-
 
   // Custom validation function for minimum length
   validateMinLength(control: AbstractControl): ValidationErrors | null {
@@ -210,17 +222,17 @@ export class RemigesAlyaValidatorService {
     if (value < minDate || value > maxDate) {
       return { invalidDateRange: true };
     }
-   return null;
+    return null;
   }
 
- validDateValidator(control: any) {
+  validDateValidator(control: any) {
     const value = control.value;
     const isValidDate = !isNaN(Date.parse(value));
 
     if (!isValidDate) {
       return { invalidDate: true };
     }
- return null;
+    return null;
   }
 
   //validation for if age is less than 18 year
@@ -235,19 +247,32 @@ export class RemigesAlyaValidatorService {
     return null;
   }
 
-//keyup or keypress Event
-  allowOnly(event: KeyboardEvent, pattern: RegExp) {
-    const inputChar = String.fromCharCode(event.charCode);
 
-    if (!pattern.test(inputChar)) {
-      // If the input character does not match the pattern, prevent the default action
+  allowOnly(event: KeyboardEvent, pattern: RegExp) {
+    const input = event.target as HTMLInputElement;
+    const inputChar = event.key;
+
+    const specialKeys = ['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight', 'Enter', 'Escape'];
+
+    if (specialKeys.includes(inputChar)) {
+      return; 
+    }
+
+    const newValue = input.value + inputChar;
+
+    if (!pattern.test(newValue)) {
       event.preventDefault();
     }
   }
+  panOrPekraValidator(errorMsg: string): ValidatorFn {
+    const panRegex = /^[A-Z]{3}[PCHFT]{1}[A-Z]{1}[0-9]{4}[A-Z]{1}$/;
+    const pekraRegex = /^NDM\d{7}$/;
 
+    return this.customRegexValidator(new RegExp(`${panRegex.source}|${pekraRegex.source}`), errorMsg);
+  }
   //phone number validator  using google-libphonenumber validator
   phoneNumberUtil = PhoneNumberUtil.getInstance();
- isPhoneNumberValidator(regionCode: any = undefined): ValidatorFn {
+  isPhoneNumberValidator(regionCode: any = undefined): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } => {
       let validNumber = false;
       try {
@@ -261,12 +286,27 @@ export class RemigesAlyaValidatorService {
     }
   }
 
-   // General function to convert form input to uppercase and trim length
-   handleInputToUppercase(form: FormGroup, controlName: string, maxLength: number = 10): void {
+  // General function to convert form input to uppercase and trim length
+  handleInputToUppercase(form: FormGroup, controlName: string, maxLength: number = 10): void {
     const currentValue = form.controls[controlName].value;
     if (currentValue) {
       const uppercaseValue = currentValue.toUpperCase().substring(0, maxLength);
       form.controls[controlName].setValue(uppercaseValue);
     }
   }
+  formatDateInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    let value = input.value.replace(/[^0-9]/g, ''); // Remove any non-numeric characters
+  
+    if (value.length > 2 && value.length <= 4) {
+      value = value.slice(0, 2) + '/' + value.slice(2);
+    } else if (value.length > 4) {
+      value = value.slice(0, 2) + '/' + value.slice(2, 4) + '/' + value.slice(4, 8);
+    }
+  
+    input.value = value;
+
+  }
+
+  
 }
