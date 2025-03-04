@@ -1,7 +1,5 @@
 package com.remiges.alya.jobs;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -28,6 +26,8 @@ import com.remiges.alya.service.MinioService;
 @Scope("prototype")
 public class JobMgr {
 
+	// ApplicationContext applicationContext = ApplicationContextProviderAlya.getApplicationContext();
+    // LogharbourUtilityAlya logharbourUtility = applicationContext.getBean(LogharbourUtilityAlya.class);
 	private static final Logger logger = LoggerFactory.getLogger(JobMgr.class);
 
 	private final Map<String, Initializer> initializers = new ConcurrentHashMap<>();
@@ -60,7 +60,6 @@ public class JobMgr {
 		jobprocessoThread = new Thread(new JobProcessor());
 
 	}
-
 	/**
 	 * Starts the job processing thread.
 	 * 
@@ -68,6 +67,8 @@ public class JobMgr {
 	 */
 	public String DoJobs() {
 		if (jobprocessoThread == null) {
+			// logharbourUtility.collectActivityLogs("job process thread not exists",AlyaConstant.LogharbourUtilityConstant.ALYA_MODULE_NAME,"JOB_MGR");
+			logger.error("ALYA : JobMgr : DoJobs : "+"job process thread not exists");
 			return "job process thread not exists";
 		}
 		jobprocessoThread.start();
@@ -109,7 +110,9 @@ public class JobMgr {
 		if (batchProcessor == null) {
 			String erlog = "No batch Processor found for app " + rowtoprocess.getApp() + " and for OP "
 					+ rowtoprocess.getOp();
-			logger.debug(erlog);
+					// logharbourUtility.collectActivityLogs(erlog,AlyaConstant.LogharbourUtilityConstant.ALYA_MODULE_NAME,"JOB_MGR");
+
+		    logger.error("ALYA : JobMgr : processBatch : " + erlog);
 			return erlog;
 		}
 
@@ -123,14 +126,20 @@ public class JobMgr {
 
 			} else {
 				String erlog = "failed to process batchrow for app " + rowtoprocess.getApp();
-				logger.debug(erlog);
+				// logharbourUtility.collectActivityLogs(erlog,AlyaConstant.LogharbourUtilityConstant.ALYA_MODULE_NAME,"JOB_MGR");
+				logger.error("ALYA : JobMgr : processBatch : " + erlog);
+
+				// logger.debug(erlog);
 				return erlog;
 			}
 
 			return "";
 		} catch (IllegalStateException exs) {
 			String erlog = "No Initializer found for app " + rowtoprocess.getApp();
-			logger.debug(erlog);
+			// logharbourUtility.collectActivityLogs(erlog,AlyaConstant.LogharbourUtilityConstant.ALYA_MODULE_NAME,"JOB_MGR");
+			logger.error("ALYA : JobMgr : processBatch : " + erlog);
+
+			// logger.debug(erlog);
 			return erlog;
 		}
 	}
@@ -143,24 +152,31 @@ public class JobMgr {
 		@Override
 		public void run() {
 			while (bprocessJobs) {
+				// logharbourUtility.collectActivityLogs("JobProcessor : run : 1 : Initiat Request",AlyaConstant.LogharbourUtilityConstant.ALYA_MODULE_NAME,"JOB_MGR");
 
 				List<BatchJob> allQueuedBatchRow = new ArrayList<>();
 				synchronized (lock) {
-
+					// logharbourUtility.collectActivityLogs("JobProcessor : run : 2 : synchronized Block 1",AlyaConstant.LogharbourUtilityConstant.ALYA_MODULE_NAME,"JOB_MGR");
 					allQueuedBatchRow = batchJobService.getAllQueuedBatchRows(BatchStatus.BatchQueued);
-
+					logger.error("ALYA : JobMgr : run : " + "allQueuedBatchRow "+allQueuedBatchRow.size());
 					// allQueuedBatchRow.forEach(bat -> {
-
-					// System.out.println(bat.getLine().toString());
+					// 	logger.error("ALYA : JobMgr : run : " + bat.getLine().toString());
 					// });
 
 				}
 				// batch is empty go to sleep
 				if (allQueuedBatchRow.isEmpty()) {
+					// logharbourUtility.collectActivityLogs("JobProcessor : run : 3 : synchronized Block",AlyaConstant.LogharbourUtilityConstant.ALYA_MODULE_NAME,"JOB_MGR");
+
 					try {
 						Thread.sleep(getRandomSleepDuration());
+						logger.error("ALYA : JobMgr : run : " + "allQueuedBatchRow is Empty so calling getRandomSleepDuration");
+
 						continue;
-					} catch (InterruptedException e) {
+					} catch (Exception e) {
+						// logharbourUtility.collectActivityLogs("JobProcessor : run : ERROR : All queued Batch row is empty.",AlyaConstant.LogharbourUtilityConstant.ALYA_MODULE_NAME,"JOB_MGR");
+						logger.error("ALYA : JobMgr : run : " + e.getMessage());
+
 						e.printStackTrace();
 					}
 				}
@@ -168,13 +184,21 @@ public class JobMgr {
 				try {
 
 					synchronized (lock) {
+						logger.info("JobProcessor : run : 4 : synchronized Block 2");
+						// logharbourUtility.collectActivityLogs("JobProcessor : run : 4 : synchronized Block 2",AlyaConstant.LogharbourUtilityConstant.ALYA_MODULE_NAME,"JOB_MGR");
 
 						Set<UUID> uniqueBatchIds = allQueuedBatchRow.stream().map(batch -> batch.getId())
 								.collect(Collectors.toSet());
+								logger.error("ALYA : JobMgr : JobProcessor : " + "uniqueBatchIds for allQueuedBatchRow -> "+  uniqueBatchIds.size());
+
+								// logharbourUtility.collectActivityLogs("JobProcessor : run : 4 : synchronized Block 2 -> "+ allQueuedBatchRow.stream().map(batch -> batch.getId())
+								// .collect(Collectors.toSet()),AlyaConstant.LogharbourUtilityConstant.ALYA_MODULE_NAME,"JOB_MGR");
+
 
 						batchJobService.SwitchBatchToInprogress(allQueuedBatchRow, uniqueBatchIds,
 								BatchStatus.BatchInProgress);
-
+								logger.error("ALYA : JobMgr : JobProcessor : "+ " calling SwitchBatchToInprogress for uniqueBatchIds -> "+uniqueBatchIds.size() );
+								// logharbourUtility.collectActivityLogs("JobProcessor : run : 5 : synchronized Block 2 -> "+ BatchStatus.BatchInProgress,AlyaConstant.LogharbourUtilityConstant.ALYA_MODULE_NAME,"JOB_MGR");
 					}
 
 					// collect batchId to summarize
@@ -182,10 +206,18 @@ public class JobMgr {
 
 					allQueuedBatchRow.forEach(row -> {
 						String error = processRow(row);
-						if (!error.isEmpty())
-							logger.debug("process row failed for rowid " + row.getRowId());
+						if (!error.isEmpty()){
+							logger.error("ALYA : JobMgr : JobProcessor : "+"Empty row  for rowid -> " + row.getRowId());
+						}
+						// logharbourUtility.collectActivityLogs("JobProcessor : run : ERROR :Empty row  for rowid -> " + row.getRowId(),AlyaConstant.LogharbourUtilityConstant.ALYA_MODULE_NAME,"JOB_MGR");
 						else
-							BatchIdToSummarize.add(row.getId());
+							{
+								BatchIdToSummarize.add(row.getId());
+								logger.error("ALYA : JobMgr : JobProcessor : "+"Row added for summarization for rowid -> " + row.getRowId());
+
+								// logharbourUtility.collectActivityLogs("JobProcessor : run : 6 : Row added to Batch summarization -> "+ row.getId(),AlyaConstant.LogharbourUtilityConstant.ALYA_MODULE_NAME,"JOB_MGR");
+						}
+
 
 					});
 
@@ -193,25 +225,20 @@ public class JobMgr {
 					synchronized (lock2) {
 
 						for (UUID batchId : BatchIdToSummarize) {
-
-
+							// logharbourUtility.collectActivityLogs("JobProcessor : run : 7 : Summarized Batch for BatchID -> "+batchId,AlyaConstant.LogharbourUtilityConstant.ALYA_MODULE_NAME,"JOB_MGR");
 							batchJobService.SummarizeBatch(batchId);
+							logger.error("ALYA : JobMgr : JobProcessor : "+"Calling SummarizeBatch for batchId" + batchId);
+							
 
 						}
 
 					}
 
 				} catch (Exception ex) {
-					// Log exception if needed
-					logger.debug("Exception caught {}", ex.toString());
-				}
+					logger.error("ALYA : JobMgr : JobProcessor : "+"Error -> " + ex.toString());
 
-				String timestamp8 = LocalDateTime.now()
-						.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-				logger.info("[" + " Exit Start : " + timestamp8 + " | "
-						+ " Thread Id : "
-						+ Thread.currentThread().getId() + " | "
-						+ "] ");
+					// logharbourUtility.collectActivityLogs("JobProcessor : run : ERROR : ERROR -> " + ex.toString(),AlyaConstant.LogharbourUtilityConstant.ALYA_MODULE_NAME,"JOB_MGR");
+				}
 
 			}
 		}
@@ -226,11 +253,16 @@ public class JobMgr {
 	private String processSlowQuery(BatchJob rowtoprocess) {
 		String processorKey = rowtoprocess.getApp() + rowtoprocess.getOp();
 		SQProcessor sqProcessor = slowQueryProcessor.get(processorKey);
+		// logharbourUtility.collectActivityLogs("JobProcessor : processSlowQuery : 1 : sqProcessor -> "+ sqProcessor.toString(),AlyaConstant.LogharbourUtilityConstant.ALYA_MODULE_NAME,"JOB_MGR");
 
 		if (sqProcessor == null) {
 			String erlog = "No SQ Processor found for app " + rowtoprocess.getApp()
 					+ " and for OP " + rowtoprocess.getOp();
 			logger.debug(erlog);
+			logger.error("ALYA : JobMgr : processSlowQuery : "+ erlog);
+
+			// logharbourUtility.collectActivityLogs("ERROR "+ erlog,AlyaConstant.LogharbourUtilityConstant.ALYA_MODULE_NAME,"JOB_MGR");
+
 			return erlog;
 		}
 
@@ -239,22 +271,36 @@ public class JobMgr {
 
 			BatchOutput batchoutput = sqProcessor.DoSlowQuery(batchInitBlock, rowtoprocess.getContext(),
 					rowtoprocess.getInput());
+					// logharbourUtility.collectActivityLogs("JobProcessor : processSlowQuery : 2 : BatchOutPut -> "+ batchoutput.toString(),AlyaConstant.LogharbourUtilityConstant.ALYA_MODULE_NAME,"JOB_MGR");
+					logger.error("ALYA : JobMgr : processSlowQuery : "+"updateSlowQueryJobResult for BatchOutPut -> "+ batchoutput.toString());
+					
+
 
 			updateSlowQueryJobResult(rowtoprocess, batchoutput);
 
 			if (batchoutput.error.equals(ErrorCodes.NOERROR)) {
 				String erlog = "Success to process row for app " + rowtoprocess.getApp();
-				logger.debug(erlog);
+				logger.error("ALYA : JobMgr : processSlowQuery : "+erlog);
+				// logharbourUtility.collectActivityLogs("JobProcessor : processSlowQuery : 3 : "+ erlog,AlyaConstant.LogharbourUtilityConstant.ALYA_MODULE_NAME,"JOB_MGR");
 
 			} else {
 				String erlog = "failed to process sq for app " + rowtoprocess.getApp();
 				logger.debug(erlog);
+				logger.error("ALYA : JobMgr : processSlowQuery : "+erlog);
+
+				// logharbourUtility.collectActivityLogs("JobProcessor : processSlowQuery : 4 : "+ erlog,AlyaConstant.LogharbourUtilityConstant.ALYA_MODULE_NAME,"JOB_MGR");
+
+
 				return erlog;
 			}
 
 			return "";
 		} catch (IllegalStateException exs) {
+
 			String erlog = "No Initializer found for app " + rowtoprocess.getApp();
+			// logharbourUtility.collectActivityLogs("JobProcessor : processSlowQuery : ERROR -> "+ erlog,AlyaConstant.LogharbourUtilityConstant.ALYA_MODULE_NAME,"JOB_MGR");
+			logger.error("ALYA : JobMgr : processSlowQuery : "+erlog);
+
 			logger.debug(erlog);
 			return erlog;
 		}
@@ -270,9 +316,15 @@ public class JobMgr {
 	private String updateSlowQueryJobResult(BatchJob rowtoproces, BatchOutput batchOutput) {
 		try {
 			batchJobService.updateBatchRowForSlowQueryoutput(rowtoproces, batchOutput);
+			// logharbourUtility.collectActivityLogs("JobProcessor : updateSlowQueryJobResult : 1 : Process initiated for Row -> "+ rowtoproces.toString(),AlyaConstant.LogharbourUtilityConstant.ALYA_MODULE_NAME,"JOB_MGR");
+			logger.error("ALYA : JobMgr : updateSlowQueryJobResult : "+"updateBatchRowForSlowQueryoutput for BatchOutPut -> "+ batchOutput.toString()+ " and rowtoprocess -> "+rowtoproces.toString() );
+
 			return "";
 		} catch (Exception ex) {
 			String erlog = "failed to update result for app " + rowtoproces.getApp();
+			// logharbourUtility.collectActivityLogs("JobProcessor : updateSlowQueryJobResult : ERROR -> "+ erlog,AlyaConstant.LogharbourUtilityConstant.ALYA_MODULE_NAME,"JOB_MGR");
+			logger.error("ALYA : JobMgr : updateSlowQueryJobResult : "+"Error -> "+erlog);
+
 			logger.debug(erlog);
 			return erlog;
 		}
@@ -287,10 +339,16 @@ public class JobMgr {
 	 */
 	private String updateBatchJobResult(BatchJob rowtoproces, BatchOutput batchOutput) {
 		try {
+			// logharbourUtility.collectActivityLogs("JobProcessor : updateBatchJobResult : 1 : Process initiated for Row -> "+ rowtoproces.toString(),AlyaConstant.LogharbourUtilityConstant.ALYA_MODULE_NAME,"JOB_MGR");
+			logger.error("ALYA : JobMgr : updateBatchJobResult : "+"updateBatchRowForBatchOutput initiated for BatchOutPut -> "+ batchOutput.toString()+ " and rowtoprocess -> "+rowtoproces.toString());
 			batchJobService.updateBatchRowForBatchOutput(rowtoproces, batchOutput);
 			return "";
 		} catch (Exception ex) {
+
 			String erlog = "failed to update blobrow for app " + rowtoproces.getApp() + ex.getMessage();
+			// logharbourUtility.collectActivityLogs("JobProcessor : updateBatchJobResult : ERROR -> "+ erlog,AlyaConstant.LogharbourUtilityConstant.ALYA_MODULE_NAME,"JOB_MGR");
+			logger.error("ALYA : JobMgr : updateBatchJobResult : "+"Error -> "+erlog);
+
 			logger.debug(erlog);
 			return erlog;
 		}
@@ -301,9 +359,12 @@ public class JobMgr {
 	 * 
 	 * @return the random sleep duration in milliseconds
 	 */
-	public static long getRandomSleepDuration() {
+	public  long getRandomSleepDuration() {
 		Random rand = new Random();
-		int randomSeconds = rand.nextInt(31) + 30; // Random number between 30 and 60 (inclusive)
+		int randomSeconds = 30; // Random number between 30 and 60 (inclusive)
+		// logharbourUtility.collectActivityLogs("JobProcessor : getRandomSleepDuration : 1 : Process initiated with 30 seconds",AlyaConstant.LogharbourUtilityConstant.ALYA_MODULE_NAME,"JOB_MGR");
+		logger.error("ALYA : JobMgr : getRandomSleepDuration : "+"Process initiated with 30 seconds");
+
 		return randomSeconds * 1000; // Convert seconds to milliseconds
 	}
 
@@ -316,6 +377,8 @@ public class JobMgr {
 	public synchronized BatchInitBlocks getOrCreateInitBlock(String app) {
 		synchronized (lock) {
 			if (initBlocks.containsKey(app)) {
+				// logharbourUtility.collectActivityLogs("JobProcessor : getOrCreateInitBlock : 1 : Returned InitBlock for app -> "+app,AlyaConstant.LogharbourUtilityConstant.ALYA_MODULE_NAME,"JOB_MGR");
+				logger.error("ALYA : JobMgr : getOrCreateInitBlock : "+"Returned InitBlock for app -> "+app);
 				return initBlocks.get(app);
 			}
 
@@ -323,11 +386,19 @@ public class JobMgr {
 			if (initializer == null) {
 				String erlog = "No initializer registered for app: " + app;
 				logger.debug(erlog);
+				logger.error("ALYA : JobMgr : getOrCreateInitBlock : "+"ERROR -> "+erlog);
+
+				// logharbourUtility.collectActivityLogs("JobProcessor : getOrCreateInitBlock : ERROR -> "+erlog,AlyaConstant.LogharbourUtilityConstant.ALYA_MODULE_NAME,"JOB_MGR");
+
+
 				throw new IllegalStateException(erlog);
 			}
 
 			BatchInitBlocks initBlock = initializer.init(app);
 			initBlocks.put(app, initBlock);
+			// logharbourUtility.collectActivityLogs("JobProcessor : getOrCreateInitBlock : 2 : InitBlock  -> "+initBlock,AlyaConstant.LogharbourUtilityConstant.ALYA_MODULE_NAME,"JOB_MGR");
+			logger.error("ALYA : JobMgr : getOrCreateInitBlock : "+"InitBlock  -> "+initBlock);
+
 			return initBlock;
 		}
 	}
@@ -344,12 +415,15 @@ public class JobMgr {
 	public synchronized void registerInitializer(String app, Initializer initializer) {
 		if (initializers.containsKey(app)) {
 			String erlog = "Initializer already registered for app: " + app;
+			// logharbourUtility.collectActivityLogs("JobProcessor : registerInitializer : 1 : "+erlog,AlyaConstant.LogharbourUtilityConstant.ALYA_MODULE_NAME,"JOB_MGR");
+			logger.error("ALYA : JobMgr : registerInitializer : "+"Error  -> "+erlog);
+
 			logger.debug(erlog);
 			throw new IllegalStateException(erlog);
 		}
-		logger.info("Register the initializer for the app.......");
 		initializers.put(app, initializer);
-		logger.info("Fetch the registered initializer for the app......." + initializers.get(app));
+		// logharbourUtility.collectActivityLogs("JobProcessor : registerInitializer : 2 : Fetch the registered initializer for the app......." + initializers.get(app),AlyaConstant.LogharbourUtilityConstant.ALYA_MODULE_NAME,"JOB_MGR");
+
 	}
 
 	/**
@@ -364,11 +438,15 @@ public class JobMgr {
 		if (batchProcessors.containsKey(key)) {
 			String logst = "BatchProcessor already registered for app: " + key;
 			logger.debug(logst);
+			logger.error("ALYA : JobMgr : RegisterProcessor : "+"ERROR : " + logst);
+			// logharbourUtility.collectActivityLogs("JobProcessor : RegisterProcessor : ERROR : " + logst,AlyaConstant.LogharbourUtilityConstant.ALYA_MODULE_NAME,"JOB_MGR");
 			throw new IllegalStateException(logst);
 		}
-		logger.info("Register the BatchProcessor for the app.......");
+		logger.info("JobProcessor : RegisterProcessor : 1 : Register the BatchProcessor for the app.......");
 		batchProcessors.put(key, processor);
-		logger.info("Fetch the registered BatchProcessor for the app......." + batchProcessors.get(key));
+		logger.error("ALYA : JobMgr : RegisterProcessor : "+"put in batchProcessor where key -> " + key +" and processor -> "+ processor.toString());
+
+		logger.info("JobProcessor : RegisterProcessor : 2 : Fetch the registered BatchProcessor for the app......." + batchProcessors.get(key));
 	}
 
 	/**
@@ -383,10 +461,14 @@ public class JobMgr {
 		if (slowQueryProcessor.containsKey(key)) {
 			String erlog = "SQProcessor already registered for app: " + key;
 			logger.debug(erlog);
+			// logharbourUtility.collectActivityLogs("JobProcessor : RegisterSQProcessor : ERROR -> " + erlog,AlyaConstant.LogharbourUtilityConstant.ALYA_MODULE_NAME,"JOB_MGR");
+			logger.error("ALYA : JobMgr : RegisterSQProcessor : "+"ERROR -> " + erlog);
 			throw new IllegalStateException(erlog);
 		}
-		logger.info("Register the SQProcessor for the app.......");
+		// logharbourUtility.collectActivityLogs("JobProcessor : RegisterSQProcessor : 2 : Fetch the registered SQProcessor for the app......." + slowQueryProcessor.get(key),AlyaConstant.LogharbourUtilityConstant.ALYA_MODULE_NAME,"JOB_MGR");
+
 		slowQueryProcessor.put(key, processor);
-		logger.info("Fetch the registered SQProcessor for the app......." + slowQueryProcessor.get(key));
+		logger.error("ALYA : JobMgr : RegisterSQProcessor : "+"put in slowQueryProcessor where key -> " + key +" and processor -> "+ processor.toString());
+
 	}
 }

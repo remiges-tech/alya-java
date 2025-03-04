@@ -65,6 +65,23 @@
 			<artifactId>minio</artifactId>
 			<version>8.5.10</version>
 		</dependency>
+
+		<dependency>
+			<groupId>com.remiges</groupId>
+			<artifactId>etcd</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
+		<!-- <dependency>
+			<groupId>com.remiges</groupId>
+			<artifactId>logharbour</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency> -->
+				<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
 	</dependencies>
 
 </project>
